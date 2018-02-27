@@ -27,6 +27,7 @@ var Brain = function(kwargs) {
 	_this.data_url = kwargs.data_url || null; // _this.manifest_url;
 	_this.view = kwargs.view || {};  // allow overriding fov, near, far, etc
 	_this.value_key = kwargs.value_key || null;
+	_this.my_colors = kwargs.colors;
 
 	// Just to declare the parts up front...
 	this.camera = null;
@@ -75,7 +76,7 @@ var Brain = function(kwargs) {
 
 		// The Mesh
 		// Params: None for now... add to scene
-		this.loadBrain();
+		this.loadBrain(_this.my_colors);
 
 		// The spot in the HTML
 		this.container.appendChild( this.renderer.domElement );
@@ -127,7 +128,7 @@ var Brain = function(kwargs) {
 		}
 	}
 
-	this.loadBrain = function(kwargs) {
+	this.loadBrain = function(kwargs, my_colors) {
 		kwargs = kwargs || {};
 		_this.manifest_url = (kwargs.manifest_url || _this.manifest_url) + '?' + (new Date())
 		_this.data_url = (kwargs.data_url || _this.data_url)
@@ -168,7 +169,8 @@ var Brain = function(kwargs) {
 				var mesh_url = get_prop(data, "filename", key, null);
 				//console.log(data)
 				var mesh_props = {
-					color: get_prop(data, "colors", key, [rnum(0.25, 1.), rnum(0.25, 1.), rnum(0.25, 1.)]),
+				    color: my_colors,
+					//color: get_prop(data, "colors", key, [rnum(0.25, 1.), rnum(0.25, 1.), rnum(0.25, 1.)]),
 					name: get_prop(data, "name", key, key),
 					value: get_prop(data, "values", key, null),
 					roi_key: key
