@@ -8,3 +8,5 @@ img
 #js
 *.json
 *.pyc
+*.iml
+.idea/
