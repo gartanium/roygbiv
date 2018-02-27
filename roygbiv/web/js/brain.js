@@ -169,7 +169,7 @@ var Brain = function(kwargs) {
 				var mesh_url = get_prop(data, "filename", key, null);
 				//console.log(data)
 				var mesh_props = {
-				    color: my_colors,
+				    color: my_colors[key], // return color at a given key
 					//color: get_prop(data, "colors", key, [rnum(0.25, 1.), rnum(0.25, 1.), rnum(0.25, 1.)]),
 					name: get_prop(data, "name", key, key),
 					value: get_prop(data, "values", key, null),

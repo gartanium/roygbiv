@@ -23,6 +23,10 @@
         <script src="js/brain.js"></script>
 		<script src="js/boxplot.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+        <!--Some stuff for color scale-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://d3js.org/d3.v3.js"></script>
 		
 	</head>
 
@@ -63,7 +67,9 @@
                     },
                     manifest_url: 'data/lh_files_to_load.json',
                     label_mapper: "data/labels.json",
-                    colors: "Some colors" // needs some colors
+                    colors: d3.scale.linear().domain([1,100])
+                            .interpolate(d3.interpolateHcl)
+                            .range([d3.rgb("#007AFF"), d3.rgb('#FFF500')])
                 });
 			}]);
 		</script>
