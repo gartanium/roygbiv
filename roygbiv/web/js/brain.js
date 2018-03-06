@@ -76,7 +76,7 @@ var Brain = function(kwargs) {
 
 		// The Mesh
 		// Params: None for now... add to scene
-		this.loadBrain(_this.my_colors);
+		this.loadBrain();
 
 		// The spot in the HTML
 		this.container.appendChild( this.renderer.domElement );
@@ -128,7 +128,7 @@ var Brain = function(kwargs) {
 		}
 	}
 
-	this.loadBrain = function(kwargs, my_colors) {
+	this.loadBrain = function(kwargs) {
 		kwargs = kwargs || {};
 		_this.manifest_url = (kwargs.manifest_url || _this.manifest_url) + '?' + (new Date())
 		_this.data_url = (kwargs.data_url || _this.data_url)
@@ -166,10 +166,11 @@ var Brain = function(kwargs) {
 
 			for (var ki in roi_keys) {
 				var key = roi_keys[ki];
+				console.log(key);
 				var mesh_url = get_prop(data, "filename", key, null);
 				//console.log(data)
 				var mesh_props = {
-				    color: my_colors[key], // return color at a given key
+				    color: _this.my_colors[key], // return color at a given key
 					//color: get_prop(data, "colors", key, [rnum(0.25, 1.), rnum(0.25, 1.), rnum(0.25, 1.)]),
 					name: get_prop(data, "name", key, key),
 					value: get_prop(data, "values", key, null),
