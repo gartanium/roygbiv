@@ -26,7 +26,7 @@
 
         <!--Some stuff for color scale-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="http://d3js.org/d3.v3.js"></script>
+        <script src="http://d3js.org/d3.v4.js"></script>
 		
 	</head>
 
@@ -67,7 +67,59 @@
                     },
                     manifest_url: 'data/lh_files_to_load.json',
                     label_mapper: "data/labels.json",
-                    colors: {
+					colors: function() {
+                        //build some fake data
+                        var maximum = 1200,
+							length = 34; //1035-1002
+
+                        function randomArray(length, max) {
+                            return Array.apply(null, Array(length)).map(function() {
+                                return Math.round(Math.random() * max);
+                            });
+                        }
+
+                        var data = randomArray(length, maximum);
+
+						//functions to calculate min, mean, max
+						//Math.min, Math.max
+
+                        function mean(data) {
+                            var total = 0;
+                            for (var i = 0; i < data.length; i += 1) {
+                                total += data[i];
+                            }
+                            return total / data.length;
+                        }
+
+                        /*var mid = mean(data),
+							min = Math.min(data),
+							max = Math.max(data);*/
+                        var mid = mean(data),
+							min = 0,
+							max = maximum;
+
+						//return scale of colors for min to mid to max values
+                        var colors = d3.scale.linear()
+                            .domain([min, mid, max])
+                            .range(['#0015ff', '#000000', '#ff0000']);
+
+						//take color scale and return values mapped to dictionary
+						//range will be replaced with list of values, key should be
+						//taken from column headers
+						var dict = {};
+						for (var j = 0; j < 34; j++) {
+							dict[k+1002] = [
+							    d3.color(colors(data[k])).r/256,
+								d3.color(colors(data[k])).g/256,
+								d3.color(colors(data[k])).b/256
+							];
+						}
+
+						return dict;
+
+
+                    }()
+                    /*colors: {
                         "1002": [
                             "0.7586206896551724",
                             "0.20689655172413793",
@@ -223,7 +275,7 @@
                             "0.9655172413793103",
                             "0.7931034482758621"
                         ]
-                }
+                	}*/
                         // potential color scale
                         /*d3.scale.linear().domain([1,100])
                             .interpolate(d3.interpolateHcl)
