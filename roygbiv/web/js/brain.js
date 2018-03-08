@@ -166,7 +166,7 @@ var Brain = function(kwargs) {
 
 			for (var ki in roi_keys) {
 				var key = roi_keys[ki];
-				console.log(key);
+				//console.log(key);
 				var mesh_url = get_prop(data, "filename", key, null);
 				//console.log(data)
 				var mesh_props = {
