@@ -69,55 +69,69 @@
                     label_mapper: "data/labels.json",
 					colors: function() {
                         //build some fake data
-                        var maximum = 1200,
-							length = 34; //1035-1002
+                        //var maximum = 1200,
+						//	length = 34; //1035-1002
 
-                        function randomArray(length, max) {
-                            return Array.apply(null, Array(length)).map(function() {
-                                return Math.round(Math.random() * max);
-                            });
-                        }
+                        //function randomArray(length, max) {
+                        //    return Array.apply(null, Array(length)).map(function() {
+                        //        return Math.round(Math.random() * max);
+                        //    });
+                        //}
 
-                        var data = randomArray(length, maximum);
-
-						//functions to calculate min, mean, max
-						//Math.min, Math.max
-
-                        function mean(data) {
-                            var total = 0;
-                            for (var i = 0; i < data.length; i += 1) {
-                                total += data[i];
-                            }
-                            return total / data.length;
-                        }
-
-                        /*var mid = mean(data),
-							min = Math.min(data),
-							max = Math.max(data);*/
-                        var mid = mean(data),
-							min = 0,
-							max = maximum;
-
-						//return scale of colors for min to mid to max values
-                        var colors = d3.scale.linear()
-                            .domain([min, mid, max])
-                            .range(['#0015ff', '#000000', '#ff0000']);
-
-						//take color scale and return values mapped to dictionary
-						//range will be replaced with list of values, key should be
-						//taken from column headers
+                        //var data = randomArray(length, maximum);
 						var dict = {};
-						for (var j = 0; j < 34; j++) {
-							dict[j+1002] = [
-							    d3.color(colors(data[j])).r/256,
-								d3.color(colors(data[j])).g/256,
-								d3.color(colors(data[j])).b/256
-							];
-						}
 
-						return dict;
+                        d3.csv("./data/UCSF_PLUS_UNIQUE.csv", function(datas){
+                            var data = datas[0];
 
+                            //console.log(data);
 
+                            //functions to calculate min, mean, max
+                            //Math.min, Math.max
+
+                            function mean(data) {
+                                var total = 0;
+                                for (var i = 0; i < data.length; i += 1) {
+                                    total += data[i];
+                                }
+                                return total / data.length;
+                            }
+
+                            /*var mid = mean(data),
+                                min = Math.min(data),
+                                max = Math.max(data);*/
+                            //Need to pull values to calculate
+                            var values = Object.values(data);
+                            values = values.map(Number);
+
+                            var mid = mean(values),
+                                min = Math.min(...values),
+                                max = Math.max(...values);
+
+                            //return scale of colors for min to mid to max values
+                            var colors = d3.scale.linear()
+                                .domain([min, mid, max])
+                                .range(['#0015ff', '#000000', '#ff0000']);
+
+                            //take color scale and return values mapped to dictionary
+                            //range will be replaced with list of values, key should be
+                            //taken from column headers
+
+							//ISSUE Each val of j represented in values
+							//Each val of j + 1002 not represented in data
+                            for (var j = 1002; j < 1036; j++) {
+                                if (data[j]) {
+                                    dict[j] = [
+                                        d3.color(colors(parseInt(data[j]))).r/256,
+                                        d3.color(colors(parseInt(data[j]))).g/256,
+                                        d3.color(colors(parseInt(data[j]))).b/256
+                                    ];
+								}
+                            }
+						});
+
+                        console.log(dict);
+                        return dict;
                     }()
                     /*colors: {
                         "1002": [
