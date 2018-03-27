@@ -27,7 +27,7 @@ var Brain = function(kwargs) {
 	_this.data_url = kwargs.data_url || null; // _this.manifest_url;
 	_this.view = kwargs.view || {};  // allow overriding fov, near, far, etc
 	_this.value_key = kwargs.value_key || null;
-	_this.my_colors = kwargs.colors;
+	//_this.my_colors = kwargs.colors;
 
 	// Just to declare the parts up front...
 	this.camera = null;
@@ -40,6 +40,10 @@ var Brain = function(kwargs) {
 	this.cur_picked = null;
 
 	this.__init__ = function() {
+
+        this.setColors = function(colors) {
+            _this.my_colors = colors;
+        }
 
 		this.container = $('#' + this.divID)[0];
 		var sz = this.container.getBoundingClientRect();
