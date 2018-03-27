@@ -43,7 +43,7 @@ var Brain = function(kwargs) {
 
         this.setColors = function(colors) {
             _this.my_colors = colors;
-        }
+        }();
 
 		this.container = $('#' + this.divID)[0];
 		var sz = this.container.getBoundingClientRect();

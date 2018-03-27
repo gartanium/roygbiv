@@ -66,72 +66,58 @@
                         $scope.$apply();
                     },
                     manifest_url: 'data/lh_files_to_load.json',
-                    label_mapper: "data/labels.json",
-					colors: function() {
-                        //build some fake data
-                        //var maximum = 1200,
-						//	length = 34; //1035-1002
+                    label_mapper: "data/labels.json"
+                });
 
-                        //function randomArray(length, max) {
-                        //    return Array.apply(null, Array(length)).map(function() {
-                        //        return Math.round(Math.random() * max);
-                        //    });
-                        //}
+                d3.csv("./data/UCSF_PLUS_UNIQUE.csv", function(datas){
+                    var data = datas[0];
 
-                        //var data = randomArray(length, maximum);
-						var dict = {};
+                    //console.log(data);
 
-                        d3.csv("./data/UCSF_PLUS_UNIQUE.csv", function(datas){
-                            var data = datas[0];
+                    //functions to calculate min, mean, max
+                    //Math.min, Math.max
 
-                            //console.log(data);
+                    function mean(data) {
+                        var total = 0;
+                        for (var i = 0; i < data.length; i += 1) {
+                            total += data[i];
+                        }
+                        return total / data.length;
+                    }
 
-                            //functions to calculate min, mean, max
-                            //Math.min, Math.max
+                    /*var mid = mean(data),
+                        min = Math.min(data),
+                        max = Math.max(data);*/
+                    //Need to pull values to calculate
+                    var values = Object.values(data);
+                    values = values.map(Number);
 
-                            function mean(data) {
-                                var total = 0;
-                                for (var i = 0; i < data.length; i += 1) {
-                                    total += data[i];
-                                }
-                                return total / data.length;
-                            }
+                    var mid = mean(values),
+                        min = Math.min(...values),
+                    max = Math.max(...values);
 
-                            /*var mid = mean(data),
-                                min = Math.min(data),
-                                max = Math.max(data);*/
-                            //Need to pull values to calculate
-                            var values = Object.values(data);
-                            values = values.map(Number);
+                    //return scale of colors for min to mid to max values
+                    var colors = d3.scale.linear()
+                        .domain([min, mid, max])
+                        .range(['#0015ff', '#000000', '#ff0000']);
 
-                            var mid = mean(values),
-                                min = Math.min(...values),
-                                max = Math.max(...values);
+                    //take color scale and return values mapped to dictionary
+                    //range will be replaced with list of values, key should be
+                    //taken from column headers
 
-                            //return scale of colors for min to mid to max values
-                            var colors = d3.scale.linear()
-                                .domain([min, mid, max])
-                                .range(['#0015ff', '#000000', '#ff0000']);
-
-                            //take color scale and return values mapped to dictionary
-                            //range will be replaced with list of values, key should be
-                            //taken from column headers
-
-							//ISSUE Each val of j represented in values
-							//Each val of j + 1002 not represented in data
-                            for (var j = 1002; j < 1036; j++) {
-                                if (data[j]) {
-                                    dict[j] = [
-                                        d3.color(colors(parseInt(data[j]))).r/256,
-                                        d3.color(colors(parseInt(data[j]))).g/256,
-                                        d3.color(colors(parseInt(data[j]))).b/256
-                                    ];
-								}
-                            }
-                            $scope.brain.setColors(dict);
-						});
-
-                    }()
+                    //ISSUE Each val of j represented in values
+                    //Each val of j + 1002 not represented in data
+					var dict = [];
+                    for (var j = 1002; j < 1036; j++) {
+                        if (data[j]) {
+                            dict[j] = [
+                                d3.color(colors(parseInt(data[j]))).r/256,
+                                d3.color(colors(parseInt(data[j]))).g/256,
+                                d3.color(colors(parseInt(data[j]))).b/256
+                            ];
+                        }
+                    }
+                    $scope.brain.setColors(dict);
                 });
 			}]);
 		</script>
