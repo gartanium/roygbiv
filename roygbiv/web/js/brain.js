@@ -27,7 +27,7 @@ var Brain = function(kwargs) {
 	_this.data_url = kwargs.data_url || null; // _this.manifest_url;
 	_this.view = kwargs.view || {};  // allow overriding fov, near, far, etc
 	_this.value_key = kwargs.value_key || null;
-	//_this.my_colors = kwargs.colors;
+	_this.my_colors = kwargs.colors;
 
 	// Just to declare the parts up front...
 	this.camera = null;
@@ -40,10 +40,10 @@ var Brain = function(kwargs) {
 	this.cur_picked = null;
 
 	this.__init__ = function() {
-
+		/*
         this.setColors = function(colors) {
-            _this.my_colors = colors;
-        }();
+        	_this.my_colors = colors;
+        };*/
 
 		this.container = $('#' + this.divID)[0];
 		var sz = this.container.getBoundingClientRect();
@@ -147,58 +147,60 @@ var Brain = function(kwargs) {
 			return;
 
 		function reset_mesh_props(data, textStatus, jqXHR, paint_colors) {
-			console.log('loading brain');
-			if (paint_colors === undefined) {
-				paint_colors = true;
-			}
+			if (_this.my_colors) {
+                console.log('loading brain');
+                if (paint_colors === undefined) {
+                    paint_colors = true;
+                }
 
-			// Out with the old
-			var keys = Object.keys(data);
-			var key0 = keys[0];
-			var roi_keys = Object.keys(data[key0]);
-			_this.clearBrain(roi_keys);
+                // Out with the old
+                var keys = Object.keys(data);
+                var key0 = keys[0];
+                var roi_keys = Object.keys(data[key0]);
+                _this.clearBrain(roi_keys);
 
-			// hack to remove filename from URL
-			var base_url = _this.manifest_url.split('/').reverse().slice(1).reverse().join('/');
+                // hack to remove filename from URL
+                var base_url = _this.manifest_url.split('/').reverse().slice(1).reverse().join('/');
 
-			function get_prop(data, prop_name, key, default_val) {
-				var val = (prop_name in data) ? data[prop_name][key] : default_val;
-				if (val && _this.value_key !== null)
-					val = val[_this.value_key] || val;
-				return val;
-			}
+                function get_prop(data, prop_name, key, default_val) {
+                    var val = (prop_name in data) ? data[prop_name][key] : default_val;
+                    if (val && _this.value_key !== null)
+                        val = val[_this.value_key] || val;
+                    return val;
+                }
 
-			for (var ki in roi_keys) {
-				var key = roi_keys[ki];
-				//console.log(key);
-				var mesh_url = get_prop(data, "filename", key, null);
-				//console.log(data)
-				var mesh_props = {
-				    color: _this.my_colors[key], // return color at a given key
-					//color: get_prop(data, "colors", key, [rnum(0.25, 1.), rnum(0.25, 1.), rnum(0.25, 1.)]),
-					name: get_prop(data, "name", key, key),
-					value: get_prop(data, "values", key, null),
-					roi_key: key
-				}
-				if (!paint_colors) {
-					mesh_props['color'] = [1, 1, 1];
-				}
+                for (var ki in roi_keys) {
+                    var key = roi_keys[ki];
+                    //console.log(key);
+                    var mesh_url = get_prop(data, "filename", key, null);
+                    //console.log(data)
+                    var mesh_props = {
+                        color: _this.my_colors[key], // return color at a given key
+                        //color: get_prop(data, "colors", key, [rnum(0.25, 1.), rnum(0.25, 1.), rnum(0.25, 1.)]),
+                        name: get_prop(data, "name", key, key),
+                        value: get_prop(data, "values", key, null),
+                        roi_key: key
+                    }
+                    if (!paint_colors) {
+                        mesh_props['color'] = [1, 1, 1];
+                    }
 
-				// Select the needed value
-				if (isarr(mesh_props.value))
-					mesh_props.value = mesh_props.value[Object.keys(mesh_props.value)[0]];
+                    // Select the needed value
+                    if (isarr(mesh_props.value))
+                        mesh_props.value = mesh_props.value[Object.keys(mesh_props.value)[0]];
 
-				if (mesh_url) {  // Load remote mesh
-					if (mesh_url[0] != '/')  // relative path is relative to manifest
-						mesh_url = base_url + "/" + mesh_url;
-					_this.loadMesh(mesh_url, mesh_props);
-				} else if (_this.meshes && _this.meshes[mesh_props.roi_key]) {  // Set existing mesh properties
-					copy_mesh_props(mesh_props, _this.meshes[mesh_props.roi_key]);
-				} else {  // Didn't load mesh, none existing...
-					console.error(sprintf("Mesh URL not specified for %s, no existing mesh, skipping...",
-										  mesh_props.roi_key), _this);
-				}
-			}
+                    if (mesh_url) {  // Load remote mesh
+                        if (mesh_url[0] != '/')  // relative path is relative to manifest
+                            mesh_url = base_url + "/" + mesh_url;
+                        _this.loadMesh(mesh_url, mesh_props);
+                    } else if (_this.meshes && _this.meshes[mesh_props.roi_key]) {  // Set existing mesh properties
+                        copy_mesh_props(mesh_props, _this.meshes[mesh_props.roi_key]);
+                    } else {  // Didn't load mesh, none existing...
+                        console.error(sprintf("Mesh URL not specified for %s, no existing mesh, skipping...",
+                            mesh_props.roi_key), _this);
+                    }
+                }
+            }
 		}
 
 		$.ajax({dataType: "json",
