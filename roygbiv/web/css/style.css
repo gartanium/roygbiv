@@ -129,3 +129,23 @@ body {
 	width: 400px;
 	overflow: hidden;
 }
+/*
+ * Search
+*/
+.search-container {
+	padding: 20px 5px 20px 5px;
+	text-align: center;
+}
+.search-field {
+	width: 60%;
+	height: 30px;
+	line-height: 20px;
+	font-size: 16px;
+	margin-right: 10px;
+	padding: 2px;
+}
+.search-button {
+	padding: 4px;
+	line-height: 20px;
+	font-size: 16px;
+}
