@@ -142,7 +142,7 @@
                         var keyObj = keystuff[0];
 
 						//Currently, values in 'keyObj' and indexes in 'datas' are identical
-                        var gene = 'BTBD2';
+                        var gene = 'DARC';
                         var loc = keyObj[gene];
                         var data = datas[loc];
                         //console.log(data);
@@ -161,16 +161,13 @@
                         values = values.map(Number);
 
                         var mid = mean(values),
-                            min = Math.min(...values
-                    ),
-                        max = Math.max(...values
-                    )
-                        ;
+                            min = Math.min(...values);
+						var big = Math.max(...values);
 
                         //return scale of colors for min to mid to max values
                         var colors = d3.scale.linear()
-                            .domain([min, mid, max])
-                            .range(['#0015ff', '#000000', '#ff0000']);
+                            .domain([min, mid, big])
+                            .range(['#ffffff', '#ffd400', '#ff0000']);
 
                         //take color scale and return values mapped to object
                         //range will be replaced with list of values, key should be
