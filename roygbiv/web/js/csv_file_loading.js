@@ -1,6 +1,5 @@
-angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {}]);
 
-//function to calculate mean
+
 function mean(data) {
     var total = 0;
     for (var i = 0; i < data.length; i += 1) {
@@ -9,13 +8,19 @@ function mean(data) {
     return total / data.length;
 }
 
-function load_csv_files() {
-    angular.module('navigator', [])
-    .controller('NavigateController', ['$scope', function($scope) {
+// Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
+// gene of interest.
+angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
+    
+    // TODO: Functionality for uploading a csv file for the brain.
+    $('#search-form').on('click', '#upload', function(e) { 
+        
         d3.csv("./data/keys.csv", function(keystuff) { 
+            
             d3.csv("./data/Allen_clean.csv", function(datas) {
+                
                 //attempt at making an input bar for genes
-                //how do we allow for multiple loadups
+                // Load a new brain when the user clicks Go
                 $('#search-form').on('click', '#search-button', function(e) {
                     e.preventDefault();
                     /*
@@ -105,15 +110,13 @@ function load_csv_files() {
                     //Build object with key = row number(index) and value = gene
                     */
                     //Build index/gene pair object
-                
+
 
                     //Currently, values in 'keyObj' and indexes in 'datas' are identical
                     var gene = $('#search-field').val().trim().toUpperCase();
                     var loc = keystuff[0][gene];
                     var data = datas[loc];
                     //console.log(data);
-
-
 
                     //Need to pull values to calculate mid, min, max
                     var values = Object.values(data);
@@ -170,8 +173,10 @@ function load_csv_files() {
                         label_mapper: "data/labels.json",
                         colors: dict
                     });
+               
                 });
             });
         });
-    }]);
-}
+    });
+}]);
+
