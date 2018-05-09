@@ -11,8 +11,8 @@ function mean(data) {
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
-    
-    $scope.fileStatus = "Select a CSV file to load...";
+
+    $scope.fileStatus = "Select a csv file to upload...";
     $scope.$apply();
     
     // TODO: Functionality for uploading a csv file for the brain.
@@ -20,10 +20,11 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
         
         d3.csv("./data/keys.csv", function(keystuff) { 
             
-            d3.csv("./data/Allen_clean.csv", function(datas) {
-               
+            var path = $('#upload-path').text();
+            d3.csv(path, function(datas) {
+                
               // Inform the user that the file successfully loaded.
-              $scope.fileStatus = "File uploaded Successfully";
+              $scope.fileStatus = "File uploaded successfully!";
               $scope.$apply();
                 
                 //attempt at making an input bar for genes
