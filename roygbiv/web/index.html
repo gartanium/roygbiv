@@ -39,11 +39,12 @@
 					<form id="search-form">
                         <table style="width:100%">
                             <tr>
+                                <th>CSV File Upload</th>
                                 <th><input value="" id="upload-path" class="search-field" type="search" autocomplete="off" /></th>
                                 <th><button id="upload" class="search-button">Upload</button></th>
-                                <th></th>
                             </tr>
                             <tr>
+                                <th>Gene Selection</th>
                                 <th><input value="" id="search-field" class="search-field" type="search" autocomplete="off" /></th>
                                 <th><button id="search-button" class="search-button">Go</button></th>
                             </tr>
@@ -53,8 +54,16 @@
 					</form>
 				</div>
 				<div id="nav_label">
-					
-				    <p>{{fileStatus}}</p>
+					<table>
+                        <tr>
+                            <th>File: </th>
+                            <th>{{filePath}}</th>
+                        </tr>
+                        <tr>
+                            <th>Status: </th>
+                            <th>{{fileStatus}}</th>
+                        </tr>
+                    </table>
                     
                     <br />
                     <br />

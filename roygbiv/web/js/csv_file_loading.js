@@ -14,7 +14,7 @@ function mean(data) {
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
 
-    $scope.fileStatus = "Select a csv file to upload...";
+    $scope.fileStatus = "Enter the csv file path...";
     $scope.$apply();
     
     // TODO: Functionality for uploading a csv file for the brain.
@@ -26,13 +26,15 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                 
               if(error) {
                   // Inform the user that the file failed to load.
-                  $scope.fileStatus = "ERROR: failed to upload file ->" + path;
+                  $scope.fileStatus = "ERROR failed to upload file!";
+                  $scope.filePath = path;
                   $scope.$apply();
                   
               } else {
                   
                   // Inform the user that the file successfully loaded.
-                  $scope.fileStatus = "File uploaded successfully! " + path;
+                  $scope.fileStatus = "File uploaded successfully!";
+                  $scope.filePath = path;
                   $scope.$apply();
 
                     //attempt at making an input bar for genes
