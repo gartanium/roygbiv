@@ -8,7 +8,43 @@ function mean(data) {
     return total / data.length;
 }
 
+// Returns a dictionary containing colors for different regions of the Brain.
+function getColorDict(data) {
+    
+    //Need to pull values to calculate mid, min, max
+    var values = Object.values(data);
+    values = values.map(Number);
 
+    var mid = mean(values),
+        min = Math.min(...values);
+    var big = Math.max(...values);
+
+    //return scale of colors for min to mid to max values
+    var colors = d3.scale.linear()
+        .domain([min, mid, big])
+        .range(['#ffffff', '#ffd400', '#ff0000']);
+
+    //take color scale and return values mapped to object
+    //range will be replaced with list of values, key should be
+    //taken from column headers
+
+    //ISSUE Each val of j represented in values
+    //Each val of j + 1002 not represented in data
+    //Color scale works, but unfortunately since expressions are all so similar, colors are almost identical
+    var dict = [];
+    for (var j = 1002; j < 1036; j++) {
+        if (data[j]) {
+            
+            red = d3.color(colors(parseFloat(data[j]))).r / 256
+            green =  d3.color(colors(parseFloat(data[j]))).g / 256;
+            blue = d3.color(colors(parseFloat(data[j]))).b / 256
+            
+            dict[j] = [red, green, blue];
+        }
+    }
+    
+    return dict;
+}
 
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
@@ -21,6 +57,12 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
     $('#search-form').on('click', '#upload', function(e) { 
         var path = $('#upload-path').val();
         
+        if(path == "") {
+            $scope.fileStatus = "Empty file path submitted. Please enter a valid file path."
+            $scope.$apply();
+            return;
+        }
+        
         d3.csv("data/keys.csv", function(keystuff) { 
             d3.csv(path, function(error, datas) {
                 
@@ -32,7 +74,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                   
               } else {
                   
-                  // Inform the user that the file successfully loaded.
+                  // Inform the user that the file successfully loaded, and display the path.
                   $scope.fileStatus = "File uploaded successfully!";
                   $scope.filePath = path;
                   $scope.$apply();
@@ -136,36 +178,10 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         var data = datas[loc];
                         //console.log(data);
 
-                        //Need to pull values to calculate mid, min, max
-                        var values = Object.values(data);
-                        values = values.map(Number);
 
-                        var mid = mean(values),
-                            min = Math.min(...values);
-                        var big = Math.max(...values);
-
-                        //return scale of colors for min to mid to max values
-                        var colors = d3.scale.linear()
-                            .domain([min, mid, big])
-                            .range(['#ffffff', '#ffd400', '#ff0000']);
-
-                        //take color scale and return values mapped to object
-                        //range will be replaced with list of values, key should be
-                        //taken from column headers
-
-                        //ISSUE Each val of j represented in values
-                        //Each val of j + 1002 not represented in data
-                        //Color scale works, but unfortunately since expressions are all so similar, colors are almost identical
-                        var dict = [];
-                        for (var j = 1002; j < 1036; j++) {
-                            if (data[j]) {
-                                dict[j] = [
-                                    d3.color(colors(parseFloat(data[j]))).r / 256,
-                                    d3.color(colors(parseFloat(data[j]))).g / 256,
-                                    d3.color(colors(parseFloat(data[j]))).b / 256
-                                ];
-                            }
-                        }
+                        // TODO: Color Scheme
+                        dict = getColorDict(data);
+                        
                         //remove old brain to render new upon user click go
                         if ($scope.brain) {
                             $('#nav-brain').empty();
@@ -193,9 +209,8 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             label_mapper: "data/labels.json",
                             colors: dict
                         });
-
                     });
-              }
+                }
             });
         });
     });
