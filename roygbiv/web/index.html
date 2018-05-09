@@ -39,9 +39,9 @@
 					<form id="search-form">
                         <table style="width:100%">
                             <tr>
-                                <th><input value="" id="upload" class="search-field" type="search" autocomplete="off" /></th>
+                                <th><input value="" id="upload_path" class="search-field" type="search" autocomplete="off" /></th>
                                 <th><button id="upload" class="search-button">Upload</button></th>
-                                <th><p></p></th>
+                                <th></th>
                             </tr>
                             <tr>
                                 <th><input value="" id="search-field" class="search-field" type="search" autocomplete="off" /></th>
@@ -54,10 +54,14 @@
 					</form>
 				</div>
 				<div id="nav_label">
-					Shift+click on a label to see stats
-					<br />
-					<br />
-					Selected Label: {{selectedLabel}}
+					
+				
+                    File Status: {{fileStatus}} 
+                    <br />
+                    <br />
+                    Shift+click on a label to see stats
+                    <br />
+					Selected Label: {{selectedLabel}} 
 				</div>
 				<div id="plot-canvas" style="width: 400px; height: 300px;">
 				</div>

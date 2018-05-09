@@ -12,12 +12,19 @@ function mean(data) {
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
     
+    $scope.fileStatus = "Select a CSV file to load...";
+    $scope.$apply();
+    
     // TODO: Functionality for uploading a csv file for the brain.
     $('#search-form').on('click', '#upload', function(e) { 
         
         d3.csv("./data/keys.csv", function(keystuff) { 
             
             d3.csv("./data/Allen_clean.csv", function(datas) {
+               
+              // Inform the user that the file successfully loaded.
+              $scope.fileStatus = "File uploaded Successfully";
+              $scope.$apply();
                 
                 //attempt at making an input bar for genes
                 // Load a new brain when the user clicks Go
@@ -111,7 +118,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     */
                     //Build index/gene pair object
 
-
+                    
                     //Currently, values in 'keyObj' and indexes in 'datas' are identical
                     var gene = $('#search-field').val().trim().toUpperCase();
                     var loc = keystuff[0][gene];
@@ -161,11 +168,13 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             if (!mesh) {
                                 // deselected: clear label & plot
                                 $scope.selectedLabel = "";
+                      
                                 $('#plot-canvas').empty();
                             } else {
                                 // selected: add label, do plot.
                                 $scope.selectedLabel = mesh.name;
                                 do_boxplot("plot-canvas", mesh);
+                                
                             }
                             $scope.$apply();
                         },
