@@ -32,15 +32,25 @@
 	</head>
 
 	<body>
-
-        
 		<div ng-app="navigator" ng-controller="NavigateController" ng-strict-di>
 			<div id="header_n_label">
 				<h1>ROYGBIV</h1>
 				<div class="search-container">
 					<form id="search-form">
-                        <input value="" id="upload" class="search-field" type="search" autocomplete="off" /><button id="upload" class="search-button">Upload</button>
-						<input value="" id="search-field" class="search-field" type="search" autocomplete="off" /><button id="search-button" class="search-button">Go</button>
+                        <table style="width:100%">
+                            <tr>
+                                <th><input value="" id="upload" class="search-field" type="search" autocomplete="off" /></th>
+                                <th><button id="upload" class="search-button">Upload</button></th>
+                                <th><p></p></th>
+                            </tr>
+                            <tr>
+                                <th><input value="" id="search-field" class="search-field" type="search" autocomplete="off" /></th>
+                                <th><button id="search-button" class="search-button">Go</button></th>
+                            </tr>
+                        </table>
+                        
+						
+                        
 					</form>
 				</div>
 				<div id="nav_label">
@@ -55,9 +65,5 @@
 			<div id="nav-brain" style="width: 53%; height: 550px; margin-top: 10px; margin-right: 10px;">
 			</div>
 		</div>
-        
-    
-
-		
 	</body>
 </html>
