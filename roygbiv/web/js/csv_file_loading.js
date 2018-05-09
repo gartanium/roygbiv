@@ -1,5 +1,3 @@
-
-
 function mean(data) {
     var total = 0;
     for (var i = 0; i < data.length; i += 1) {
@@ -8,9 +6,7 @@ function mean(data) {
     return total / data.length;
 }
 
-// Returns a dictionary containing colors for different regions of the Brain.
-function getColorDict(data) {
-    
+function getColorScale(data) {
     //Need to pull values to calculate mid, min, max
     var values = Object.values(data);
     values = values.map(Number);
@@ -23,11 +19,21 @@ function getColorDict(data) {
     var colors = d3.scale.linear()
         .domain([min, mid, big])
         .range(['#ffffff', '#ffd400', '#ff0000']);
+    
+    return colors;
+}
 
+/*
+    Returns a dictionary containing colors for different regions of the Brain.
+    Scale: A d3.scale 
+*/
+function getColorDict(data, colorsScale) {
+    
     //take color scale and return values mapped to object
     //range will be replaced with list of values, key should be
     //taken from column headers
-
+    
+    
     //ISSUE Each val of j represented in values
     //Each val of j + 1002 not represented in data
     //Color scale works, but unfortunately since expressions are all so similar, colors are almost identical
@@ -35,11 +41,14 @@ function getColorDict(data) {
     for (var j = 1002; j < 1036; j++) {
         if (data[j]) {
             
-            red = d3.color(colors(parseFloat(data[j]))).r / 256
-            green =  d3.color(colors(parseFloat(data[j]))).g / 256;
-            blue = d3.color(colors(parseFloat(data[j]))).b / 256
-            
+            red = d3.color(colorsScale(parseFloat(data[j]))).r / 256;
+            green =  d3.color(colorsScale(parseFloat(data[j]))).g / 256;
+            blue = d3.color(colorsScale(parseFloat(data[j]))).b / 256;
             dict[j] = [red, green, blue];
+            // [238,192,89]
+            
+            //dict[j] = [colorArray[j-1002][0]/256, colorArray[j-1002][1]/256, colorArray[j-1002][2]/256];
+            
         }
     }
     
@@ -178,9 +187,11 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         var data = datas[loc];
                         //console.log(data);
 
-
                         // TODO: Color Scheme
-                        dict = getColorDict(data);
+                        colorScale = getColorScale(data);
+                        dict = getColorDict(data, colorScale);
+                        colorlegend("#nav_legend", colorScale, "linear", {title: "linear"});
+                        
                         
                         //remove old brain to render new upon user click go
                         if ($scope.brain) {
@@ -209,6 +220,8 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             label_mapper: "data/labels.json",
                             colors: dict
                         });
+                        
+                        
                     });
                 }
             });
