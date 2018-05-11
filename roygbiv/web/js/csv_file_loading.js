@@ -1,15 +1,40 @@
 function mean(data) {
     var total = 0;
-    for (var i = 0; i < data.length; i += 1) {
+    length = data.length;
+    for (var i = 0; i < length; i += 1) {
         total += data[i];
     }
     return total / data.length;
 }
 
+/**
+ * Function: Applys a precision to an array of floats.
+ * floatArray: An array of floats
+ * Precision: Precision of each float in the array (Number of integers after the   * comma).
+**/
+function adjustPrecision(floatArray, precision) {
+    for (var i = 0; i < length; i+=1) {
+        floatArray[i] = floatArray[i].toFixed(precision);
+    }
+}
+
+
+/**
+ * Function: Returs a d3.scale for the data. Includes a color scale.
+ * Data: An object containing data for Gene Expression.
+**/
 function getColorScale(data) {
-    //Need to pull values to calculate mid, min, max
+    
+    // Convert our data object into an array of floats.
     var values = Object.values(data);
     values = values.map(Number);
+    
+    // Adjust the precision of each float value in data,
+    // so we don't have to many decimels.
+    adjustPrecision(values, 4);
+    
+    //Need to pull values to calculate mid, min, max
+
 
     var mid = mean(values),
         min = Math.min(...values);
@@ -23,10 +48,11 @@ function getColorScale(data) {
     return colors;
 }
 
-/*
-    Returns a dictionary containing colors for different regions of the Brain.
-    Scale: A d3.scale 
-*/
+/**
+ * Function: Returns a dictionary containing colors for different regions of the   *           Brain.
+ * Scale: A d3.scale 
+ * Data: An array of floats containing Gene Expression data.
+**/
 function getColorDict(data, colorsScale) {
     
     //take color scale and return values mapped to object
@@ -45,10 +71,6 @@ function getColorDict(data, colorsScale) {
             green =  d3.color(colorsScale(parseFloat(data[j]))).g / 256;
             blue = d3.color(colorsScale(parseFloat(data[j]))).b / 256;
             dict[j] = [red, green, blue];
-            // [238,192,89]
-            
-            //dict[j] = [colorArray[j-1002][0]/256, colorArray[j-1002][1]/256, colorArray[j-1002][2]/256];
-            
         }
     }
     
@@ -190,7 +212,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         // TODO: Color Scheme
                         colorScale = getColorScale(data);
                         dict = getColorDict(data, colorScale);
-                        colorlegend("#nav_legend", colorScale, "linear", {title: "linear"});
+                        colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression Scale"});
                         
                         
                         //remove old brain to render new upon user click go
@@ -219,9 +241,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             manifest_url: 'data/lh_files_to_load.json',
                             label_mapper: "data/labels.json",
                             colors: dict
-                        });
-                        
-                        
+                        });         
                     });
                 }
             });
