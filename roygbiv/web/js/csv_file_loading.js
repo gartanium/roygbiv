@@ -68,13 +68,12 @@ function getColorScale(data) {
 **/
 function getGeneLocation(locationDict, gene) {
     var location = locationDict[0][gene];
-    
     try {
         if(gene == "") {
             throw "ERROR: No gene was specified (Empty string)";
         }
         else if(location == null) {
-            throw "ERROR: [" + gene +"] is not a valid entry";
+            throw "ERROR: " + gene +" is not a valid entry";
         }
         else {
             return location;
@@ -84,9 +83,9 @@ function getGeneLocation(locationDict, gene) {
         throw errorMsg;
     }
 }
-
+            
 /**
- * Function: Returns a dictionary containing colors for different regions of the   *           Brain.
+ * Function: Returns a dictionary containing colors for different regions of the Brain.
  * Scale: A d3.scale 
  * Data: An array of floats containing Gene Expression data.
 **/
@@ -110,7 +109,6 @@ function getColorDict(data, colorsScale) {
             dict[j] = [red, green, blue];
         }
     }
-    
     return dict;
 }
 
@@ -119,6 +117,7 @@ function getColorDict(data, colorsScale) {
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
 
     $scope.fileStatus = "Enter the csv file path...";
+    $scope.geneStatus = "Enter a Gene...";
     $scope.$apply();
     
     // TODO: Functionality for uploading a csv file for the brain.
@@ -241,10 +240,21 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
 
 
                         //Currently, values in 'keyObj' and indexes in 'datas' are identical
-                        //var gene = $('#search-field').val().trim().toUpperCase();
                         var geneName = $scope.geneSearch.trim().toUpperCase()
-                        loc = getGeneLocation(keystuff, geneName);
-                        var data = datas[loc];
+                        var geneLoc;
+                        
+                        // Attempt to get the Gene from the User. Throw a message if it fails.
+                        try {
+                            geneLoc = getGeneLocation(keystuff, geneName)
+                        }
+                        catch (error_message) {
+                            $scope.geneStatus = error_message;
+                            $scope.$apply();
+                            return;
+                        }
+                        
+                        
+                        var data = datas[geneLoc];
                         //console.log(data);
 
                         // TODO: Color Scheme
