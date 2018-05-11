@@ -1,3 +1,9 @@
+/**
+ * Edited by Matthew Brown 5/11/18
+ * Contains functinos for manipulating the Brain.
+ *
+ */
+
 var Brain = function(kwargs) {
 	/*
 	Brain represents a 2D brain surface.
@@ -353,6 +359,27 @@ var Brain = function(kwargs) {
 		}
 		return null;
 	}
+    
+    this.hideMeshByName = function(mesh_name) {
+        
+    }
+    
+    this.showMeshByName = function(mesh_name) {
+        
+    }
+    
+    // Hides all the meshes on the brain.
+    this.hideAllMeshes = function() {
+        for (var i in _this.meshes) {
+            _this.meshes[i].material.opacity = 0;
+        }
+    }
+    
+    this.showAllMeshes = function() {
+        for (var i in _this.meshes) {
+            _this.meshes[i].material.opacity = 1;
+        }
+    }
 
 	this.objectPick = function(picked_mesh) {
 		if (_this.cur_picked == picked_mesh)
@@ -370,7 +397,7 @@ var Brain = function(kwargs) {
 				_this.fnPlot(picked_mesh);
 		}
 	}
-
+    
 	_this.__init__();
 	return _this;
 }
