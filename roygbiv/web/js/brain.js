@@ -360,21 +360,34 @@ var Brain = function(kwargs) {
 		return null;
 	}
     
+    /**
+    * Function: Sets a meshes opacity to 0
+    * mesh_name: Name of the brain mesh.
+    **/
     this.hideMeshByName = function(mesh_name) {
-        
+        this.selectMeshByName(mesh_name).material.opacity = 0;
     }
     
+    /**
+    * Function: Sets a meshes opacity to 1
+    * mesh_name: Name of the brain mesh.
+    **/
     this.showMeshByName = function(mesh_name) {
-        
+        this.selectMeshByName(mesh_name).material.opacity = 1;
     }
     
-    // Hides all the meshes on the brain.
+    /**
+    * Function: Sets all meshes opacity to 0
+    **/
     this.hideAllMeshes = function() {
         for (var i in _this.meshes) {
             _this.meshes[i].material.opacity = 0;
         }
     }
     
+    /**
+    * Function: Sets all meshes opacity to 1
+    **/
     this.showAllMeshes = function() {
         for (var i in _this.meshes) {
             _this.meshes[i].material.opacity = 1;
