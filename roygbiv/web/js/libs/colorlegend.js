@@ -88,7 +88,10 @@ var colorlegend = function (target, scale, type, options) {
       .attr('height', h)
     .append('g')
       .attr('class', 'colorlegend')
-      .attr('transform', 'translate(' + padding[3] + ',' + padding[0] + ')')
+      .attr('transform', 'translate(20, 20)')
+      //.attr('transform', 'translate(' + padding[3] + ',' + padding[0] + ')')
+      .attr("cx", 25)
+      .attr('position', 'absolute')
       .style('font-size', '11px')
       .style('fill', '#666');
       
@@ -133,9 +136,9 @@ var colorlegend = function (target, scale, type, options) {
         // show only the first and last for others
         else {
           if (i === 0)
-            return domain[0];
+            return domain[0].toFixed(4);
           if (i === colors.length - 1) 
-            return domain[domain.length - 1];
+            return domain[domain.length - 1].toFixed(4);
         }
       });
 
