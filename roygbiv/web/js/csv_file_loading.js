@@ -8,10 +8,10 @@ function mean(data) {
 }
 
 /**
- * Function: Applys a precision to an array of floats.
- * floatArray: An array of floats
- * Precision: Precision of each float in the array (Number of integers after the   * comma).
- * Return: Returns an adjusted array.
+* Function: Applys a precision to an array of floats.
+* floatArray: An array of floats
+* Precision: Precision of each float in the array (Number of integers after the   * * comma).
+* Return: Returns an adjusted array.
 **/
 function adjustPrecision(floatArray, precision) {
     for (var i = 0; i < length; i+=1) {
@@ -21,6 +21,11 @@ function adjustPrecision(floatArray, precision) {
     return floatArray;
 }
 
+/**
+* Function: Adjusts the precision of a float primative
+* Value: Float primative
+* Precision: Decimal Precision
+**/
 function adjustSinglePrecision(value, precision) {
     return parseFloat(value.toFixed(precision));
 }
@@ -29,7 +34,7 @@ function adjustSinglePrecision(value, precision) {
 /**
  * Function: Returs a d3.scale for the data. Includes a color scale.
  * Data: An object containing data for Gene Expression.
-**/
+ **/
 function getColorScale(data) {
     
     // Convert our data object into an array of floats.
@@ -53,6 +58,31 @@ function getColorScale(data) {
         .range(['#ffffff', '#ffd400', '#ff0000']);
     
     return colors;
+}
+
+/**
+* Function: Returns the location of a gene.
+* locationDict: Dictionary containing the genes as keys and locations as values.
+* gene: String containing the gene name.
+* Validates if a Gene is valid, if not, throws an error.
+**/
+function getGeneLocation(locationDict, gene) {
+    var location = locationDict[0][gene];
+    
+    try {
+        if(gene == "") {
+            throw "ERROR: No gene was specified (Empty string)";
+        }
+        else if(location == null) {
+            throw "ERROR: [" + gene +"] is not a valid entry";
+        }
+        else {
+            return location;
+        }
+    }
+    catch (errorMsg) {
+        throw errorMsg;
+    }
 }
 
 /**
@@ -104,17 +134,17 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
         d3.csv("data/keys.csv", function(keystuff) { 
             d3.csv(path, function(error, datas) {
                 
-              if(error) {
+                $scope.filePath = path;
+              
+                if(error) {
                   // Inform the user that the file failed to load.
                   $scope.fileStatus = "ERROR failed to upload file!";
-                  $scope.filePath = path;
                   $scope.$apply();
                   
-              } else {
+                } else {
                   
                   // Inform the user that the file successfully loaded, and display the path.
                   $scope.fileStatus = "File uploaded successfully!";
-                  $scope.filePath = path;
                   $scope.$apply();
 
                     //attempt at making an input bar for genes
@@ -211,8 +241,9 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
 
 
                         //Currently, values in 'keyObj' and indexes in 'datas' are identical
-                        var gene = $('#search-field').val().trim().toUpperCase();
-                        var loc = keystuff[0][gene];
+                        //var gene = $('#search-field').val().trim().toUpperCase();
+                        var geneName = $scope.geneSearch.trim().toUpperCase()
+                        loc = getGeneLocation(keystuff, geneName);
                         var data = datas[loc];
                         //console.log(data);
 
