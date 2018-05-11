@@ -11,11 +11,18 @@ function mean(data) {
  * Function: Applys a precision to an array of floats.
  * floatArray: An array of floats
  * Precision: Precision of each float in the array (Number of integers after the   * comma).
+ * Return: Returns an adjusted array.
 **/
 function adjustPrecision(floatArray, precision) {
     for (var i = 0; i < length; i+=1) {
-        floatArray[i] = floatArray[i].toFixed(precision);
+        floatArray[i] = parseFloat(floatArray[i].toFixed(precision));
     }
+    
+    return floatArray;
+}
+
+function adjustSinglePrecision(value, precision) {
+    return parseFloat(value.toFixed(precision));
 }
 
 
@@ -31,7 +38,7 @@ function getColorScale(data) {
     
     // Adjust the precision of each float value in data,
     // so we don't have to many decimels.
-    adjustPrecision(values, 4);
+
     
     //Need to pull values to calculate mid, min, max
 
@@ -212,6 +219,9 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         // TODO: Color Scheme
                         colorScale = getColorScale(data);
                         dict = getColorDict(data, colorScale);
+                        
+                        $('#nav_legend').empty();
+                        
                         colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression Scale"});
                         
                         
