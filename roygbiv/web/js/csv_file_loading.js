@@ -292,8 +292,22 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             manifest_url: 'data/lh_files_to_load.json',
                             label_mapper: "data/labels.json",
                             colors: dict
-                        });         
+                        });    
+                        
+                        // Hide brain when user clicks clear
+                        $('#search-form').on('click', '#clear-regions', function(e) { 
+                            $scope.brain.hideAllMeshes();
+                        });
+                        // Show brain when user clicks reset.
+                        $('#search-form').on('click', '#reset-regions', function(e) { 
+                            $scope.brain.showAllMeshes();
+                        });
+                        
+                        
+                        
                     });
+                    
+                    
                 }
             });
         });
