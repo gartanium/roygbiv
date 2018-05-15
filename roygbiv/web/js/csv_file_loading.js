@@ -204,6 +204,19 @@ function getColorDict(data, colorsScale) {
     return dict;
 }
 
+function registerRegionCheckboxes(brain) {
+    $('#region-selection').on('change', '#region-select', function(e) { 
+        name = this.name;
+        if(this.checked) {
+            brain.showMeshByName(name);
+        }
+        else
+        {
+            brain.hideMeshByName(name);
+        }
+    });
+}
+
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
@@ -305,6 +318,9 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         $('#search-form').on('click', '#reset-regions', function(e) { 
                             $scope.brain.showAllMeshes();
                         });
+                        
+                        // Register the checkboxes that hide/show the brain.
+                        registerRegionCheckboxes($scope.brain);
                     });
                 }
             });
