@@ -5,6 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" type="text/css" href="css/nav_bar.css" />
 
 		<script src="js/libs/three.min.js"></script>
 		<script src="js/libs/Projector.js"></script>
@@ -33,6 +34,29 @@
 	</head>
 
 	<body>
+        <div class="navbar">
+            <div class="dropdown">
+                <button class="dropbtn">File 
+                <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                <a href="#">Up</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Brain Display 
+                <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+                </div>
+            </div> 
+        </div>
+
 		<div ng-app="navigator" ng-controller="NavigateController" ng-strict-di>
 			<div id="header_n_label">
 				<h1>ROYGBIV</h1>
