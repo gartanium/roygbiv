@@ -58,3 +58,11 @@ navbar {
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
+.region-display-label {
+    color: black;
+}
+
+#region-selection li {
+    color: black;
+}
