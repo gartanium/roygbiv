@@ -204,6 +204,11 @@ function getColorDict(data, colorsScale) {
     return dict;
 }
 
+/**
+ * Function: Registers an event for all the region-select checkboxes
+ * that displays or hides the specific region of the brain.
+ * Brain: The brain object
+**/
 function registerRegionCheckboxes(brain) {
     $('#region-selection').on('change', '#region-select', function(e) { 
         name = this.name;
@@ -215,6 +220,39 @@ function registerRegionCheckboxes(brain) {
             brain.hideMeshByName(name);
         }
     });
+}
+
+/**
+ * @function checkBoxesByClass Any checkbox with the given class is checked or unchecked, 
+ * and the associated event, change, is fired.
+ * @param {*String} className The Class of the checkboxes
+ * @param {*Bool} boolChecked determines if the box is to be checked or unchecked. True=Check it, False=Uncheck 
+ */
+function checkBoxesByClass(className, boolChecked) {
+    
+    $('.'+className).each(function() {
+        $(this).prop('checked', boolChecked);
+        $(this).change();
+    });
+
+}
+
+/** 
+ * @function registerEvents Registers events associated with the brain.
+ * @param {brain} brain Brain to be rendered to the screen. 
+ **/
+function registerEvents(brain) {
+    // Hide brain when user clicks clear
+    $('#search-form').on('click', '#clear-regions', function(e) { 
+        checkBoxesByClass("region-select", false);
+    });
+    // Show brain when user clicks reset.
+    $('#search-form').on('click', '#reset-regions', function(e) { 
+        checkBoxesByClass("region-select", true);
+    });
+    
+    // Register the checkboxes that hide/show the brain.
+    registerRegionCheckboxes(brain);
 }
 
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
@@ -308,19 +346,9 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             manifest_url: 'data/lh_files_to_load.json',
                             label_mapper: "data/labels.json",
                             colors: dict
-                        });    
+                        });   
                         
-                        // Hide brain when user clicks clear
-                        $('#search-form').on('click', '#clear-regions', function(e) { 
-                            $scope.brain.hideAllMeshes();
-                        });
-                        // Show brain when user clicks reset.
-                        $('#search-form').on('click', '#reset-regions', function(e) { 
-                            $scope.brain.showAllMeshes();
-                        });
-                        
-                        // Register the checkboxes that hide/show the brain.
-                        registerRegionCheckboxes($scope.brain);
+                        registerEvents($scope.brain);
                     });
                 }
             });
