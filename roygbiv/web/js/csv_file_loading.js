@@ -253,6 +253,25 @@ function registerEvents(brain) {
     
     // Register the checkboxes that hide/show the brain.
     registerRegionCheckboxes(brain);
+
+    // Register downloading the brain SVG
+    registerDownloadSVG();
+}
+
+function registerDownloadSVG() {
+    d3.select("#download").on("click", function() {
+        d3.select(this)
+          .attr("href", 'data:application/octet-stream;base64,' + btoa(d3.select("#line").html()))
+          .attr("download", "viz.svg") 
+      })
+}
+
+/**
+ * @function initializeDefaultValues when a new brain is rendered, we set the initial values here.
+ */
+function initializeDefaultValues() {
+    // When the brain is first rendered, we want all region select check boxes to be selected.
+    checkBoxesByClass("region-select", true);
 }
 
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
@@ -316,7 +335,6 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         dict = getColorDict(data, colorScale);
                         
                         $('#nav_legend').empty();
-                        
                         colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression Scale"});
                         
                         
@@ -348,6 +366,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             colors: dict
                         });   
                         
+                        initializeDefaultValues();  
                         registerEvents($scope.brain);
                     });
                 }
