@@ -334,8 +334,6 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         colorScale = getColorScale(data);
                         dict = getColorDict(data, colorScale);
                         
-                        $('#nav_legend').empty();
-                        colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression Scale"});
                         
                         
                         //remove old brain to render new upon user click go
@@ -365,7 +363,8 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             label_mapper: "data/labels.json",
                             colors: dict
                         });   
-                        
+                        $('#nav_legend').empty()
+                        colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression Scale"});
                         initializeDefaultValues();  
                         registerEvents($scope.brain);
                     });

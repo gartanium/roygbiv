@@ -176,6 +176,10 @@ body {
     margin-left: 20px;
 }
 
+.region-display-label {
+	color: black;
+}
+
 #region-selection label {
   float: left;
 }

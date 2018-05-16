@@ -1,3 +1,8 @@
+/**
+ * @function do_boxplot Used for rendering the brain and legend.
+ * @param {*} divID 
+ * @param {*} mesh 
+ */
 function do_boxplot(divID, mesh) {
 	/* Draws a box plot, given the labelID, color */
 	console.log("doing boxplots")
