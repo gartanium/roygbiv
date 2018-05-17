@@ -258,6 +258,7 @@ function registerEvents(brain) {
     registerDownloadSVG();
 }
 
+// Used for downloading SVGS
 function registerDownloadSVG() {
     d3.select("#download").on("click", function() {
         d3.select(this)
@@ -310,6 +311,9 @@ function setupDefaultValues(container) {
     container.cameraZ = 200;
     container.fileStatus = "Enter the csv file path...";
     container.geneStatus = "Enter a Gene...";
+    container.cameraPosDisplayX = 0;
+    container.cameraPosDisplayY = 0;
+    container.cameraPosDisplayZ = 200;
     container.$apply();
 }
 
@@ -400,9 +404,9 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             label_mapper: "data/labels.json",
                             colors: dict,
                             onAnimation: function (camera) {
-                                $scope.cameraX = camera.position.x;
-                                $scope.cameraY = camera.position.y;
-                                $scope.cameraZ = camera.position.z;
+                                $scope.cameraPosDisplayX = adjustSinglePrecision(camera.position.x, 2);
+                                $scope.cameraPosDisplayY = adjustSinglePrecision(camera.position.y, 2);
+                                $scope.cameraPosDisplayZ = adjustSinglePrecision(camera.position.z, 2);
                                 $scope.$apply();
                             }
                             
