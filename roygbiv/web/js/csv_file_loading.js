@@ -294,21 +294,30 @@ function getCameraPosition(phi, theta, radious) {
  * @function setups the camera
  *
  */
-function setupCamera(object) {
+function setupCamera(container) {
     
-    cameraPos = getCameraPosition(object.cameraPhi, object.cameraTheta, object.cameraRadius)
-    object.brain.camera.position.x = cameraPos.x;
-    object.brain.camera.position.y = cameraPos.y;
-    object.brain.camera.position.z = cameraPos.z;
+
+    container.brain.camera.position.x = container.cameraX
+    container.brain.camera.position.y = container.cameraY
+    container.brain.camera.position.z = container.cameraZ
+}
+
+function setupDefaultValues(container) {
+    
+    // Sets the default camera position to be {0, 0, 200} x, y, z respectively.
+    container.cameraX = 0;
+    container.cameraY = 0;
+    container.cameraZ = 200;
+    container.fileStatus = "Enter the csv file path...";
+    container.geneStatus = "Enter a Gene...";
+    container.$apply();
 }
 
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
 
-    $scope.fileStatus = "Enter the csv file path...";
-    $scope.geneStatus = "Enter a Gene...";
-    $scope.$apply();
+    setupDefaultValues($scope);
     
     // TODO: Functionality for uploading a csv file for the brain.
     $('#search-form').on('click', '#upload', function(e) { 
@@ -389,7 +398,14 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             },
                             manifest_url: 'data/lh_files_to_load.json',
                             label_mapper: "data/labels.json",
-                            colors: dict
+                            colors: dict,
+                            onAnimation: function (camera) {
+                                $scope.cameraX = camera.position.x;
+                                $scope.cameraY = camera.position.y;
+                                $scope.cameraZ = camera.position.z;
+                                $scope.$apply();
+                            }
+                            
                         });   
                         
                         

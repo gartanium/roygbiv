@@ -313,7 +313,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		}
 
-        // Adds two vectors together and set's Object, The THREE.PerspectiveCamera
+        // Adds two vectors together and set's Object, The THREE.PerspectiveCameras, position vector to the sum.
 		_this.object.position.addVectors( _this.target, _eye );
 
 		_this.checkDistances();
