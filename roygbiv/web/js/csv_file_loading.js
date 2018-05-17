@@ -403,10 +403,10 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             manifest_url: 'data/lh_files_to_load.json',
                             label_mapper: "data/labels.json",
                             colors: dict,
-                            onAnimation: function (camera) {
-                                $scope.cameraPosDisplayX = adjustSinglePrecision(camera.position.x, 2);
-                                $scope.cameraPosDisplayY = adjustSinglePrecision(camera.position.y, 2);
-                                $scope.cameraPosDisplayZ = adjustSinglePrecision(camera.position.z, 2);
+                            onAnimation: function (camera) { // Call back function so that the camera position                                  // is displayed for the user to see.
+                                $scope.cameraPosDisplayX = camera.position.x;
+                                $scope.cameraPosDisplayY = camera.position.y;
+                                $scope.cameraPosDisplayZ = camera.position.z;
                                 $scope.$apply();
                             }
                             

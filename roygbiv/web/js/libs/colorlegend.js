@@ -82,7 +82,7 @@ var colorlegend = function (target, scale, type, options) {
   
   
   // set up the legend graphics context
-  var legend = d3.select('svg')
+  var legend = d3.select(target)
     .append('g')
       .attr('class', 'colorlegend')
       .attr('transform', 'translate(20, 20)')
