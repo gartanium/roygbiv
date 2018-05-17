@@ -290,6 +290,18 @@ function getCameraPosition(phi, theta, radious) {
     return new THREE.Vector3(x, y, z);
 }
 
+/**
+ * @function setups the camera
+ *
+ */
+function setupCamera(object) {
+    
+    cameraPos = getCameraPosition(object.cameraPhi, object.cameraTheta, object.cameraRadius)
+    object.brain.camera.position.x = cameraPos.x;
+    object.brain.camera.position.y = cameraPos.y;
+    object.brain.camera.position.z = cameraPos.z;
+}
+
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
@@ -380,19 +392,10 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             colors: dict
                         });   
                         
-                        var cameraPos = getCameraPosition(200, 100, 125);
-                        //var testRotation =
-                        //brain.camera.apply(testRotation);
-                        //$scope.brain.camera.rotation =  new THREE.Euler( 180, 40, 20, 'XYZ' );
-                        //$scope.brain.camera.rotation.x = 180;
-                        //$scope.brain.camera.rotation.y = 180;
-                        $scope.brain.camera.position.x = cameraPos.x;
-                        $scope.brain.camera.position.y = cameraPos.y;
-                        $scope.brain.camera.position.z = cameraPos.z;
-                        
                         
                         $('#nav_legend').empty()
                         colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression Scale"});
+                        setupCamera($scope);
                         initializeDefaultValues();  
                         registerEvents($scope.brain);
                     });

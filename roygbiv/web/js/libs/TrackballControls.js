@@ -121,9 +121,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 				( pageX - _this.screen.left ) / _this.screen.width,
 				( pageY - _this.screen.top ) / _this.screen.height
 			);
-
 			return vector;
-
 		};
 
 	}() );
@@ -235,6 +233,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 		}
 
 	};
+    
+    
 
 	this.panCamera = (function() {
 
@@ -313,13 +313,14 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		}
 
+        // Adds two vectors together and set's Object, The THREE.PerspectiveCamera
 		_this.object.position.addVectors( _this.target, _eye );
 
 		_this.checkDistances();
 
 		_this.object.lookAt( _this.target );
 
-		if ( lastPosition.distanceToSquared( _this.object.position ) > EPS ) {
+		if ( lastPosition .distanceToSquared( _this.object.position ) > EPS ) {
 
 			_this.dispatchEvent( changeEvent );
 
@@ -422,7 +423,6 @@ THREE.TrackballControls = function ( object, domElement ) {
 		document.addEventListener( 'mouseup', mouseup, false );
 
 		_this.dispatchEvent( startEvent );
-
 	}
 
 	function mousemove( event ) {
@@ -446,7 +446,6 @@ THREE.TrackballControls = function ( object, domElement ) {
 			_panEnd.copy( getMouseOnScreen( event.pageX, event.pageY ) );
 
 		}
-
 	}
 
 	function mouseup( event ) {

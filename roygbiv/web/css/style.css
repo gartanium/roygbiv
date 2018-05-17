@@ -188,3 +188,7 @@ body {
   list-style: none;
   float: left;
 }
+
+.camera-text {
+    width: 50px;
+}
