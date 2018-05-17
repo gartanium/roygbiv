@@ -122,31 +122,25 @@ function adjustSinglePrecision(value, precision) {
     return parseFloat(value.toFixed(precision));
 }
 
+/*function calculateMinMidMax(data) {
+    // Convert our data object into an array of floats.
+    var values = Object.values(data);
+    values = values.map(Number);
+        var mid = mean(values),
+        min = Math.min(...values);
+    var big = Math.max(...values);
+    
+}*/
 
 /**
  * Function: Returs a d3.scale for the data. Includes a color scale.
  * Data: An object containing data for Gene Expression.
  **/
-function getColorScale(data) {
+function getColorScale(min, mid, max, data) {
     
-    // Convert our data object into an array of floats.
-    var values = Object.values(data);
-    values = values.map(Number);
-    
-    // Adjust the precision of each float value in data,
-    // so we don't have to many decimels.
-
-    
-    //Need to pull values to calculate mid, min, max
-
-
-    var mid = mean(values),
-        min = Math.min(...values);
-    var big = Math.max(...values);
-
     //return scale of colors for min to mid to max values
     var colors = d3.scale.linear()
-        .domain([min, mid, big])
+        .domain([min, mid, max])
         .range(['#ffffff', '#ffd400', '#ff0000']);
     
     return colors;
@@ -292,8 +286,8 @@ function getCameraPosition(phi, theta, radious) {
 }
 
 /**
- * @function setups the camera
- *
+ * @function setups the camera, so that when the brain renders, it renders
+ * at the user defined position.
  */
 function setupCamera(container) {
     
@@ -309,6 +303,9 @@ function setupDefaultValues(container) {
     container.cameraX = 0;
     container.cameraY = 0;
     container.cameraZ = 200;
+    container.userMin = 0;
+    container.userMid = 6;
+    container.userMax = 12;
     container.fileStatus = "Enter the csv file path...";
     container.geneStatus = "Enter a Gene...";
     container.cameraPosDisplayX = 0;
@@ -372,7 +369,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         //console.log(data);
 
                         // TODO: Color Scheme
-                        colorScale = getColorScale(data);
+                        colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);
                         dict = getColorDict(data, colorScale);
                         
                         
@@ -414,7 +411,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         
                         
                         $('#nav_legend').empty()
-                        colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression Scale"});
+                        colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
                         setupCamera($scope);
                         initializeDefaultValues();  
                         registerEvents($scope.brain);

@@ -119,11 +119,6 @@
                                 <th><button id="upload" class="search-button">Upload</button></th>
                             </tr>
                             <tr>
-                                <th>Gene Selection</th>
-                                <th><input value="" id="search-field" ng-model="geneSearch" class="search-field" type="search" autocomplete="off" /></th>
-                                <th><button id="search-button" class="search-button">Go</button></th>
-                            </tr>
-                            <tr>
                                 <th>Region Display</th>
                                 <th><button id="clear-regions" class="search-button">Clear</button></th>
                                 <th><button id="reset-regions" class="search-button">Reset</button></th>
@@ -133,6 +128,23 @@
                                 <th><input type="text" class="camera-text" ng-model="cameraX"></th>
                                 <th><input type="text" class="camera-text" ng-model="cameraY"></th>
                                 <th><input type="text" class="camera-text" ng-model="cameraZ"></th>
+                            </tr>
+                            <tr>
+                                <th>Minimum</th>
+                                <th><input type="text" ng-model="userMin"></th>
+                            </tr>
+                            <tr>
+                                <th>Mid</th>
+                                <th><input type="text" ng-model="userMid"></th>
+                            </tr>
+                            <tr>
+                                <th>Maximum</th>
+                                <th><input type="text" ng-model="userMax"></th>
+                            </tr>
+                            <tr>
+                                <th>Gene Selection</th>
+                                <th><input value="" id="search-field" ng-model="geneSearch" class="search-field" type="search" autocomplete="off" /></th>
+                                <th><button id="search-button" class="search-button">Go</button></th>
                             </tr>
                         </table>
                     </form>
@@ -166,12 +178,12 @@
                 </div>
                 <br />
                 <div id="plot-canvas" style="width: 400px; height: 300px;"></div>
-                <div id="nav_legend"></div> 
+                
             </div>
             </div>
-            <div>               
-                    <div id="nav-brain" style="width: 53%; height: 550px; margin-top: 10px; margin-right: 10px;"></div>
-                  
+            <div class="graphics-display">               
+                <div id="nav-brain" style=" height: 550px; margin-top: 10px; margin-right: 10px;"></div>
+                <div id="nav_legend"></div>
             </div>
 		</div>
 	</body>

@@ -83,13 +83,16 @@ var colorlegend = function (target, scale, type, options) {
   
   // set up the legend graphics context
   var legend = d3.select(target)
+      .append('svg')
+      .attr('width', w)
+      .attr('height', h)
     .append('g')
       .attr('class', 'colorlegend')
       .attr('transform', 'translate(20, 20)')
       //.attr('transform', 'translate(' + padding[3] + ',' + padding[0] + ')')
       .attr("cx", 25)
       .attr('position', 'absolute')
-      .style('font-size', '11px')
+      .style('font-size', '15px')
       .style('fill', '#666');
       
   var legendBoxes = legend.selectAll('g.legend')
