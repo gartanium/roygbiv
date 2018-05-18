@@ -7,6 +7,7 @@ function mean(data) {
     return total / data.length;
 }
 
+
 /*
 * No idea what this is for.
 */
@@ -314,7 +315,18 @@ function setupDefaultValues(container) {
     container.$apply();
 }
 
+/**
+ * 
+ * @param {*} scope 
+ * @param {*Dictionary} colorsDict Dictionary containing values for the gene expression colors, associated with the region.
+ */
 function renderBrain(scope, colorsDict) {
+
+    //remove old brain to render new upon user click go
+    if ($scope.brain) {
+        $('#nav-brain').empty();
+    }
+
     return new Brain({
         divID: "nav-brain",  // div to render brain
         callback: function (mesh) {
@@ -365,8 +377,10 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
         d3.csv("data/keys.csv", function(keystuff) { 
             d3.csv(path, function(error, datas) {
                 
-                getKeyDict(datas);
+                
+                
 
+                // Get the file path of the users defined file, so we can display it for the user.
                 $scope.filePath = path;
               
                 if(error) {
@@ -389,30 +403,27 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         var geneName = $scope.geneSearch.trim().toUpperCase()
                         var geneLoc;
                         
+                        
+
                         // Attempt to get the Gene from the User. Throw a message if it fails.
                         try {
-                            geneLoc = getGeneLocation(keystuff, geneName)
+                            geneLoc = getGeneLocation(getGeneLocDict(datas), geneName)
                         }
                         catch (error_message) {
                             $scope.geneStatus = error_message;
                             $scope.$apply();
                             return;
                         }
-                       
-                        var data = datas[geneLoc];
-                        //console.log(data);
 
-                        // TODO: Color Scheme
+                        getRegionDict(geneLoc, datas);
+                       
+                        // Get the brain data related to the specific Gene Location.
+                        var data = datas[geneLoc];
+                        
+                        // Get the color scale and colored data for the Brain.
                         colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);
                         dict = getColorDict(data, colorScale);
                         
-                        
-                        
-                        //remove old brain to render new upon user click go
-                        if ($scope.brain) {
-                            $('#nav-brain').empty();
-                        }
-
                         //render new brain
                         $scope.brain = renderBrain($scope, dict);
                         
