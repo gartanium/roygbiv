@@ -4,11 +4,10 @@
  */
 
 /**
-* Function: Returns the location of a gene.
-* locationDict: Dictionary containing the genes as keys and locations as values.
-* gene: String containing the gene name.
-* Validates if a Gene is valid, if not, throws an error.
-**/
+ * @function Description: Returns the location of a gene. Also validates if a Gene is valid, if not, throws an error.
+ * @param {*} locationDict Associative array containing the genes as keys and locations as values.
+ * @param {*String} gene containing the gene name.
+ */
 function getGeneLocation(locationDict, gene) {
     var location = locationDict[gene];
     try {
@@ -26,7 +25,11 @@ function getGeneLocation(locationDict, gene) {
         throw errorMsg;
     }
 }
-    
+ 
+/**
+ * Returns an associative array or "dictionary" containing the location  of every gene in the csv file.
+ * @param {*} csv_object CSV object to be processed. 
+ */
  function getGeneLocDict(csv_object) {
     var dictionary = {};
     length = csv_object.length;
@@ -42,13 +45,31 @@ function getGeneLocation(locationDict, gene) {
     return dictionary;
  }
 
+ /**
+  * Returns Gene Region Data in an associative array.
+  * @param {Float} location location of the Gene in the csv file.
+  * @param {*} csv_object CSV file object to be processed.
+  */
  function getRegionDict(location, csv_object){
+
+    // Our csv object looks like this in a row.
+    // "ctx-lh-caudalanteriorcingulate" : 9.4231
+    // We want it to look like this:
+    // 1002 : 9.4231
+    // This is what this function does.
+
     headerObj = generateHeaderObject();
+
+    // Set gene Data equal to the row containing the gene we are looking at.
     geneData = csv_object[location];
+
+    // Our return object. It will contain an associative array with a key value pair that will look something like 1002: 9.323244,
+    // Where the key is the Region ID and the value is the Gene Expression Data.
     regionDictionary = {};
 
     for(i = 0; i < 34; i++) {
         
+        // For reason unkown to me we don't have regions for IDS 1004, 1032, and 1033, so we skip them.
         switch(i) {
             case 2:
             case 30:
@@ -60,7 +81,7 @@ function getGeneLocation(locationDict, gene) {
                 key1 = headerObj[i + 1002]; 
                 key2 = headerObj[i + 2002];
 
-                // Get the data from the specific brain region. 
+                // Extract the data.
                 data1 = parseFloat(geneData[key1]);
                 data2 = parseFloat(geneData[key2]);
 
@@ -71,10 +92,13 @@ function getGeneLocation(locationDict, gene) {
         }
 
     }
-
     return regionDictionary;
  }
 
+ /** 
+  * Generates an associative array with a Key for each region,
+  * usefull for processing the brain gene expression data.
+ */
  function generateHeaderObject() {
     return {
         "1002": "ctx-lh-caudalanteriorcingulate",

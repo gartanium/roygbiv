@@ -7,99 +7,6 @@ function mean(data) {
     return total / data.length;
 }
 
-
-/*
-* No idea what this is for.
-*/
-function assign_regions() {
-    /*
-    //Intent of the below chunk is to clean data to allow for input into application
-    //"headerNames" and "name" are used to make header names the key for the object "name"
-
-    var headerNames = d3.keys(datas[0]);
-    var name = {
-            "1002": "ctx-lh-caudalanteriorcingulate",
-            "1003": "ctx-lh-caudalmiddlefrontal",
-            "1005": "ctx-lh-cuneus",
-            "1006": "ctx-lh-entorhinal",
-            "1007": "ctx-lh-fusiform",
-            "1008": "ctx-lh-inferiorparietal",
-            "1009": "ctx-lh-inferiortemporal",
-            "1010": "ctx-lh-isthmuscingulate",
-            "1011": "ctx-lh-lateraloccipital",
-            "1012": "ctx-lh-lateralorbitofrontal",
-            "1013": "ctx-lh-lingual",
-            "1014": "ctx-lh-medialorbitofrontal",
-            "1015": "ctx-lh-middletemporal",
-            "1016": "ctx-lh-parahippocampal",
-            "1017": "ctx-lh-paracentral",
-            "1018": "ctx-lh-parsopercularis",
-            "1019": "ctx-lh-parsorbitalis",
-            "1020": "ctx-lh-parstriangularis",
-            "1021": "ctx-lh-pericalcarine",
-            "1022": "ctx-lh-postcentral",
-            "1023": "ctx-lh-posteriorcingulate",
-            "1024": "ctx-lh-precentral",
-            "1025": "ctx-lh-precuneus",
-            "1026": "ctx-lh-rostralanteriorcingulate",
-            "1027": "ctx-lh-rostralmiddlefrontal",
-            "1028": "ctx-lh-superiorfrontal",
-            "1029": "ctx-lh-superiorparietal",
-            "1030": "ctx-lh-superiortemporal",
-            "1031": "ctx-lh-supramarginal",
-            "1034": "ctx-lh-transversetemporal",
-            "1035": "ctx-lh-insula",
-            "2002": "ctx-rh-caudalanteriorcingulate",
-            "2003": "ctx-rh-caudalmiddlefrontal",
-            "2005": "ctx-rh-cuneus",
-            "2006": "ctx-rh-entorhinal",
-            "2007": "ctx-rh-fusiform",
-            "2008": "ctx-rh-inferiorparietal",
-            "2009": "ctx-rh-inferiortemporal",
-            "2010": "ctx-rh-isthmuscingulate",
-            "2011": "ctx-rh-lateraloccipital",
-            "2012": "ctx-rh-lateralorbitofrontal",
-            "2013": "ctx-rh-lingual",
-            "2014": "ctx-rh-medialorbitofrontal",
-            "2015": "ctx-rh-middletemporal",
-            "2016": "ctx-rh-parahippocampal",
-            "2017": "ctx-rh-paracentral",
-            "2018": "ctx-rh-parsopercularis",
-            "2019": "ctx-rh-parsorbitalis",
-            "2020": "ctx-rh-parstriangularis",
-            "2021": "ctx-rh-pericalcarine",
-            "2022": "ctx-rh-postcentral",
-            "2023": "ctx-rh-posteriorcingulate",
-            "2024": "ctx-rh-precentral",
-            "2025": "ctx-rh-precuneus",
-            "2026": "ctx-rh-rostralanteriorcingulate",
-            "2027": "ctx-rh-rostralmiddlefrontal",
-            "2028": "ctx-rh-superiorfrontal",
-            "2029": "ctx-rh-superiorparietal",
-            "2030": "ctx-rh-superiortemporal",
-            "2031": "ctx-rh-supramarginal",
-            "2034": "ctx-rh-transversetemporal",
-            "2035": "ctx-rh-insula"
-    };
-
-    //Iterate through name and rearrange csv columns by value to map to key
-    var names_values = Object.values(name);
-    var names_keys = Object.keys(name);
-
-    for (var stuff = 0; stuff < 70; stuff ++) {
-        for (var items = 0; items < 62; items++) {
-            if (headerNames[stuff] === names_values[items]) {
-                headerNames[stuff] = names_keys[items];
-            }
-        }
-    }
-    //Data headers converted to keys
-    //TO DO:
-    //Remove unnecessary columns
-    //Build object with key = row number(index) and value = gene
-    */
-}
-
 /**
 * Function: Applys a precision to an array of floats.
 * floatArray: An array of floats
@@ -247,33 +154,20 @@ function initializeDefaultValues() {
 }
 
 /**
- * @function returns a transformed camera position.
- * @ phi: Angle Phi
- * @ theta: Angle Theta
- * @ radius: Radius to be positioned on.
- */
-function getCameraPosition(phi, theta, radious) {
-     x = radious * Math.sin( theta * Math.PI / 360 )
-         * Math.cos( phi * Math.PI / 360 );
-     y = radious * Math.sin( phi * Math.PI / 360 );
-     z = radious * Math.cos( theta * Math.PI / 360 )
-                            * Math.cos( phi * Math.PI / 360 );
-    
-    return new THREE.Vector3(x, y, z);
-}
-
-/**
  * @function setups the camera, so that when the brain renders, it renders
  * at the user defined position.
  */
 function setupCamera(container) {
-    
 
     container.brain.camera.position.x = container.cameraX
     container.brain.camera.position.y = container.cameraY
     container.brain.camera.position.z = container.cameraZ
 }
 
+/**
+ * Sets the default values for our scope.
+ * @param {Scope} container Scope that contains the individual elements.
+ */
 function setupDefaultValues(container) {
     
     // Sets the default camera position to be {0, 0, 200} x, y, z respectively.
@@ -333,8 +227,6 @@ function renderBrain(scope, colorsDict) {
     });   
 }
 
-
-
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
@@ -343,74 +235,65 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
     
     $('#search-form').on('click', '#upload', function(e) { 
         var path = $('#upload-path').val();
-        
         if(path == "") {
             $scope.fileStatus = "Empty file path submitted. Please enter a valid file path."
             $scope.$apply();
             return;
         }
-        
-        d3.csv("data/keys.csv", function(keystuff) { 
-            d3.csv(path, function(error, datas) {
+        d3.csv(path, function(error, csvObject) {
+            
+            // Get the file path of the users defined file, so we can display it for the user.
+            $scope.filePath = path;
+            
+            if(error) {
+                // Inform the user that the file failed to load.
+                $scope.fileStatus = "ERROR failed to upload file!";
+                $scope.$apply();
                 
+            } else {
                 
-                
+                // Inform the user that the file successfully loaded, and display the path.
+                $scope.fileStatus = "File uploaded successfully!";
+                $scope.$apply();
 
-                // Get the file path of the users defined file, so we can display it for the user.
-                $scope.filePath = path;
-              
-                if(error) {
-                  // Inform the user that the file failed to load.
-                  $scope.fileStatus = "ERROR failed to upload file!";
-                  $scope.$apply();
-                  
-                } else {
-                  
-                  // Inform the user that the file successfully loaded, and display the path.
-                  $scope.fileStatus = "File uploaded successfully!";
-                  $scope.$apply();
+                //attempt at making an input bar for genes
+                // Load a new brain when the user clicks Go
+                $('#search-form').on('click', '#search-button', function(e) {
+                    e.preventDefault();
 
-                    //attempt at making an input bar for genes
-                    // Load a new brain when the user clicks Go
-                    $('#search-form').on('click', '#search-button', function(e) {
-                        e.preventDefault();
+                    //Currently, values in 'keyObj' and indexes in 'datas' are identical
+                    var geneName = $scope.geneSearch.trim().toUpperCase()
+                    var geneLoc;
 
-                        //Currently, values in 'keyObj' and indexes in 'datas' are identical
-                        var geneName = $scope.geneSearch.trim().toUpperCase()
-                        var geneLoc;
-                        
-                        
+                    // Attempt to get the Gene from the User. Throw a message if it fails.
+                    try {
+                        geneLocDictionary = getGeneLocDict(csvObject);
+                        geneLoc = getGeneLocation(geneLocDictionary, geneName);
+                    }
+                    catch (error_message) {
+                        $scope.geneStatus = error_message;
+                        $scope.$apply();
+                        return;
+                    }
 
-                        // Attempt to get the Gene from the User. Throw a message if it fails.
-                        try {
-                            geneLocDictionary = getGeneLocDict(datas);
-                            geneLoc = getGeneLocation(geneLocDictionary, geneName);
-                        }
-                        catch (error_message) {
-                            $scope.geneStatus = error_message;
-                            $scope.$apply();
-                            return;
-                        }
-
-                        // Get the brain data related to the specific Gene Location.
-                        var data = getRegionDict(geneLoc, datas);
-                        
-                        // Get the color scale and colored data for the Brain.
-                        colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);
-                        dict = getColorDict(data, colorScale);
-                        
-                        //render new brain
-                        $scope.brain = renderBrain($scope, dict);
-                        
-                        
-                        $('#nav_legend').empty()
-                        colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
-                        setupCamera($scope);
-                        initializeDefaultValues();  
-                        registerEvents($scope.brain);
-                    });
-                }
-            });
+                    // Get the brain data related to the specific Gene Location.
+                    var geneRegionData = getRegionDict(geneLoc, csvObject);
+                    
+                    // Get the color scale and colored data for the Brain.
+                    colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);
+                    dict = getColorDict(geneRegionData, colorScale);
+                    
+                    //render new brain
+                    $scope.brain = renderBrain($scope, dict);
+                    
+                    
+                    $('#nav_legend').empty()
+                    colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
+                    setupCamera($scope);
+                    initializeDefaultValues();  
+                    registerEvents($scope.brain);
+                });
+            }
         });
     });
 }]);
