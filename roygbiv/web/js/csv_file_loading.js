@@ -314,6 +314,39 @@ function setupDefaultValues(container) {
     container.$apply();
 }
 
+function renderBrain(scope, colorsDict) {
+    return new Brain({
+        divID: "nav-brain",  // div to render brain
+        callback: function (mesh) {
+            // callback when a mesh is selected/deselected
+            if (!mesh) {
+                // deselected: clear label & plot
+                scope.selectedLabel = "";
+
+                $('#plot-canvas').empty();
+            } else {
+                // selected: add label, do plot.
+                scope.selectedLabel = mesh.name;
+                do_boxplot("plot-canvas", mesh);
+
+            }
+            scope.$apply();
+        },
+        manifest_url: 'data/lh_files_to_load.json',
+        label_mapper: "data/labels.json",
+        colors: colorsDict,
+        onAnimation: function (camera) { // Call back function so that the camera position                                  
+                                         // is displayed for the user to see.
+            scope.cameraPosDisplayX = camera.position.x;
+            scope.cameraPosDisplayY = camera.position.y;
+            scope.cameraPosDisplayZ = camera.position.z;
+            scope.$apply();
+        }
+    });   
+}
+
+
+
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
@@ -332,6 +365,8 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
         d3.csv("data/keys.csv", function(keystuff) { 
             d3.csv(path, function(error, datas) {
                 
+                getKeyDict(datas);
+
                 $scope.filePath = path;
               
                 if(error) {
@@ -363,7 +398,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             $scope.$apply();
                             return;
                         }
-                        
+                       
                         var data = datas[geneLoc];
                         //console.log(data);
 
@@ -379,34 +414,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         }
 
                         //render new brain
-                        $scope.brain = new Brain({
-                            divID: "nav-brain",  // div to render brain
-                            callback: function (mesh) {
-                                // callback when a mesh is selected/deselected
-                                if (!mesh) {
-                                    // deselected: clear label & plot
-                                    $scope.selectedLabel = "";
-
-                                    $('#plot-canvas').empty();
-                                } else {
-                                    // selected: add label, do plot.
-                                    $scope.selectedLabel = mesh.name;
-                                    do_boxplot("plot-canvas", mesh);
-
-                                }
-                                $scope.$apply();
-                            },
-                            manifest_url: 'data/lh_files_to_load.json',
-                            label_mapper: "data/labels.json",
-                            colors: dict,
-                            onAnimation: function (camera) { // Call back function so that the camera position                                  // is displayed for the user to see.
-                                $scope.cameraPosDisplayX = camera.position.x;
-                                $scope.cameraPosDisplayY = camera.position.y;
-                                $scope.cameraPosDisplayZ = camera.position.z;
-                                $scope.$apply();
-                            }
-                            
-                        });   
+                        $scope.brain = renderBrain($scope, dict);
                         
                         
                         $('#nav_legend').empty()
