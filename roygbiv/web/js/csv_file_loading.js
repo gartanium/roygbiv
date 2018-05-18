@@ -320,7 +320,6 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
 
     setupDefaultValues($scope);
     
-    // TODO: Functionality for uploading a csv file for the brain.
     $('#search-form').on('click', '#upload', function(e) { 
         var path = $('#upload-path').val();
         

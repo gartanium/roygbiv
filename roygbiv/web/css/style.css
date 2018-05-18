@@ -177,6 +177,10 @@ body {
   margin: 0;
   list-style: none;
   float: left;
+  top: 2em;
+  left: -1px;
+  border: 0;
+  margin-right: 0;
 }
 
 .camera-text {
