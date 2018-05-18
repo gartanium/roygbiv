@@ -146,31 +146,7 @@ function getColorScale(min, mid, max, data) {
     
     return colors;
 }
-
-/**
-* Function: Returns the location of a gene.
-* locationDict: Dictionary containing the genes as keys and locations as values.
-* gene: String containing the gene name.
-* Validates if a Gene is valid, if not, throws an error.
-**/
-function getGeneLocation(locationDict, gene) {
-    var location = locationDict[0][gene];
-    try {
-        if(gene == "") {
-            throw "ERROR: No gene was specified (Empty string)";
-        }
-        else if(location == null) {
-            throw "ERROR: " + gene +" is not a valid entry";
-        }
-        else {
-            return location;
-        }
-    }
-    catch (errorMsg) {
-        throw errorMsg;
-    }
-}
-            
+        
 /**
  * Function: Returns a dictionary containing colors for different regions of the Brain.
  * Scale: A d3.scale 
@@ -181,7 +157,7 @@ function getColorDict(data, colorsScale) {
     //take color scale and return values mapped to object
     //range will be replaced with list of values, key should be
     //taken from column headers
-    
+
     
     //ISSUE Each val of j represented in values
     //Each val of j + 1002 not represented in data
@@ -323,7 +299,7 @@ function setupDefaultValues(container) {
 function renderBrain(scope, colorsDict) {
 
     //remove old brain to render new upon user click go
-    if ($scope.brain) {
+    if (scope.brain) {
         $('#nav-brain').empty();
     }
 
@@ -407,7 +383,8 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
 
                         // Attempt to get the Gene from the User. Throw a message if it fails.
                         try {
-                            geneLoc = getGeneLocation(getGeneLocDict(datas), geneName)
+                            geneLocDictionary = getGeneLocDict(datas);
+                            geneLoc = getGeneLocation(geneLocDictionary, geneName);
                         }
                         catch (error_message) {
                             $scope.geneStatus = error_message;
@@ -415,10 +392,8 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                             return;
                         }
 
-                        getRegionDict(geneLoc, datas);
-                       
                         // Get the brain data related to the specific Gene Location.
-                        var data = datas[geneLoc];
+                        var data = getRegionDict(geneLoc, datas);
                         
                         // Get the color scale and colored data for the Brain.
                         colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);

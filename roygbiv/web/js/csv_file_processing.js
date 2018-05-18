@@ -3,6 +3,30 @@
  * @description Functions for processing a csv file.
  */
 
+/**
+* Function: Returns the location of a gene.
+* locationDict: Dictionary containing the genes as keys and locations as values.
+* gene: String containing the gene name.
+* Validates if a Gene is valid, if not, throws an error.
+**/
+function getGeneLocation(locationDict, gene) {
+    var location = locationDict[gene];
+    try {
+        if(gene == "") {
+            throw "ERROR: No gene was specified (Empty string)";
+        }
+        else if(location == null) {
+            throw "ERROR: " + gene +" is not a valid entry";
+        }
+        else {
+            return location;
+        }
+    }
+    catch (errorMsg) {
+        throw errorMsg;
+    }
+}
+    
  function getGeneLocDict(csv_object) {
     var dictionary = {};
     length = csv_object.length;
@@ -37,8 +61,8 @@
                 key2 = headerObj[i + 2002];
 
                 // Get the data from the specific brain region. 
-                data1 = geneData[key1];
-                data2 = geneData[key2];
+                data1 = parseFloat(geneData[key1]);
+                data2 = parseFloat(geneData[key2]);
 
                 // Set it to our return object.
                 regionDictionary[i + 1002] = data1;
