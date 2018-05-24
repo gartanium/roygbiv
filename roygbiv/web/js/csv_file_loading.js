@@ -275,25 +275,24 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     }
 
                     // Get the brain data related to the specific Gene Location.
-                    var geneRegionData = getRegionDict(geneLoc, csvObject);
-                    var values = Object.values(geneRegionData);
-                    values = values.map(Number);
+                    var geneRegionDataObject = getRegionDict(geneLoc, csvObject);
+                    var geneRegionDataArray = Object.values(geneRegionDataObject);
+                    geneRegionDataArray = geneRegionDataArray.map(Number);
 
                      // Get the color scale and colored data for the Brain.
                      // If the zscore box is checked, use zscore for rendering the brain. Otherwise use min/max.
                     if($scope.zScoreCheckbox) {
 
                         // normalize the region specific data using the z-score.
-
-                        values = applyZScore(values);
-                        colorScale = getColorScale(Math.min.apply(Math, values), 0, Math.max.apply(Math, values));
+                        geneRegionDataArray = applyZScore(geneRegionDataArray);
+                        colorScale = getColorScale(Math.min.apply(Math, geneRegionDataArray), 0, Math.max.apply(Math, geneRegionDataArray));
                     }
                     else {
                         colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);
                     }
                     
-                    // Get the dictionary containing color values for each region of the brain according to our scale we made.
-                    dict = getColorDict(values, colorScale);
+                    // Get the dictionary or "Associativge Array" containing color values for each region of the brain according to our scale we made.
+                    dict = getColorDict(geneRegionDataArray, colorScale);
                     
                     //render new brain
                     $scope.brain = renderBrain($scope, dict);
