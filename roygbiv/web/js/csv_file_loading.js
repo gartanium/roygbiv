@@ -86,7 +86,7 @@ function getColorDict(data, colorsScale) {
  * Brain: The brain object
 **/
 function registerRegionCheckboxes(brain) {
-    $('#region-selection').on('change', '#region-select', function(e) { 
+    $('.region-select').on('change', function(e) { 
         name = this.name;
         if(this.checked) {
             brain.showMeshByName(name);
@@ -95,6 +95,19 @@ function registerRegionCheckboxes(brain) {
         {
             brain.hideMeshByName(name);
         }
+    });
+}
+
+function updateRegionDisplay(className, brain) {
+    $('.'+className).each(function() {
+        
+        if($(this).is(':checked')) {
+            brain.showMeshByName(name);
+        }  
+        else {
+            brain.hideMeshByName(name);
+        }
+        
     });
 }
 
@@ -222,7 +235,9 @@ function renderBrain(scope, colorsDict) {
             scope.cameraPosDisplayZ = camera.position.z;
             scope.$apply();
         }
-    });   
+    });
+    
+    updateRegionDisplay("region-select", $scope.brain);
 }
 
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the

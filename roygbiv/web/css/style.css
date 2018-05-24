@@ -186,3 +186,11 @@ body {
 .camera-text {
     width: 50px;
 }
+
+
+input {
+    float: left;
+    margin: 5px 0px;
+    width: 10%;
+    border:solid 1px;
+}

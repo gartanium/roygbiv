@@ -54,43 +54,6 @@
                     <button class="dropbtn">Region Display 
                     <i class="fa fa-caret-down"></i>
                     </button>
-                    <div class="dropdown-content" id="region-selection">
-                        <ul>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalanteriorcingulate"> ctx-lh-caudalanteriorcingulate</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalmiddlefrontal"> ctx-lh-caudalmiddlefrontal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-cuneus"> ctx-lh-cuneus</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-entorhinal"> ctx-lh-entorhinal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-fusiform"> ctx-lh-fusiform</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-inferiorparietal"> ctx-lh-inferiorparietal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-inferiortemporal"> ctx-lh-inferiortemporal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-isthmuscingulate"> ctx-lh-isthmuscingulate</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lateraloccipital"> ctx-lh-lateraloccipital</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lateralorbitofrontal"> ctx-lh-lateralorbitofrontal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lingual"> ctx-lh-lingual</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-medialorbitofrontal"> ctx-lh-medialorbitofrontal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-middletemporal"> ctx-lh-middletemporal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parahippocampal"> ctx-lh-parahippocampal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-paracentral"> ctx-lh-paracentral</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parsopercularis"> ctx-lh-parsopercularis</li>
-                        </ul>
-                        <ul>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parsorbitalis"> ctx-lh-parsorbitalis</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parstriangularis"> ctx-lh-parstriangularis</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-pericalcarine"> ctx-lh-pericalcarine</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-postcentral"> ctx-lh-postcentral</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-posteriorcingulate"> ctx-lh-posteriorcingulate</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-precentral"> ctx-lh-precentral</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-precuneus"> ctx-lh-precuneus</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-rostralanteriorcingulate"> ctx-lh-rostralanteriorcingulate</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-rostralmiddlefrontal"> ctx-lh-rostralmiddlefrontal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiorfrontal"> ctx-lh-superiorfrontal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiorparietal"> ctx-lh-superiorparietal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiortemporal"> ctx-lh-superiortemporal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-supramarginal"> ctx-lh-supramarginal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-transversetemporal"> ctx-lh-transversetemporal</li>
-                            <li><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-insula"> ctx-lh-insula</li>
-                        </ul>
-                    </div>
                 </div> 
                 <div class="dropdown">
                     <button class="dropbtn">Help 
@@ -112,6 +75,33 @@
             <div class="sidenav">
                 <div id="header_n_label">
                 <h1>ROYGBIV</h1>
+                <div id="nav_label">
+                        <table>
+                            <tr>
+                                <th>File: </th>
+                                <th>{{filePath}}</th>
+                            </tr>
+                            <tr>
+                                <th>Status: </th>
+                                <th>{{fileStatus}}</th>
+                            </tr>
+                            <tr>
+                                <th>Gene: </th>
+                                <th>{{geneStatus}}</th>
+                            </tr>
+                            <tr>
+                                <th>Camera Position: </th>
+                                <th>{{cameraPosDisplayX + " " + cameraPosDisplayY + " " + cameraPosDisplayZ}}</th>
+                            </tr>
+    
+                        </table>
+    
+                        <br />
+                        <br />
+                        Shift+click on a label to see stats
+                        <br />
+                        Selected Label: {{selectedLabel}} 
+                    </div>
                 <div class="search-container">
                     <form id="search-form">
                         <table style="width:100%">
@@ -152,36 +142,83 @@
                                 <th><input value="" id="search-field" ng-model="geneSearch" class="search-field" type="search" autocomplete="off" /></th>
                                 <th><button id="search-button" class="search-button">Go</button></th>
                             </tr>
+                            <tr>
+                                
+                            <div id="region-selection">  
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalanteriorcingulate"> ctx-lh-caudalanteriorcingulate</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalmiddlefrontal"> ctx-lh-caudalmiddlefrontal</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-cuneus"> ctx-lh-cuneus</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-entorhinal"> ctx-lh-entorhinal</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-fusiform"> ctx-lh-fusiform</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-inferiorparietal"> ctx-lh-inferiorparietal</th>
+                                </tr>
+                                <tr>
+
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-inferiortemporal"> ctx-lh-inferiortemporal</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-isthmuscingulate"> ctx-lh-isthmuscingulate</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lateraloccipital"> ctx-lh-lateraloccipital</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lateralorbitofrontal"> ctx-lh-lateralorbitofrontal</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lingual"> ctx-lh-lingual</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-medialorbitofrontal"> ctx-lh-medialorbitofrontal</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-middletemporal"> ctx-lh-middletemporal</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parahippocampal"> ctx-lh-parahippocampal</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-paracentral"> ctx-lh-paracentral</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parsopercularis"> ctx-lh-parsopercularis</th>            
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parsorbitalis"> ctx-lh-parsorbitalis</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parstriangularis"> ctx-lh-parstriangularis</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-pericalcarine"> ctx-lh-pericalcarine</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-postcentral"> ctx-lh-postcentral</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-posteriorcingulate"> ctx-lh-posteriorcingulate</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-precentral"> ctx-lh-precentral</th>
+                                </tr>
+                                <tr>
+                                    
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-precuneus"> ctx-lh-precuneus</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-rostralanteriorcingulate"> ctx-lh-rostralanteriorcingulate</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-rostralmiddlefrontal"> ctx-lh-rostralmiddlefrontal</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiorfrontal"> ctx-lh-superiorfrontal</th>
+                                </tr>
+                                <tr>  
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiorparietal"> ctx-lh-superiorparietal</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiortemporal"> ctx-lh-superiortemporal</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-supramarginal"> ctx-lh-supramarginal</th>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-transversetemporal"> ctx-lh-transversetemporal</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-insula"> ctx-lh-insula</th>
+                                </tr>
+                            </div>
+
+
+
+
                         </table>
                     </form>
                 </div>
-                <div id="nav_label">
-                    <table>
-                        <tr>
-                            <th>File: </th>
-                            <th>{{filePath}}</th>
-                        </tr>
-                        <tr>
-                            <th>Status: </th>
-                            <th>{{fileStatus}}</th>
-                        </tr>
-                        <tr>
-                            <th>Gene: </th>
-                            <th>{{geneStatus}}</th>
-                        </tr>
-                        <tr>
-                            <th>Camera Position: </th>
-                            <th>{{cameraPosDisplayX + " " + cameraPosDisplayY + " " + cameraPosDisplayZ}}</th>
-                        </tr>
 
-                    </table>
-
-                    <br />
-                    <br />
-                    Shift+click on a label to see stats
-                    <br />
-                    Selected Label: {{selectedLabel}} 
-                </div>
                 <br />
                 <div id="plot-canvas" style="width: 400px; height: 300px;"></div>
                 
