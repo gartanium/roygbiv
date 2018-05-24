@@ -95,6 +95,15 @@ function getGeneLocation(locationDict, gene) {
     return regionDictionary;
  }
 
+ /**
+  * @function applyZScore Normalizes the array using a z-score.
+  * @param {Float Array} geneRegionData An array of floats containing gene expression data, for the regions of the brain.
+  */
+ function applyZScore(geneRegionData) {
+    geneRegionData = arr.zScores(geneRegionData);
+    return geneRegionData;
+ }
+
  /** 
   * Generates an associative array with a Key for each region,
   * usefull for processing the brain gene expression data.

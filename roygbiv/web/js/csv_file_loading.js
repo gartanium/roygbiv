@@ -64,19 +64,17 @@ function getColorDict(data, colorsScale) {
     //take color scale and return values mapped to object
     //range will be replaced with list of values, key should be
     //taken from column headers
-
-    
     //ISSUE Each val of j represented in values
     //Each val of j + 1002 not represented in data
     //Color scale works, but unfortunately since expressions are all so similar, colors are almost identical
     var dict = [];
-    for (var j = 1002; j < 1036; j++) {
+    for (var j = 0; j < 34; j++) {
         if (data[j]) {
             
             red = d3.color(colorsScale(parseFloat(data[j]))).r / 256;
             green =  d3.color(colorsScale(parseFloat(data[j]))).g / 256;
             blue = d3.color(colorsScale(parseFloat(data[j]))).b / 256;
-            dict[j] = [red, green, blue];
+            dict[j + 1002] = [red, green, blue];
         }
     }
     return dict;
@@ -278,10 +276,24 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
 
                     // Get the brain data related to the specific Gene Location.
                     var geneRegionData = getRegionDict(geneLoc, csvObject);
+                    var values = Object.values(geneRegionData);
+                    values = values.map(Number);
+
+                     // Get the color scale and colored data for the Brain.
+                     // If the zscore box is checked, use zscore for rendering the brain. Otherwise use min/max.
+                    if($scope.zScoreCheckbox) {
+
+                        // normalize the region specific data using the z-score.
+
+                        values = applyZScore(values);
+                        colorScale = getColorScale(Math.min.apply(Math, values), 0, Math.max.apply(Math, values));
+                    }
+                    else {
+                        colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);
+                    }
                     
-                    // Get the color scale and colored data for the Brain.
-                    colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);
-                    dict = getColorDict(geneRegionData, colorScale);
+                    // Get the dictionary containing color values for each region of the brain according to our scale we made.
+                    dict = getColorDict(values, colorScale);
                     
                     //render new brain
                     $scope.brain = renderBrain($scope, dict);
