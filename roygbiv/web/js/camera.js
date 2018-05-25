@@ -14,6 +14,10 @@ function copyCameraProperties(cameraOld, cameraNew) {
         cameraNew.position.x = cameraOld.position.x;
         cameraNew.position.y = cameraOld.position.y;
         cameraNew.position.z = cameraOld.position.z;
+
+        cameraNew.rotation.x = cameraOld.rotation.x;
+        cameraNew.rotation.y = cameraOld.rotation.y;
+        cameraNew.rotation.z = cameraOld.rotation.z;
 }
 
 /**

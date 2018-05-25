@@ -165,7 +165,7 @@ function registerEvents(scope, cameraSettingsArray) {
         $('#search-form').on('click', '#'+scope.cameraSettingName, function(e) {
             
             //scope.brain.camera.copy(cameraSettingsArray[scope.cameraSettingName]);
-            //copyProperties(scope.brain.camera, cameraSettingsArray[scope.cameraSettingName]);
+            copyCameraProperties(cameraSettingsArray[this.id], scope.brain.camera);
         })
     });
     
