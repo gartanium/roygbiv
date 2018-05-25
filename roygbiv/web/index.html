@@ -26,7 +26,8 @@
         <script src="js/csv_file_processing.js"></script>
         <script src="js/brain.utils.js"></script>
         <script src="js/brain.js"></script>
-		<script src="js/boxplot.js"></script>
+        <script src="js/boxplot.js"></script>
+        <script src="js/camera.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
         <!--Some stuff for color scale-->
@@ -78,20 +79,20 @@
                 <div id="nav_label">
                         <table>
                             <tr>
-                                <th>File: </th>
-                                <th>{{filePath}}</th>
+                                <td>File: </td>
+                                <td>{{filePath}}</td>
                             </tr>
                             <tr>
-                                <th>Status: </th>
-                                <th>{{fileStatus}}</th>
+                                <td>Status: </td>
+                                <td>{{fileStatus}}</td>
                             </tr>
                             <tr>
-                                <th>Gene: </th>
-                                <th>{{geneStatus}}</th>
+                                <td>Gene: </td>
+                                <td>{{geneStatus}}</td>
                             </tr>
                             <tr>
-                                <th>Camera Position: </th>
-                                <th>{{cameraPosDisplayX + " " + cameraPosDisplayY + " " + cameraPosDisplayZ}}</th>
+                                <td>Camera Position: </td>
+                                <td>{{cameraPosDisplayX + " " + cameraPosDisplayY + " " + cameraPosDisplayZ}}</td>
                             </tr>
     
                         </table>
@@ -106,115 +107,122 @@
                     <form id="search-form">
                         <table style="width:100%">
                             <tr>
-                                <th>CSV File Upload</th>
-                                <th><input value="" id="upload-path" class="search-field" type="search" autocomplete="off" /></th>
-                                <th><button id="upload" class="search-button">Upload</button></th>
+                                <td>CSV File Upload</td>
+                                <td><input value="" id="upload-path" class="search-field" type="search" autocomplete="off" /></td>
+                                <td><button id="upload" class="search-button">Upload</button></td>
                             </tr>
                             <tr>
-                                <th>Region Display</th>
-                                <th><button id="clear-regions" class="search-button">Clear</button></th>
-                                <th><button id="reset-regions" class="search-button">Reset</button></th>
+                                <td>Region Display</td>
+                                <td><button id="clear-regions" class="search-button">Clear</button></td>
+                                <td><button id="reset-regions" class="search-button">Reset</button></td>
                             </tr>
                             <tr>
-                                <th>Camera XYZ Position</th>
-                                <th><input type="text" class="camera-text" ng-model="cameraX"></th>
-                                <th><input type="text" class="camera-text" ng-model="cameraY"></th>
-                                <th><input type="text" class="camera-text" ng-model="cameraZ"></th>
+                                <td>Camera XYZ Position</td>
+                                <td><input type="text" class="camera-text" ng-model="cameraX"></td>
+                                <td><input type="text" class="camera-text" ng-model="cameraY"></td>
+                                <td><input type="text" class="camera-text" ng-model="cameraZ"></td>
                             </tr>
                             <tr>
-                                <th>Z-Score</th>
-                                <th><input type="checkbox" ng-model="zScoreCheckbox"</th>
+                                <td>Z-Score</td>
+                                <td><input type="checkbox" ng-model="zScoreCheckbox"</td>
                             </tr>
                             <tr>
-                                <th>Minimum</th>
-                                <th><input type="text" ng-model="userMin"></th>
+                                <td>Minimum</td>
+                                <td><input type="text" ng-model="userMin"></td>
                             </tr>
                             <tr>
-                                <th>Mid</th>
-                                <th><input type="text" ng-model="userMid"></th>
+                                <td>Mid</td>
+                                <td><input type="text" ng-model="userMid"></td>
                             </tr>
                             <tr>
-                                <th>Maximum</th>
-                                <th><input type="text" ng-model="userMax"></th>
+                                <td>Maximum</td>
+                                <td><input type="text" ng-model="userMax"></td>
                             </tr>
                             <tr>
-                                <th>Gene Selection</th>
-                                <th><input value="" id="search-field" ng-model="geneSearch" class="search-field" type="search" autocomplete="off" /></th>
-                                <th><button id="search-button" class="search-button">Go</button></th>
+                                <td>Gene Selection</td>
+                                <td><input value="" id="search-field" ng-model="geneSearch" class="search-field" type="search" autocomplete="off" /></td>
+                                <td><button id="search-button" class="search-button">Go</button></td>
                             </tr>
                             <tr>
+                                <td>Camera</td>
+                                <td><input value="" class="search-field" ng-model="cameraSettingName"></td>
+                                <td><button id="camera-button" class="search-button">Snapshot</button></td>
+                            </tr>
+                            </table>
+
+                            <table id="cameraSettings">
                                 
+                            </table>
+
+                            <table>
+                            <tr>
                             <div id="region-selection">  
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalanteriorcingulate"> ctx-lh-caudalanteriorcingulate</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalmiddlefrontal"> ctx-lh-caudalmiddlefrontal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalanteriorcingulate"> ctx-lh-caudalanteriorcingulate</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalmiddlefrontal"> ctx-lh-caudalmiddlefrontal</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-cuneus"> ctx-lh-cuneus</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-entorhinal"> ctx-lh-entorhinal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-cuneus"> ctx-lh-cuneus</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-entorhinal"> ctx-lh-entorhinal</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-fusiform"> ctx-lh-fusiform</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-inferiorparietal"> ctx-lh-inferiorparietal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-fusiform"> ctx-lh-fusiform</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-inferiorparietal"> ctx-lh-inferiorparietal</td>
                                 </tr>
                                 <tr>
 
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-inferiortemporal"> ctx-lh-inferiortemporal</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-isthmuscingulate"> ctx-lh-isthmuscingulate</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-inferiortemporal"> ctx-lh-inferiortemporal</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-isthmuscingulate"> ctx-lh-isthmuscingulate</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lateraloccipital"> ctx-lh-lateraloccipital</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lateralorbitofrontal"> ctx-lh-lateralorbitofrontal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lateraloccipital"> ctx-lh-lateraloccipital</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lateralorbitofrontal"> ctx-lh-lateralorbitofrontal</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lingual"> ctx-lh-lingual</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-medialorbitofrontal"> ctx-lh-medialorbitofrontal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-lingual"> ctx-lh-lingual</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-medialorbitofrontal"> ctx-lh-medialorbitofrontal</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-middletemporal"> ctx-lh-middletemporal</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parahippocampal"> ctx-lh-parahippocampal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-middletemporal"> ctx-lh-middletemporal</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parahippocampal"> ctx-lh-parahippocampal</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-paracentral"> ctx-lh-paracentral</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parsopercularis"> ctx-lh-parsopercularis</th>            
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-paracentral"> ctx-lh-paracentral</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parsopercularis"> ctx-lh-parsopercularis</td>            
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parsorbitalis"> ctx-lh-parsorbitalis</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parstriangularis"> ctx-lh-parstriangularis</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parsorbitalis"> ctx-lh-parsorbitalis</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-parstriangularis"> ctx-lh-parstriangularis</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-pericalcarine"> ctx-lh-pericalcarine</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-postcentral"> ctx-lh-postcentral</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-pericalcarine"> ctx-lh-pericalcarine</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-postcentral"> ctx-lh-postcentral</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-posteriorcingulate"> ctx-lh-posteriorcingulate</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-precentral"> ctx-lh-precentral</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-posteriorcingulate"> ctx-lh-posteriorcingulate</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-precentral"> ctx-lh-precentral</td>
                                 </tr>
                                 <tr>
                                     
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-precuneus"> ctx-lh-precuneus</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-rostralanteriorcingulate"> ctx-lh-rostralanteriorcingulate</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-precuneus"> ctx-lh-precuneus</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-rostralanteriorcingulate"> ctx-lh-rostralanteriorcingulate</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-rostralmiddlefrontal"> ctx-lh-rostralmiddlefrontal</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiorfrontal"> ctx-lh-superiorfrontal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-rostralmiddlefrontal"> ctx-lh-rostralmiddlefrontal</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiorfrontal"> ctx-lh-superiorfrontal</td>
                                 </tr>
                                 <tr>  
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiorparietal"> ctx-lh-superiorparietal</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiortemporal"> ctx-lh-superiortemporal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiorparietal"> ctx-lh-superiorparietal</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-superiortemporal"> ctx-lh-superiortemporal</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-supramarginal"> ctx-lh-supramarginal</th>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-transversetemporal"> ctx-lh-transversetemporal</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-supramarginal"> ctx-lh-supramarginal</td>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-transversetemporal"> ctx-lh-transversetemporal</td>
                                 </tr>
                                 <tr>
-                                    <th><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-insula"> ctx-lh-insula</th>
+                                    <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-insula"> ctx-lh-insula</td>
                                 </tr>
                             </div>
-
-
-
-
                         </table>
                     </form>
                 </div>

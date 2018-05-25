@@ -128,9 +128,10 @@ function checkBoxesByClass(className, boolChecked) {
 
 /** 
  * @function registerEvents Registers events associated with the brain.
- * @param {brain} brain Brain to be rendered to the screen. 
+ * @param {scope} scope scope containing the brain object.
+ * @param {Camera Array} cameraSettingsArray an array containing camera objects, with their setting name as their key.
  **/
-function registerEvents(brain) {
+function registerEvents(scope, cameraSettingsArray) {
     // Hide brain when user clicks clear
     $('#search-form').on('click', '#clear-regions', function(e) { 
         checkBoxesByClass("region-select", false);
@@ -139,13 +140,42 @@ function registerEvents(brain) {
     $('#search-form').on('click', '#reset-regions', function(e) { 
         checkBoxesByClass("region-select", true);
     });
+
+    // Register the button for saving the camera data.
+    $('#search-form').on('click', '#camera-button', function(e) {
+        
+        var camera = scope.brain.camera;
+        deepCopyObjectToList(camera, cameraSettingsArray, scope.cameraSettingName);
+
+        // Find a <table> element with id="cameraSettings":
+        var table = document.getElementById("cameraSettings");
+
+        // Create an empty <tr> element and add it to the 1st position of the table:
+        var row = table.insertRow(0);
+
+        // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+
+        // Add some text to the new cells:
+        cell1.innerHTML = scope.cameraSettingName;
+        cell2.innerHTML = "<button class=\"cameraSettingsButton\" id =\"" + scope.cameraSettingName + "\">Go</button>";
+     
+        // Register the event.
+        $('#search-form').on('click', '#'+scope.cameraSettingName, function(e) {
+            
+            //scope.brain.camera.copy(cameraSettingsArray[scope.cameraSettingName]);
+            //copyProperties(scope.brain.camera, cameraSettingsArray[scope.cameraSettingName]);
+        })
+    });
     
     // Register the checkboxes that hide/show the brain.
-    registerRegionCheckboxes(brain);
+    registerRegionCheckboxes(scope.brain);
 
     // Register downloading the brain SVG
     registerDownloadSVG();
 }
+
 
 // Used for downloading SVGS
 function registerDownloadSVG() {
@@ -312,12 +342,12 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     //render new brain
                     $scope.brain = renderBrain($scope, dict);
                     
-                    
+                    var cameraSettings = new Array();
                     $('#nav_legend').empty()
                     colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
                     setupCamera($scope);
                     initializeDefaultValues();  
-                    registerEvents($scope.brain);
+                    registerEvents($scope, cameraSettings);
                 });
             }
         });
