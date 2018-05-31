@@ -251,7 +251,7 @@ var Brain = function(kwargs) {
 
 		this.controls.update();
 		this.renderer.render( this.scene, this.camera );
-        _this.onAnimation(this.camera);
+        
 	}
 
 	// lights

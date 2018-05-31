@@ -10,18 +10,23 @@ function deepCopyObjectToList(object, list, key) {
     list[key] = copiedObject;
 }
 
-function copyCameraProperties(cameraOld, cameraNew) {
-        cameraNew.position.x = cameraOld.position.x;
-        cameraNew.position.y = cameraOld.position.y;
-        cameraNew.position.z = cameraOld.position.z;
+function copyCameraProperties(cameraNew, cameraOld) {
+      
 
-        cameraNew.rotation.x = cameraOld.rotation.x;
-        cameraNew.rotation.y = cameraOld.rotation.y;
-        cameraNew.rotation.z = cameraOld.rotation.z;
+        var properties = ["aspect", "matrix", "matrixWorld", "position", "projectionMatrix", "quaternion", "rotation", "modelViewMatrix"];
 
-        //cameraNew.matrix =  JSON.parse(JSON.stringify(cameraOld.matrix));
+        for(var index in properties) {
+            cameraNew[index] = jQuery.extend(true, {}, cameraOld[index]);
+        }
 
-
+        
+        /*for(var k in cameraOld) {
+            if($.isFunction(k) !== false) {
+                cameraNew[k] = jQuery.extend(true, {}, cameraOld[k]);
+            }
+        }
+        cameraNew.updateProjectionMatrix();
+        return cameraNew;*/
 }
 
 /**

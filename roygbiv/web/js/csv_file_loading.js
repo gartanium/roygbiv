@@ -163,8 +163,23 @@ function registerEvents(scope, cameraSettingsArray) {
         // Register the event.
         $('#search-form').on('click', '#'+scope.cameraSettingName, function(e) {
             
-            //scope.brain.camera.copy(cameraSettingsArray[scope.cameraSettingName]);
-            copyCameraProperties(cameraSettingsArray[this.id], scope.brain.camera);
+
+            //var properties = ["aspect", "matrix", "matrixWorld", "position", "projectionMatrix", "quaternion", "rotation", "modelViewMatrix"];
+            var properties = ["up", "position", "rotation", "matrix", "projectionMatrix", "quaternion"];
+
+            for(i = 0; i < properties.length; i++) {
+                index = properties[i];
+                
+                property = cameraSettingsArray[this.id][index].clone();
+                scope.brain.camera[index].copy(property); 
+            }
+            scope.brain.camera.updateProjectionMatrix();
+
+    
+        
+            //copyCameraProperties(cameraSettingsArray[this.id], scope.brain.camera);
+            //scope.brain.camera = cameraSettingsArray[this.id].clone();
+            //for(var k in cameraSettingsArray[this.id]) scope.brain.camera[k]=cameraSettingsArray[this.id][k];
         })
     });
     
