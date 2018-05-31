@@ -18,6 +18,10 @@ function copyCameraProperties(cameraOld, cameraNew) {
         cameraNew.rotation.x = cameraOld.rotation.x;
         cameraNew.rotation.y = cameraOld.rotation.y;
         cameraNew.rotation.z = cameraOld.rotation.z;
+
+        //cameraNew.matrix =  JSON.parse(JSON.stringify(cameraOld.matrix));
+
+
 }
 
 /**

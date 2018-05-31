@@ -147,7 +147,6 @@ function registerEvents(scope, cameraSettingsArray) {
         var camera = scope.brain.camera;
         deepCopyObjectToList(camera, cameraSettingsArray, scope.cameraSettingName);
 
-        // Find a <table> element with id="cameraSettings":
         var table = document.getElementById("cameraSettings");
 
         // Create an empty <tr> element and add it to the 1st position of the table:
@@ -215,6 +214,7 @@ function setupDefaultValues(container) {
     container.cameraX = 0;
     container.cameraY = 0;
     container.cameraZ = 200;
+    
     container.userMin = 0;
     container.userMid = 6;
     container.userMax = 12;
