@@ -1,3 +1,7 @@
+/**
+ * @function mean returns the mean value for the data.
+ * @param {float array} data 
+ */
 function mean(data) {
     var total = 0;
     length = data.length;
@@ -7,58 +11,46 @@ function mean(data) {
     return total / data.length;
 }
 
+function validateColor(color) {
+
+}
+
 /**
-* Function: Applys a precision to an array of floats.
-* floatArray: An array of floats
-* Precision: Precision of each float in the array (Number of integers after the   * * comma).
-* Return: Returns an adjusted array.
-**/
-function adjustPrecision(floatArray, precision) {
-    for (var i = 0; i < length; i+=1) {
-        floatArray[i] = parseFloat(floatArray[i].toFixed(precision));
+ * @param {string} a string to be converted into a color.
+ */
+function validateColor(colorString) {
+    color = d3.color(colorString);
+    if(color.displayable) {
+        return true;
     }
-    
-    return floatArray;
+    else
+        return false;
 }
 
 /**
-* Function: Adjusts the precision of a float primative
-* Value: Float primative
-* Precision: Decimal Precision
-**/
-function adjustSinglePrecision(value, precision) {
-    return parseFloat(value.toFixed(precision));
-}
-
-/*function calculateMinMidMax(data) {
-    // Convert our data object into an array of floats.
-    var values = Object.values(data);
-    values = values.map(Number);
-        var mid = mean(values),
-        min = Math.min(...values);
-    var big = Math.max(...values);
-    
-}*/
-
-/**
- * Function: Returs a d3.scale for the data. Includes a color scale.
- * Data: An object containing data for Gene Expression.
- **/
-function getColorScale(min, mid, max, data) {
-    
+ * 
+ * @param {float} min Minimum value.
+ * @param {float} mid Middle value (declarer decides what is considered "middle").
+ * @param {float} max Max value.
+ * @param {float array} data An object containing data for Gene Expression.
+ * @param {string} minColor Color for values who are or near min.
+ * @param {string} midColor Color for values who are or near mid.
+ * @param {string} maxColor Color for values who are or near max.
+ */
+function getColorScale(min, mid, max, minColor, midColor, maxColor, data) {
     //return scale of colors for min to mid to max values
     var colors = d3.scale.linear()
         .domain([min, mid, max])
-        .range(['#ffffff', '#ffd400', '#ff0000']);
+        .range([minColor, midColor, maxColor]);
     
     return colors;
 }
         
 /**
- * Function: Returns a dictionary containing colors for different regions of the Brain.
- * Scale: A d3.scale 
- * Data: An array of floats containing Gene Expression data.
-**/
+ * Returns a dictionary of colors based on the brain data and the color scale.
+ * @param {float array} data 
+ * @param {d3.scale} colorsScale 
+ */
 function getColorDict(data, colorsScale) {
     
     //take color scale and return values mapped to object
@@ -98,6 +90,11 @@ function registerRegionCheckboxes(brain) {
     });
 }
 
+/**
+ * @function updateRegionDisplay Shows or hides each brain mesh based upon it being checked.
+ * @param {string} className 
+ * @param {brain} brain 
+ */
 function updateRegionDisplay(className, brain) {
     $('.'+className).each(function() {
         
@@ -239,6 +236,12 @@ function setupDefaultValues(container) {
     container.cameraPosDisplayY = 0;
     container.cameraPosDisplayZ = 200;
     container.$apply();
+
+    container.colorPickerR = '#ffffff';
+    container.colorPickerG = '#ffd400';
+    container.colorPickerB = '#ff0000';
+
+    container.colorStatus = "Enter in 6 digit hexidecimal color codes";
 }
 
 /**
@@ -345,10 +348,10 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
 
                         // normalize the region specific data using the z-score.
                         geneRegionDataArray = applyZScore(geneRegionDataArray);
-                        colorScale = getColorScale(Math.min.apply(Math, geneRegionDataArray), 0, Math.max.apply(Math, geneRegionDataArray));
+                        colorScale = getColorScale(Math.min.apply(Math, geneRegionDataArray), 0, Math.max.apply(Math, geneRegionDataArray), $scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
                     }
                     else {
-                        colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax);
+                        colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax,  $scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
                     }
                     
                     // Get the dictionary or "Associativge Array" containing color values for each region of the brain according to our scale we made.

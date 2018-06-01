@@ -194,3 +194,7 @@ input {
     width: 10%;
     border:solid 1px;
 }
+
+#regionSelectID {
+	font-size: 12px;
+}
