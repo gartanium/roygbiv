@@ -91,10 +91,6 @@
                                 <td>{{geneStatus}}</td>
                             </tr>
                             <tr>
-                                <td>Camera Position: </td>
-                                <td>{{cameraPosDisplayX + " " + cameraPosDisplayY + " " + cameraPosDisplayZ}}</td>
-                            </tr>
-                            <tr>
                                 <td>Color status: </td>
                                 <td>{{colorStatus}}</td>
                             </tr>
@@ -116,15 +112,9 @@
                                 <td><button id="upload" class="search-button">Upload</button></td>
                             </tr>
                             <tr>
-                                <td>Region Display</td>
-                                <td><button id="clear-regions" class="search-button">Clear</button></td>
-                                <td><button id="reset-regions" class="search-button">Reset</button></td>
-                            </tr>
-                            <tr>
-                                <td>Camera XYZ Position</td>
-                                <td><input type="text" class="camera-text" ng-model="cameraX"></td>
-                                <td><input type="text" class="camera-text" ng-model="cameraY"></td>
-                                <td><input type="text" class="camera-text" ng-model="cameraZ"></td>
+                                <td>Gene Selection</td>
+                                <td><input value="" id="search-field" ng-model="geneSearch" class="search-field" type="search" autocomplete="off" /></td>
+                                <td><button id="search-button" class="search-button">Render</button></td>
                             </tr>
                             <tr>
                                 <td>Z-Score</td>
@@ -143,11 +133,6 @@
                                 <td><input type="text" class="search-field" ng-model="userMax"></td>
                             </tr>
                             <tr>
-                                <td>Gene Selection</td>
-                                <td><input value="" id="search-field" ng-model="geneSearch" class="search-field" type="search" autocomplete="off" /></td>
-                                <td><button id="search-button" class="search-button">Render</button></td>
-                            </tr>
-                            <tr>
                                 <td>Camera</td>
                                 <td><input value="" class="search-field" ng-model="cameraSettingName"></td>
                                 <td><button id="camera-button" class="search-button">Snapshot</button></td>
@@ -158,6 +143,11 @@
                                 <td><input value="" class="search-field" ng-model="colorPickerG"></td>
                                 <td><input value="" class="search-field" ng-model="colorPickerB"></td>
                                 <td><button id="color-button" class="search-button">Go</button></td>
+                            </tr>
+                            <tr>
+                                <td>Region Display</td>
+                                <td><button id="clear-regions" class="search-button">Clear</button></td>
+                                <td><button id="reset-regions" class="search-button">Reset</button></td>
                             </tr>
                             </table>
 

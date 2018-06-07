@@ -34,8 +34,6 @@ var Brain = function(kwargs) {
 	_this.view = kwargs.view || {};  // allow overriding fov, near, far, etc
 	_this.value_key = kwargs.value_key || null;
 	_this.my_colors = kwargs.colors;
-    _this.onAnimation = kwargs.onAnimation; // Function call back whenever brain is animated.
-
 
 	// Just to declare the parts up front...
 	this.camera = null;

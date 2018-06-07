@@ -19,12 +19,16 @@ function validateColor(color) {
  * @param {string} a string to be converted into a color.
  */
 function validateColor(colorString) {
-    color = d3.color(colorString);
-    if(color.displayable) {
-        return true;
+
+    try {
+        color = d3.color(colorString);
+        if(color.displayable)
+            return true;
+        else throw 'invalid color';
     }
-    else
+    catch (e) {
         return false;
+    }
 }
 
 /**
@@ -77,6 +81,11 @@ function getColorDict(data, colorsScale) {
  * that displays or hides the specific region of the brain.
  * Brain: The brain object
 **/
+/**
+ * @function registerRegionCheckboxes registers events for showing or hiding a mesh when the associated
+ * checkbox is checked. 
+ * @param {brain} brain Brain associated with the events.
+ */
 function registerRegionCheckboxes(brain) {
     $('.region-select').on('change', function(e) { 
         name = this.name;
@@ -276,13 +285,6 @@ function renderBrain(scope, colorsDict) {
         manifest_url: 'data/lh_files_to_load.json',
         label_mapper: "data/labels.json",
         colors: colorsDict,
-        onAnimation: function (camera) { // Call back function so that the camera position                                  
-                                         // is displayed for the user to see.
-            scope.cameraPosDisplayX = camera.position.x;
-            scope.cameraPosDisplayY = camera.position.y;
-            scope.cameraPosDisplayZ = camera.position.z;
-            scope.$apply();
-        }
     });
     
     updateRegionDisplay("region-select", $scope.brain);
@@ -294,6 +296,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
 
     setupDefaultValues($scope);
     
+    // Upload is for uploading data on how genes are expressed on different regions of the brain.
     $('#search-form').on('click', '#upload', function(e) { 
         var path = $('#upload-path').val();
         if(path == "") {

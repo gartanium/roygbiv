@@ -34,8 +34,10 @@ function getGeneLocation(locationDict, gene) {
     var dictionary = {};
     length = csv_object.length;
     
+    // Start at index 2
     for(i = 2; i < length; i++) {
         
+        // Weirdly enough, empty string is the gene location?
         key = csv_object[i][""];
         if(key != "") {
             dictionary[key] = i;
@@ -69,7 +71,7 @@ function getGeneLocation(locationDict, gene) {
 
     for(i = 0; i < 34; i++) {
         
-        // For reason unkown to me we don't have regions for IDS 1004, 1032, and 1033, so we skip them.
+        // For reason unknown to me we don't have regions for IDS 1004, 1032, and 1033, so we skip them.
         switch(i) {
             case 2:
             case 30:
