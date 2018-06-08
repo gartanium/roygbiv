@@ -7,7 +7,7 @@
  * object. In addition, contains functionality for linking a camera button and
  * a stored camera setting.
  * 
- * @file this file defines camera objects.
+ * @file this file defines CameraManager objects.
  * @author Matthew Brown
  * @since 06.08.18
  */
