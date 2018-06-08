@@ -137,7 +137,7 @@ function checkBoxesByClass(className, boolChecked) {
  * @param {scope} scope scope containing the brain object.
  * @param {Camera Array} cameraSettingsArray an array containing camera objects, with their setting name as their key.
  **/
-function registerEvents(scope, cameraSettingsArray) {
+function registerEvents(scope, cameraManager) {
     
     // Hide brain when user clicks clear
     $('#search-form').on('click', '#clear-regions', function(e) { 
@@ -152,7 +152,8 @@ function registerEvents(scope, cameraSettingsArray) {
     // Register the button for saving the camera data.
     $('#search-form').on('click', '#camera-button', function(e) {
         try {
-            setupCameraButton(scope.cameraSettingName, cameraSettingsArray, scope.brain.camera, "cameraSettings");
+            cameraManager.saveCameraSetting(scope.cameraSettingName, scope.brain.camera);
+            cameraManager.addLoadSettingsButton(scope.cameraSettingName, scope.brain.camera, "cameraSettings")
         }
         catch (error) {
             scope.cameraStatus = error;
@@ -197,6 +198,7 @@ function setupDefaultValues(container) {
     container.colorPickerR = '#ffffff';
     container.colorPickerG = '#ffd400';
     container.colorPickerB = '#ff0000';
+    container.cameraManager = new CameraManager();
 
     container.colorStatus = "Enter in 6 digit hexidecimal color codes";
 }
@@ -318,11 +320,11 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     //render new brain
                     $scope.brain = generateNewBrain($scope, dict);
                     
-                    var cameraSettings = new Array();
+
                     $('#nav_legend').empty()
                     colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
                     initializeDefaultValues();  
-                    registerEvents($scope, cameraSettings);
+                    registerEvents($scope, $scope.cameraManager);
                 });
             }
         });
