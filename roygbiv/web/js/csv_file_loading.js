@@ -158,50 +158,13 @@ function registerEvents(scope, cameraSettingsArray) {
 
     // Register the button for saving the camera data.
     $('#search-form').on('click', '#camera-button', function(e) {
-        
         try {
-            validateNewSavedCameraID(scope.cameraSettingName, cameraSettingsArray)
+            setupCameraButton(scope.cameraSettingName, cameraSettingsArray, scope.brain.camera, "cameraSettings");
         }
         catch (error) {
             scope.cameraStatus = error;
             scope.$apply();
-            return;
         }
-
-        var camera = scope.brain.camera;
-        deepCopyObjectToList(camera, cameraSettingsArray, scope.cameraSettingName);
-
-        var table = document.getElementById("cameraSettings");
-
-        // Create an empty <tr> element and add it to the 1st position of the table:
-        var row = table.insertRow(0);
-
-        // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-
-        // Add some text to the new cells:
-        cell1.innerHTML = scope.cameraSettingName;
-        cell2.innerHTML = "<button class=\"cameraSettingsButton\" id =\"" + scope.cameraSettingName + "\">Go</button>";
-     
-        // Register the event for when a load camera button is pressed.
-        $('#search-form').on('click', '#'+scope.cameraSettingName, function(e) {
-            
-            //var properties = ["aspect", "matrix", "matrixWorld", "position", "projectionMatrix", "quaternion", "rotation", "modelViewMatrix"];
-            var properties = ["up", "position", "rotation", "matrix", "projectionMatrix", "quaternion"];
-
-            for(i = 0; i < properties.length; i++) {
-                index = properties[i];
-                
-                property = cameraSettingsArray[this.id][index].clone();
-                scope.brain.camera[index].copy(property); 
-            }
-        
-            copyCameraProperties(cameraSettingsArray[this.id], scope.brain.camera);
-            scope.brain.camera.updateProjectionMatrix();
-            //scope.brain.camera = cameraSettingsArray[this.id].clone();
-            //for(var k in cameraSettingsArray[this.id]) scope.brain.camera[k]=cameraSettingsArray[this.id][k];
-        })
     });
     
     // Register the checkboxes that hide/show the brain.
