@@ -15,6 +15,15 @@ function validateColor(color) {
 
 }
 
+function validateMinMidMax(min, mid, max) {
+    if (min < mid && mid < max) {
+        return;
+    }
+    else {
+        throw "ERROR: min must be less than mid, and mid must be less than max!"
+    }
+}
+
 /**
  * @param {string} a string to be converted into a color.
  */
@@ -166,10 +175,9 @@ function registerEvents(scope, cameraSettingsArray) {
         cell1.innerHTML = scope.cameraSettingName;
         cell2.innerHTML = "<button class=\"cameraSettingsButton\" id =\"" + scope.cameraSettingName + "\">Go</button>";
      
-        // Register the event.
+        // Register the event for when a load camera button is pressed.
         $('#search-form').on('click', '#'+scope.cameraSettingName, function(e) {
             
-
             //var properties = ["aspect", "matrix", "matrixWorld", "position", "projectionMatrix", "quaternion", "rotation", "modelViewMatrix"];
             var properties = ["up", "position", "rotation", "matrix", "projectionMatrix", "quaternion"];
 
@@ -179,11 +187,9 @@ function registerEvents(scope, cameraSettingsArray) {
                 property = cameraSettingsArray[this.id][index].clone();
                 scope.brain.camera[index].copy(property); 
             }
-            scope.brain.camera.updateProjectionMatrix();
-
-    
         
-            //copyCameraProperties(cameraSettingsArray[this.id], scope.brain.camera);
+            copyCameraProperties(cameraSettingsArray[this.id], scope.brain.camera);
+            scope.brain.camera.updateProjectionMatrix();
             //scope.brain.camera = cameraSettingsArray[this.id].clone();
             //for(var k in cameraSettingsArray[this.id]) scope.brain.camera[k]=cameraSettingsArray[this.id][k];
         })
@@ -354,6 +360,13 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         colorScale = getColorScale(Math.min.apply(Math, geneRegionDataArray), 0, Math.max.apply(Math, geneRegionDataArray), $scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
                     }
                     else {
+                        try {
+                            validateMinMidMax($scope.userMin, $scope.userMid, $scope.userMax);
+                        } catch (error) {
+                            $scope.minMidMaxStatus = error;
+                            $scope.$apply();
+                        }
+
                         colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax,  $scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
                     }
                     

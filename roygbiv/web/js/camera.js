@@ -31,6 +31,19 @@ function copyCameraProperties(cameraNew, cameraOld) {
 }
 
 /**
+ * Validate that a given ID is not in the list of camera settings, so we can save it.
+ * @param {string} cameraID ID to save camera setting as.
+ * @param {*} cameraList List of all the saved camera settings.
+ */
+function validateNewSavedCameraID(cameraID, cameraList) {
+    if(cameraID in cameraList) {
+        throw "ERROR: a camera is already saved with that ID!";
+    }
+    else
+        return;
+}
+
+/**
  * Saves a camera position, stores it in memory, and creates a button for it.
  * @param {String} targetDivID Target div ID where a new camera button will appear.
  * @param {String} settingID ID of the camera setting.
