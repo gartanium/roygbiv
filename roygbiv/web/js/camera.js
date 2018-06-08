@@ -36,22 +36,32 @@ function copyCameraProperties(cameraNew, cameraOld) {
  * @param {*} cameraList List of all the saved camera settings.
  */
 function validateNewSavedCameraID(cameraID, cameraList) {
+
     if(cameraID in cameraList) {
         throw "ERROR: a camera is already saved with that ID!";
+    }
+    else if(cameraID == "") {
+        throw "ERROR: You must provide a name for your camera setting!";
     }
     else
         return;
 }
 
 /**
- * Saves a camera position, stores it in memory, and creates a button for it.
- * @param {String} targetDivID Target div ID where a new camera button will appear.
+ * Saves a camera object to an array of camera objects, and gives it a key of settingID.
  * @param {String} settingID ID of the camera setting.
  * @param {THREE.camera} camera Camera whose settings are to be saved.
  * @param {Array} cameraSettingList List of Camera settings.
  */
-function saveCameraSettingObject(targetDivID, settingID, camera, cameraSettingList) {
-
+function saveCameraSetting(settingID, camera, cameraSettingsArray) {
+    
+    try {
+        validateNewSavedCameraID(settingID, cameraSettingsArray);
+        deepCopyObjectToList(camera, cameraSettingsArray, settingID);
+    } catch (error) {
+        throw error;
+    }
+    
 }
 
 /**
@@ -66,10 +76,24 @@ function removeCameraSettingObject(settingID, cameraSettingList) {
 /**
  * Adds a camera setting button to a div.
  * @param {String} settingID ID of the camera setting. 
- * @param {*} divTargetID Target to send the camera button to.
+ * @param {String} tableID Table to send the camera button to.
  */
-function addCameraSettingButton(settingID, divTargetID) {
+function addLoadCameraSettingButton(settingID, tableID) {
 
+    // Table to add the button to.
+    var table = document.getElementById(tableID);
+
+    // Create an empty <tr> element and add it to the 1st position of the table:
+    var row = table.insertRow(0);
+
+    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+
+    // Add some text to the new cells:
+    cell1.innerHTML = settingID;
+    cell2.innerHTML = "<button class=\"cameraSettingsButton\" id =\"" + 
+                        settingID + "\">Go</button>";
 }
 
 /**
@@ -77,6 +101,6 @@ function addCameraSettingButton(settingID, divTargetID) {
  * @param {*} settingID Camera setting ID.
  * @param {*} divTargetID Div to remove button from.
  */
-function removeCameraSettingButton(settingID, divTargetID) {
+function removeLoadCameraSettingButton(settingID, divTargetID) {
 
 }
