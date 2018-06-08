@@ -11,10 +11,6 @@ function mean(data) {
     return total / data.length;
 }
 
-function validateColor(color) {
-
-}
-
 function validateMinMidMax(min, mid, max) {
     if (min < mid && mid < max) {
         return;
@@ -25,7 +21,7 @@ function validateMinMidMax(min, mid, max) {
 }
 
 /**
- * @param {string} a string to be converted into a color.
+ * @param {string} colorString a string to be converted into a color.
  */
 function validateColor(colorString) {
 
@@ -86,11 +82,6 @@ function getColorDict(data, colorsScale) {
 }
 
 /**
- * Function: Registers an event for all the region-select checkboxes
- * that displays or hides the specific region of the brain.
- * Brain: The brain object
-**/
-/**
  * @function registerRegionCheckboxes registers events for showing or hiding a mesh when the associated
  * checkbox is checked. 
  * @param {brain} brain Brain associated with the events.
@@ -147,10 +138,12 @@ function checkBoxesByClass(className, boolChecked) {
  * @param {Camera Array} cameraSettingsArray an array containing camera objects, with their setting name as their key.
  **/
 function registerEvents(scope, cameraSettingsArray) {
+    
     // Hide brain when user clicks clear
     $('#search-form').on('click', '#clear-regions', function(e) { 
         checkBoxesByClass("region-select", false);
     });
+   
     // Show brain when user clicks reset.
     $('#search-form').on('click', '#reset-regions', function(e) { 
         checkBoxesByClass("region-select", true);
@@ -170,18 +163,6 @@ function registerEvents(scope, cameraSettingsArray) {
     // Register the checkboxes that hide/show the brain.
     registerRegionCheckboxes(scope.brain);
 
-    // Register downloading the brain SVG
-    registerDownloadSVG();
-}
-
-
-// Used for downloading SVGS
-function registerDownloadSVG() {
-    d3.select("#download").on("click", function() {
-        d3.select(this)
-          .attr("href", 'data:application/octet-stream;base64,' + btoa(d3.select("#line").html()))
-          .attr("download", "viz.svg") 
-      })
 }
 
 /**
@@ -190,17 +171,6 @@ function registerDownloadSVG() {
 function initializeDefaultValues() {
     // When the brain is first rendered, we want all region select check boxes to be selected.
     checkBoxesByClass("region-select", true);
-}
-
-/**
- * @function setups the camera, so that when the brain renders, it renders
- * at the user defined position.
- */
-function setupCamera(container) {
-
-    container.brain.camera.position.x = container.cameraX
-    container.brain.camera.position.y = container.cameraY
-    container.brain.camera.position.z = container.cameraZ
 }
 
 /**
@@ -236,7 +206,7 @@ function setupDefaultValues(container) {
  * @param {*} scope 
  * @param {*Dictionary} colorsDict Dictionary containing values for the gene expression colors, associated with the region.
  */
-function renderBrain(scope, colorsDict) {
+function generateNewBrain(scope, colorsDict) {
 
     //remove old brain to render new upon user click go
     if (scope.brain) {
@@ -346,12 +316,11 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     dict = getColorDict(geneRegionDataArray, colorScale);
                     
                     //render new brain
-                    $scope.brain = renderBrain($scope, dict);
+                    $scope.brain = generateNewBrain($scope, dict);
                     
                     var cameraSettings = new Array();
                     $('#nav_legend').empty()
                     colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
-                    setupCamera($scope);
                     initializeDefaultValues();  
                     registerEvents($scope, cameraSettings);
                 });

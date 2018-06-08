@@ -1,33 +1,41 @@
 /**
+ * Summary.
+ * Functionality for saving and retrieving camera settings, and load buttons.
+ * 
+ * Description.
+ * Contains functions for saving camera objects, and restoring them to a persistent 
+ * object. In addition, contains functionality for linking a camera button and
+ * a stored camera setting.
+ * 
+ * @file this file defines camera objects.
+ * @author Matthew Brown
+ * @since 06.08.18
+ */
+ 
+/**
  * Deep copies and object and appends it to an associate array. Gives it the key of the length of the Associative Array.
  * @param {Object} object 
- * @param {*Associative Array} list 
+ * @param {Associative Array} objectArray Associative array where objects are stored.
  * @param {String} key A key that will be used to find the specific object in the array.
  */
-function deepCopyObjectToList(object, list, key) {
-
+function deepCopyObjectToArray(object, objectArray, key) {
     var copiedObject = object.clone();
-    list[key] = copiedObject;
+    objectArray[key] = copiedObject;
 }
 
+/**
+ * Copies several properties from the old camera into the new one.
+ * @param {Three.PerspectiveCamera} cameraNew Camera to store the values into.
+ * @param {Three.PerspectiveCamera} cameraOld Camera to retrieve the values from.
+ */
 function copyCameraProperties(cameraNew, cameraOld) {
       
+    // Camera properties to save.
+    var properties = ["children", "quaternion", "aspect", "matrix", "matrixWorld", "position", "projectionMatrix", "quaternion", "rotation", "modelViewMatrix"];
 
-        // Camera properties to save.
-        var properties = ["children", "quaternion", "aspect", "matrix", "matrixWorld", "position", "projectionMatrix", "quaternion", "rotation", "modelViewMatrix"];
-
-        for(var index in properties) {
-            cameraNew[index] = jQuery.extend(true, {}, cameraOld[index]);
-        }
-
-        
-        /*for(var k in cameraOld) {
-            if($.isFunction(k) !== false) {
-                cameraNew[k] = jQuery.extend(true, {}, cameraOld[k]);
-            }
-        }
-        cameraNew.updateProjectionMatrix();
-        return cameraNew;*/
+    for(var index in properties) {
+        cameraNew[index] = jQuery.extend(true, {}, cameraOld[index]);
+    }
 }
 
 /**
@@ -58,7 +66,7 @@ function saveCameraSetting(settingID, camera, cameraSettingsArray) {
     
     try {
         validateNewSavedCameraID(settingID, cameraSettingsArray);
-        deepCopyObjectToList(camera, cameraSettingsArray, settingID);
+        deepCopyObjectToArray(camera, cameraSettingsArray, settingID);
     } catch (error) {
         throw error;
     }
