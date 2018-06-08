@@ -13,7 +13,8 @@ function deepCopyObjectToList(object, list, key) {
 function copyCameraProperties(cameraNew, cameraOld) {
       
 
-        var properties = ["aspect", "matrix", "matrixWorld", "position", "projectionMatrix", "quaternion", "rotation", "modelViewMatrix"];
+        // Camera properties to save.
+        var properties = ["children", "quaternion", "aspect", "matrix", "matrixWorld", "position", "projectionMatrix", "quaternion", "rotation", "modelViewMatrix"];
 
         for(var index in properties) {
             cameraNew[index] = jQuery.extend(true, {}, cameraOld[index]);

@@ -27,7 +27,14 @@ You can change parameters above and change the corresponding URL:
 2. Upload all files to your remote web server (html, json, css, data)
 3. Browse to `http://your_web_server/your_roygbiv_directory/`
 
+###To use the improved version
+1. Select a csv file to upload that has gene expression data for differing regions of the brain, then select upload.
+2. Select a gene to display and any other additional options.
+3. Selecct render when your ready.
 
+###Camera
+1. Users can save the camera position of their brain.
+2. *NOTE* Does not work when the camera is zoomed in or out!!!
 
 Note:
 * If you want your downloaded or generated data stored at specific location, please define the `ROYGBIV_PATH` environment variable.
