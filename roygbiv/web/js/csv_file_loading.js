@@ -159,6 +159,15 @@ function registerEvents(scope, cameraSettingsArray) {
     // Register the button for saving the camera data.
     $('#search-form').on('click', '#camera-button', function(e) {
         
+        try {
+            validateNewSavedCameraID(scope.cameraSettingName, cameraSettingsArray)
+        }
+        catch (error) {
+            scope.cameraStatus = error;
+            scope.$apply();
+            return;
+        }
+
         var camera = scope.brain.camera;
         deepCopyObjectToList(camera, cameraSettingsArray, scope.cameraSettingName);
 
