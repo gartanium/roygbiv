@@ -17,20 +17,27 @@ function RegionColorFactory() {
 
     var brainRegionCount = 31;
 
-    var colorMin;
-    var colorMid;
-    var colorMax;
+    var _min;
+    var _mid;
+    var _max;
+
+    var _colorMin;
+    var _colorMid;
+    var _colorMax;
 
     // Possible normalizations for our region color data.
     var normalizationsEnum = {
-        zScore: 0,
-        minMidMax: 1
+        noState:   0,
+        minMidMax: 1,
+        zScore:    2
     }
 
-    var normalizationState;
+    var normalizationState = normalizationsEnum.noState;
     var colorScale;
-    var colorDict;
+    var colorArray;
     var unprocessedData;
+
+    var regionGeneExpressionData = [];
 
     /**
      * Sets the gene expression data that needs to be processed.
@@ -40,6 +47,7 @@ function RegionColorFactory() {
         
         try {
             validateGeneExpressionData(data);
+            regionGeneExpressionData = data;
         }
         catch (error) {
             throw error;
@@ -47,22 +55,43 @@ function RegionColorFactory() {
     }
     
     /**
-     * 
+     * Set the factory to build gene expression data using zScore
      */
-    this.setZScore = function() {
+    this.setNormalizationStateToZScore = function() {
         normalizationState = normalizationsEnum.zScore;
     }
 
-    this.setMinMidMax = function() {
-        normalizationState = normalizationsEnum.minMidMax;
+
+    this.setNormalizationStateToMinMidMax = function(min, mid, max) {
+        try {
+            validateMinMidMax(min, mid, max);
+            normalizationState = normalizationsEnum.minMidMax;
+        } catch (error) {
+            throw error;
+        }
+        
     }
 
     this.setColors = function(minColor, midColor, maxColor) {
-
+        _colorMin = minColor;
+        _colorMid = midColor;
+        _colorMax = maxColor;
     }
 
-    this.getRegionColorDictionary = function() {
-
+    this.generateRegionColorArray = function() {
+        if(normalizationState === normalizationsEnum.noState) {
+            throw "ERROR: The factory does not have a normalization state!";
+        }
+        else if(regionGeneExpressionData.length === 0) {
+            throw "ERROR: Gene expression data for a region must be loaded into the factory class!";
+        }
+        else if(typeof _colorMin == "undefined" || _colorMid == "undefined" || _colorMax == "undefined") {
+            throw "ERROR: The factory does not have a set color scale!";
+        }
+        else {
+            colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
+            return buildColorArray(colorScale, regionGeneExpressionData);
+        }
     }
 
     this.getColorScale = function() {
@@ -85,7 +114,7 @@ function RegionColorFactory() {
     /** 
      * @returns d3.scale 
     */
-    function buildColorScale(minColor, midColor, maxColor) {
+    function buildColorScale(min, mid, max, minColor, midColor, maxColor) {
         //return scale of colors for min to mid to max values
         var colors = d3.scale.linear()
         .domain([min, mid, max])
@@ -97,7 +126,7 @@ function RegionColorFactory() {
      * Builds an associative array containing color data for describing
      * the differing regions of the brain, and the gene expression data.
     */
-    function buildColorDictionary() {
+    function buildColorArray(colorScale, data) {
         //take color scale and return values mapped to object
         //range will be replaced with list of values, key should be
         //taken from column headers
@@ -108,9 +137,9 @@ function RegionColorFactory() {
         for (var j = 0; j < 34; j++) {
             if (data[j]) {
                 
-                red = d3.color(colorsScale(parseFloat(data[j]))).r / 256;
-                green =  d3.color(colorsScale(parseFloat(data[j]))).g / 256;
-                blue = d3.color(colorsScale(parseFloat(data[j]))).b / 256;
+                red = d3.color(colorScale(parseFloat(data[j]))).r / 256;
+                green =  d3.color(colorScale(parseFloat(data[j]))).g / 256;
+                blue = d3.color(colorScale(parseFloat(data[j]))).b / 256;
                 dict[j + 1002] = [red, green, blue];
             }
         }
@@ -134,6 +163,10 @@ function RegionColorFactory() {
         }
     }
 
+    /**
+     * Validates that the gene expression data array has data for each region of
+     * the brain, and only numerical data.
+     */
     function validateGeneExpressionData(data) {
         // There are only 31 regions expressed.
         if(data.length != brainRegionCount) {

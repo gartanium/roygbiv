@@ -237,7 +237,6 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     //render new brain
                     $scope.brain = generateNewBrain($scope, dict);
                     
-
                     $('#nav_legend').empty()
                     colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
                     initializeDefaultValues();  
