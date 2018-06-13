@@ -100,6 +100,7 @@ QUnit.module("Region_Color_Factory_Test_group");
     } catch (error) {
       assert.ok(false, "GeneExpressionDataPassedInTest2");
     }
+
   });
 
 

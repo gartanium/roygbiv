@@ -117,6 +117,8 @@ function setupDefaultValues(container) {
     container.colorPickerB = '#ff0000';
     container.cameraManager = new CameraManager();
 
+    container.regionColorFactory = new RegionColorFactory();
+
     container.colorStatus = "Enter in 6 digit hexidecimal color codes";
 }
 
@@ -237,6 +239,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     //render new brain
                     $scope.brain = generateNewBrain($scope, dict);
                     
+
                     $('#nav_legend').empty()
                     colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
                     initializeDefaultValues();  

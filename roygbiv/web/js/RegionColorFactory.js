@@ -38,6 +38,7 @@ function RegionColorFactory() {
     var unprocessedData;
 
     var regionGeneExpressionData = [];
+    var _normalizedData = [];
 
     /**
      * Sets the gene expression data that needs to be processed.
@@ -78,6 +79,9 @@ function RegionColorFactory() {
         _colorMax = maxColor;
     }
 
+    /**
+     * Returns a dictionary of colors for representing how a gene is expressed 
+     */
     this.generateRegionColorArray = function() {
         if(normalizationState === normalizationsEnum.noState) {
             throw "ERROR: The factory does not have a normalization state!";
@@ -89,8 +93,15 @@ function RegionColorFactory() {
             throw "ERROR: The factory does not have a set color scale!";
         }
         else {
+             _normalizedData = getNormalizeData(regionGeneExpressionData);
+            if(normalizationState === normalizationsEnum.zScore){
+                _min = Math.min.apply(Math, regionGeneExpressionData);
+                _mid = 0;
+                _max = Math.max.apply(Math, regionGeneExpressionData);
+            }
+
             colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
-            return buildColorArray(colorScale, regionGeneExpressionData);
+            return buildColorArray(colorScale, _normalizedData);
         }
     }
 
@@ -133,17 +144,17 @@ function RegionColorFactory() {
         //ISSUE Each val of j represented in values
         //Each val of j + 1002 not represented in data
         //Color scale works, but unfortunately since expressions are all so similar, colors are almost identical
-        var dict = [];
+        var colorArray = [];
         for (var j = 0; j < 34; j++) {
             if (data[j]) {
                 
                 red = d3.color(colorScale(parseFloat(data[j]))).r / 256;
                 green =  d3.color(colorScale(parseFloat(data[j]))).g / 256;
                 blue = d3.color(colorScale(parseFloat(data[j]))).b / 256;
-                dict[j + 1002] = [red, green, blue];
+                colorArray[j + 1002] = [red, green, blue];
             }
         }
-        return dict;
+        return colorArray;
 
     }
 
@@ -193,5 +204,23 @@ function RegionColorFactory() {
             total += data[i];
         }
         return total / data.length;
+    }
+
+    /**
+     * Normalizes the data based on the normalization state.
+     */
+    function getNormalizeData(data) {
+
+        normalizedData = shallowCopyArray(data);
+
+        if(normalizationState == normalizationsEnum.zScore) {
+            applyZScore(normalizedData);
+        }
+
+        return normalizedData;
+    }
+
+    function shallowCopyArray(oldArray) {
+        return oldArray.slice()
     }
 }
