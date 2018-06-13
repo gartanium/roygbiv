@@ -15,6 +15,8 @@
 
 function RegionColorFactory() {
 
+    var brainRegionCount = 31;
+
     var colorMin;
     var colorMid;
     var colorMax;
@@ -35,7 +37,13 @@ function RegionColorFactory() {
      * @param {Array} data Data to be processed into a dictionary of colors.
      */
     this.setDataToProcess = function(data) {
-        unprocessedData = data;
+        
+        try {
+            validateGeneExpressionData(data);
+        }
+        catch (error) {
+            throw error;
+        }
     }
     
     /**
@@ -123,6 +131,21 @@ function RegionColorFactory() {
         }
         else {
             throw "ERROR: min must be less than mid, and mid must be less than max!"
+        }
+    }
+
+    function validateGeneExpressionData(data) {
+        // There are only 31 regions expressed.
+        if(data.length != brainRegionCount) {
+            throw "ERROR: You must provide data for " + brainRegionCount + " brain regions!";
+        }
+        
+        // Each value in the array is a number.
+        for(i = 0; i < data.length; i++) {
+            if(typeof data[i] === "number")
+                continue;
+            else
+                throw "ERROR: The data represinting gene expression for each region must be numerical!";
         }
     }
 

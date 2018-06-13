@@ -1,65 +1,48 @@
-QUnit.module("region_color_factory_test_group");
+QUnit.module("Region_Color_Factory_Test_group");
+  
+  QUnit.test("setDataToProcess", function(assert) {
+    var testObj = new RegionColorFactory();
+    validTestData = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3];
+    invalidTestData = [1];
 
-  QUnit.test("validate_color_test", function( assert ) {
-    assert.ok(validateColor("blue") == "1", "Passed!");
-  });
-
-  QUnit.test("setDataToProcess", function(throws) {
-    var factory = new RegionColorFactory();
+    invalidTestData2 = [
+      "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
+      "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
+      "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
+      "31"
+    ]
 
     // make sure that we are not able to pass in invalid data.
+    //assert.throws(factory.setDataToProcess(testData), "foo", "Invalid gene data!");
+    var reg = "error{1}"
     
-
-
-  });
-
-
-  QUnit.test("min_mid_max_input_validation_test", function( assert ) {
-
-    function tryRaiseThrow(min, mid, max) {
-      try {
-        validateMinMidMax(min, mid, max) 
-        assert.ok(false);
-      } catch (error) {
-        assert.ok(error == "ERROR: min must be less than mid, and mid must be less than max!");
-      }
+    // Ensure that we can't have more or less data than the number of brain regions that
+    // we are interested in.
+    try {
+      testObj.setDataToProcess(invalidTestData)
+      assert.ok(false);
+    }
+    catch (error) {
+      assert.ok(error == "ERROR: You must provide data for 31 brain regions!");
     }
 
-    function tryNoThrow(min, mid, max) {
-      try {
-        validateMinMidMax(min, mid, max) 
-        assert.ok(true);
-      } catch (error) {
-        assert.ok(false);
-      }
+    // Ensure that non-numerical data throws an error.
+    try {
+      testObj.setDataToProcess(validTestData);
+      assert.ok(true);
+    } catch (error) {
+      assert.ok(false);
     }
-
-
-    for(i = 0; i < testThrowArray.length; i++) {
-      tryRaiseThrow(testThrowArray[i][0], testThrowArray[i][1], testThrowArray[i][2]);
+    try {
+      testObj.setDataToProcess(invalidTestData2);
+      assert.ok(false);
+    } catch(error) {
+      assert.ok(error === "ERROR: The data represinting gene expression for each region must be"+
+      " numerical!");
     }
-
-    for(i = 0; i < testNoThrowArray.length; i++) {
-      tryNoThrow(testNoThrowArray[i][0], testNoThrowArray[i][1], testNoThrowArray[i][2]);
-    }
-  })
-
-  QUnit.test("min_mid_max_input_validation_test", function( assert ) {
     
-    testThrowArray = [
-        [0, 5, 3],
-        [0, -3, -5],
-        [0, -3, 3],
-        [10, 3, 20],
-        [10, -3, -5],
-        [0, 10, 2]
-      ];
   
-      testNoThrowArray = [
-        [-3, 0, 10],
-        [0, 5, 10],
-        [-4, 3, 320],
-        [2, 44, 222]
-      ];
-      
   });
+
+
+ 
