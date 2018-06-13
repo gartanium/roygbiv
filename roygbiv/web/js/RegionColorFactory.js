@@ -1,4 +1,4 @@
-/**
+/*
  * Summary.
  * Functionality for building an associative array of colors that describe how genes are
  * expressed on different regions of the brain.
@@ -13,10 +13,6 @@
  * @since 06.08.18
  */
 
- /**
-  * Class for building a color associative array that describes gene expression data
-  * for differing regions of the brain.
-  */
 function RegionColorFactory() {
 
     var colorMin;
@@ -32,7 +28,19 @@ function RegionColorFactory() {
     var normalizationState;
     var colorScale;
     var colorDict;
+    var unprocessedData;
+
+    /**
+     * Sets the gene expression data that needs to be processed.
+     * @param {Array} data Data to be processed into a dictionary of colors.
+     */
+    this.setDataToProcess = function(data) {
+        unprocessedData = data;
+    }
     
+    /**
+     * 
+     */
     this.setZScore = function() {
         normalizationState = normalizationsEnum.zScore;
     }

@@ -4,6 +4,16 @@ QUnit.module("region_color_factory_test_group");
     assert.ok(validateColor("blue") == "1", "Passed!");
   });
 
+  QUnit.test("setDataToProcess", function(throws) {
+    var factory = new RegionColorFactory();
+
+    // make sure that we are not able to pass in invalid data.
+    
+
+
+  });
+
+
   QUnit.test("min_mid_max_input_validation_test", function( assert ) {
 
     function tryRaiseThrow(min, mid, max) {
