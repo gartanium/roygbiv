@@ -13,10 +13,7 @@
  * @since 06.08.18
  */
 
-function RegionColorFactory() {
-
-    var brainRegionCount = 31;
-
+function RegionColorFactory(geneRegionExpressionData, geneLocations) {
     var _min;
     var _mid;
     var _max;
@@ -37,29 +34,16 @@ function RegionColorFactory() {
     var colorArray;
     var unprocessedData;
 
-    var _specificGeneData = [];              // Data for a specific gene for all the regions.
+    var _specificRegionGeneData = [];              // Data for a specific gene for all the regions.
     var _normalizedData = [];
 
-    var _geneRegionExpressionData = [];      // Data representing how each gene is expressed in each region.
+    var _geneRegionExpressionData = geneRegionExpressionData;      // Data representing how each gene is expressed in each region.
     var _normalizedRegionData = [];          // Normalized version of the region expression data.
-    var _geneLocations = [];                 // Locations for each gene in the data.
-    var _geneLocation;                       // Location of the gene we are analyzing.
-
-    /**
-     * Sets the gene expression data that needs to be processed.
-     * @param {Array} data Data to be processed into a dictionary of colors.
-     */
-    this.setDataToProcess = function(data) {
-        
-        try {
-            validateGeneExpressionData(data);
-            _specificGeneData = data;
-        }
-        catch (error) {
-            throw error;
-        }
-    }
+    var _geneLocations = geneLocations;                 // Locations for each gene in the data.
+    var _gene;                       // Location of the gene we are analyzing.
     
+    // SETTERS **************************************************
+
     /**
      * Set the factory to build gene expression data using zScore
      */
@@ -67,7 +51,9 @@ function RegionColorFactory() {
         normalizationState = normalizationsEnum.zScore;
     }
 
-
+    /**
+     * Sets the factory to build gene expression data using min, mid, and max.
+     */
     this.setNormalizationStateToMinMidMax = function(min, mid, max) {
         try {
             validateMinMidMax(min, mid, max);
@@ -81,36 +67,16 @@ function RegionColorFactory() {
         
     }
 
+    /**
+     * Sets the colors for min, mid, and max scale.
+     */
     this.setColors = function(minColor, midColor, maxColor) {
+        validateColor(minColor);
+        validateColor(midColor);
+        validateColor(maxColor);
         _colorMin = minColor;
         _colorMid = midColor;
         _colorMax = maxColor;
-    }
-
-    /**
-     * Returns a dictionary of colors for representing how a gene is expressed 
-     */
-    this.generateRegionColorArray = function() {
-        if(normalizationState === normalizationsEnum.noState) {
-            throw "ERROR: The factory does not have a normalization state!";
-        }
-        else if(_specificGeneData.length === 0) {
-            throw "ERROR: Gene expression data for a region must be loaded into the factory class!";
-        }
-        else if(typeof _colorMin == "undefined" || _colorMid == "undefined" || _colorMax == "undefined") {
-            throw "ERROR: The factory does not have a set color scale!";
-        }
-        else {
-             _normalizedData = getNormalizeData(_specificGeneData);
-            if(normalizationState === normalizationsEnum.zScore){
-                _min = Math.min.apply(Math, _specificGeneData);
-                _mid = 0;
-                _max = Math.max.apply(Math, _specificGeneData);
-            }
-
-            colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
-            return buildColorArray(colorScale, _normalizedData);
-        }
     }
 
     /**
@@ -118,17 +84,16 @@ function RegionColorFactory() {
      * @param {String} gene Name of the gene to be analyzed.
      */
     this.setGene = function (gene) {
-
-        var location = _geneLocations[gene];
         try {
             if(gene == "") {
                 throw "ERROR: No gene was specified (Empty string)";
             }
-            else if(location == null) {
-                throw "ERROR: " + gene +" is not a valid gene!";
+            else if(!(_gene in _geneLocations)) {
+                throw "ERROR: " + gene + " is not a valid gene!";
             }
             else {
-                _geneLocation = location;
+                _gene = gene;
+                _specificRegionGeneData = _geneLocations[_gene]; 
             }
         }
         catch (errorMsg) {
@@ -153,8 +118,49 @@ function RegionColorFactory() {
         _geneLocations = geneExpressionKey;
     }
 
+    // GETTERS **************************************************************
+
+    
     this.getColorScale = function() {
 
+    }
+
+    /**
+     * Returns a dictionary of colors for representing how a gene is expressed 
+     */
+    this.generateRegionColorArray = function() {
+       
+        // TODO: Data validation logic
+        if(normalizationState === normalizationsEnum.noState) {
+            throw "ERROR: The factory does not have a normalization state!";
+        }
+        else if(_specificRegionGeneData.length === 0) {
+            throw "ERROR: Invalid data for gene: " + _gene + "!";
+        }
+        else if(_geneLocations.length === 0) {
+            throw "ERROR: Invalid gene location associative array! (Did you forget to set one?)";
+        }
+        else if(_geneRegionExpressionData.length === 0) {
+            throw "ERROR: Invalid gene region expression data! (Did you forget to set the data?)";
+        }
+        else if(typeof _colorMin == "undefined" || _colorMid == "undefined" || _colorMax == "undefined") {
+            throw "ERROR: The factory does not have a set color scale!";
+        }
+        
+        validateGeneExpressionData(_specificRegionGeneData);
+
+        // TODO: Any logic for processing the data goes here.
+        _normalizedData = getNormalizeData(_specificRegionGeneData);
+
+        if(normalizationState === normalizationsEnum.zScore){
+            _min = Math.min.apply(Math, _specificRegionGeneData);
+            _mid = 0;
+            _max = Math.max.apply(Math, _specificRegionGeneData);
+        }
+
+        colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
+        return buildColorArray(colorScale, _normalizedData);
+    
     }
 
     function validateColor(colorString) {
@@ -163,7 +169,7 @@ function RegionColorFactory() {
             color = d3.color(colorString);
             if(color.displayable)
                 return true;
-            else throw 'invalid color';
+            else throw 'ERROR: Invalid color';
         }
         catch (e) {
             return false;
@@ -234,6 +240,7 @@ function RegionColorFactory() {
             else
                 throw "ERROR: The data represinting gene expression for each region must be numerical!";
         }
+
     }
 
     /**
