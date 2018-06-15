@@ -1,6 +1,35 @@
 QUnit.module("Region_Color_Factory_Test_group");
+
+  QUnit.test("Gene Selection Tests", function(assert) {
+
+      var geneLocations = {
+        FOO: 0,
+        BOB: 1,
+        FOX: 2
+      };
+    
+    // Make sure the user enters in valid gene data.
+    try {
+      var gene = "SAY";
+      var testObj = new RegionColorFactory();
+      testObj.setGeneKey(geneLocations);
+      testObj.setGene(gene);
+      assert.ok(false);
+    } catch(error) {
+      assert.ok(error == "ERROR: " + gene + " is not a valid gene!");
+    }
+    try {
+      var gene = "";
+      var testObj = new RegionColorFactory();
+      testObj.setGeneKey(geneLocations);
+      testObj.setGene(gene);
+      assert.ok(false);
+    } catch(error) {
+      assert.ok(error == "ERROR: No gene was specified (Empty string)");
+    }
+  });
   
-  QUnit.test("setDataToProcess", function(assert) {
+  QUnit.test("Data Processing Tests", function(assert) {
     
     validTestData = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3];
     invalidTestData = [1];
@@ -101,7 +130,7 @@ QUnit.module("Region_Color_Factory_Test_group");
       assert.ok(false, "GeneExpressionDataPassedInTest2");
     }
 
-    // Ensure that colors are generated appropriatly.
+    // Ensure that colors are generated appropriatly, for the min-mid-max normalization.
     var testObj = new RegionColorFactory();
     validTestData2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10,
     10, 10, 10, 10, 10, 10, 10];

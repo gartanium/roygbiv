@@ -37,8 +37,13 @@ function RegionColorFactory() {
     var colorArray;
     var unprocessedData;
 
-    var regionGeneExpressionData = [];
+    var _specificGeneData = [];              // Data for a specific gene for all the regions.
     var _normalizedData = [];
+
+    var _geneRegionExpressionData = [];      // Data representing how each gene is expressed in each region.
+    var _normalizedRegionData = [];          // Normalized version of the region expression data.
+    var _geneLocations = [];                 // Locations for each gene in the data.
+    var _geneLocation;                       // Location of the gene we are analyzing.
 
     /**
      * Sets the gene expression data that needs to be processed.
@@ -48,7 +53,7 @@ function RegionColorFactory() {
         
         try {
             validateGeneExpressionData(data);
-            regionGeneExpressionData = data;
+            _specificGeneData = data;
         }
         catch (error) {
             throw error;
@@ -89,23 +94,63 @@ function RegionColorFactory() {
         if(normalizationState === normalizationsEnum.noState) {
             throw "ERROR: The factory does not have a normalization state!";
         }
-        else if(regionGeneExpressionData.length === 0) {
+        else if(_specificGeneData.length === 0) {
             throw "ERROR: Gene expression data for a region must be loaded into the factory class!";
         }
         else if(typeof _colorMin == "undefined" || _colorMid == "undefined" || _colorMax == "undefined") {
             throw "ERROR: The factory does not have a set color scale!";
         }
         else {
-             _normalizedData = getNormalizeData(regionGeneExpressionData);
+             _normalizedData = getNormalizeData(_specificGeneData);
             if(normalizationState === normalizationsEnum.zScore){
-                _min = Math.min.apply(Math, regionGeneExpressionData);
+                _min = Math.min.apply(Math, _specificGeneData);
                 _mid = 0;
-                _max = Math.max.apply(Math, regionGeneExpressionData);
+                _max = Math.max.apply(Math, _specificGeneData);
             }
 
             colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
             return buildColorArray(colorScale, _normalizedData);
         }
+    }
+
+    /**
+     * Sets the Gene to be analyzed.
+     * @param {String} gene Name of the gene to be analyzed.
+     */
+    this.setGene = function (gene) {
+
+        var location = _geneLocations[gene];
+        try {
+            if(gene == "") {
+                throw "ERROR: No gene was specified (Empty string)";
+            }
+            else if(location == null) {
+                throw "ERROR: " + gene +" is not a valid gene!";
+            }
+            else {
+                _geneLocation = location;
+            }
+        }
+        catch (errorMsg) {
+            throw errorMsg;
+        }
+    }
+
+    /**
+     * Sets the data that expresses how each gene is represented in each brain region.
+     * @param {array} regionExpressionArray a 2-dimensional array expressing how each gene is 
+     * represented in each brain region.
+     */
+    this.setRegionExpressionData = function(regionExpressionArray) {
+        _geneRegionExpressionData = regionExpressionArray;
+    }
+
+    /**
+     * Sets the key that lets the factory know where each gene is located in the Region Expression Array.
+     * @param {Array} geneExpressionKey An associative array representing where each gene is located at.
+     */
+    this.setGeneKey = function(geneExpressionKey) {
+        _geneLocations = geneExpressionKey;
     }
 
     this.getColorScale = function() {
@@ -126,6 +171,7 @@ function RegionColorFactory() {
     }
 
     /** 
+     * Creates a d3 scale that will be able to generate colors for our brain.
      * @returns d3.scale 
     */
     function buildColorScale(min, mid, max, minColor, midColor, maxColor) {
@@ -141,18 +187,14 @@ function RegionColorFactory() {
      * the differing regions of the brain, and the gene expression data.
     */
     function buildColorArray(colorScale, data) {
-        //take color scale and return values mapped to object
-        //range will be replaced with list of values, key should be
-        //taken from column headers
-        //ISSUE Each val of j represented in values
-        //Each val of j + 1002 not represented in data
-        //Color scale works, but unfortunately since expressions are all so similar, colors are almost identical
         var colorArray = [];
         for (var j = 0; j < data.length; j++) {
-            // TODO: Get rid of the if data[j]. This makes it so data with a value of 0 is skipped over...
-            red = d3.color(colorScale(parseFloat(data[j]))).r / 256;
-            green =  d3.color(colorScale(parseFloat(data[j]))).g / 256;
-            blue = d3.color(colorScale(parseFloat(data[j]))).b / 256;
+
+            tempColor = d3.color(colorScale(parseFloat(data[j])));
+            // We want a 0 to 1 scale for the colors.
+            red = tempColor.r / 256;
+            green =  tempColor.g / 256;
+            blue = tempColor.b / 256;
             colorArray[j] = [red, green, blue];
         }
         return colorArray;
