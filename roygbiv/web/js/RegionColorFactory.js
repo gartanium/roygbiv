@@ -67,6 +67,9 @@ function RegionColorFactory() {
         try {
             validateMinMidMax(min, mid, max);
             normalizationState = normalizationsEnum.minMidMax;
+            _min = min; 
+            _mid = mid;
+            _max = max;
         } catch (error) {
             throw error;
         }
@@ -145,14 +148,12 @@ function RegionColorFactory() {
         //Each val of j + 1002 not represented in data
         //Color scale works, but unfortunately since expressions are all so similar, colors are almost identical
         var colorArray = [];
-        for (var j = 0; j < 34; j++) {
-            if (data[j]) {
-                
-                red = d3.color(colorScale(parseFloat(data[j]))).r / 256;
-                green =  d3.color(colorScale(parseFloat(data[j]))).g / 256;
-                blue = d3.color(colorScale(parseFloat(data[j]))).b / 256;
-                colorArray[j + 1002] = [red, green, blue];
-            }
+        for (var j = 0; j < data.length; j++) {
+            // TODO: Get rid of the if data[j]. This makes it so data with a value of 0 is skipped over...
+            red = d3.color(colorScale(parseFloat(data[j]))).r / 256;
+            green =  d3.color(colorScale(parseFloat(data[j]))).g / 256;
+            blue = d3.color(colorScale(parseFloat(data[j]))).b / 256;
+            colorArray[j] = [red, green, blue];
         }
         return colorArray;
 

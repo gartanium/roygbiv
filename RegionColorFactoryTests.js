@@ -101,6 +101,25 @@ QUnit.module("Region_Color_Factory_Test_group");
       assert.ok(false, "GeneExpressionDataPassedInTest2");
     }
 
+    // Ensure that colors are generated appropriatly.
+    var testObj = new RegionColorFactory();
+    validTestData2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10];
+    testObj.setNormalizationStateToMinMidMax(0, 5, 10);
+    testObj.setDataToProcess(validTestData2);
+    testObj.setColors("#ff0000", "#00ff00", "#0000ff");
+    var actual = testObj.generateRegionColorArray();
+    var expected = 0.99609375; // Decimal corresponding to ff. Whenever test data is equal to min mid or max,
+    for(i = 0; i < 10; i++) {  // there should be a coressisponding ff or 0.99609375 value.
+      assert.ok(actual[i][0] == expected);
+    }
+    for(i = 10; i < 20; i++) {
+      assert.ok(actual[i][1] == expected);
+    }
+    for(i = 20; i < 31; i++) {
+      assert.ok(actual[i][2] == expected);
+    }
+
   });
 
 

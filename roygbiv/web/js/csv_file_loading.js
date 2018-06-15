@@ -214,27 +214,29 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     var geneRegionDataArray = Object.values(geneRegionDataObject);
                     geneRegionDataArray = geneRegionDataArray.map(Number);
 
+                   
+
                      // Get the color scale and colored data for the Brain.
                      // If the zscore box is checked, use zscore for rendering the brain. Otherwise use min/max.
+                    // TODO: Modify code so upon error, it goes not to minMidMaxStatus but something
+                    // more general.
                     if($scope.zScoreCheckbox) {
 
-                        // normalize the region specific data using the z-score.
-                        geneRegionDataArray = applyZScore(geneRegionDataArray);
-                        colorScale = getColorScale(Math.min.apply(Math, geneRegionDataArray), 0, Math.max.apply(Math, geneRegionDataArray), $scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
+                        $scope.regionColorFactory.setNormalizationStateToZScore();
                     }
                     else {
                         try {
-                            validateMinMidMax($scope.userMin, $scope.userMid, $scope.userMax);
+                            $scope.regionColorFactory.setNormalizationStateToMinMidMax($scope.userMin, 
+                                $scope.userMid, $scope.userMax);
+                            $scope.regionColorFactory.setColors($scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
                         } catch (error) {
                             $scope.minMidMaxStatus = error;
                             $scope.$apply();
                         }
-
-                        colorScale = getColorScale($scope.userMin, $scope.userMid, $scope.userMax,  $scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
                     }
                     
-                    // Get the dictionary or "Associativge Array" containing color values for each region of the brain according to our scale we made.
-                    dict = getColorDict(geneRegionDataArray, colorScale);
+                    $scope.regionColorFactory.setDataToProcess(geneRegionDataArray);
+                    dict = $scope.regionColorFactory.generateRegionColorArray();
                     
                     //render new brain
                     $scope.brain = generateNewBrain($scope, dict);
