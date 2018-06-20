@@ -59,9 +59,9 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
         _normalizedData = generateNormalizedData(data);
 
         // Get the min mid and max
-        _min = Math.min.apply(Math, data);
-        _mid = arr.mean(data);
-        _max = Math.max.apply(Math, data);
+        _min = Math.min.apply(Math, _normalizedData);
+        _mid = mean(_normalizedData);
+        _max = Math.max.apply(Math, _normalizedData);
         
         // Generate the color scale
 
@@ -103,7 +103,7 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
             return normalizedData;
         }
         else if(_normalizationState == _normalizationEnum.zScoreRow) {
-
+            return arr.zScores(normalizedData);
         }
         else if(_normalizationState == _normalizationEnum.zScoreColumn) {
 
@@ -140,7 +140,10 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
         var colorArray = [];
         for (var j = 0; j < data.length; j++) {
 
-            tempColor = d3.color(colorScale(parseFloat(data[j])));
+            var tempFloat = parseFloat(data[j]);
+            var colorScaled = colorScale(tempFloat);
+
+            tempColor = d3.color(colorScaled);
             // We want a 0 to 1 scale for the colors.
             red = tempColor.r / 256;
             green =  tempColor.g / 256;

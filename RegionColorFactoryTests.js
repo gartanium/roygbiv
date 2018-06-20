@@ -2,8 +2,23 @@ QUnit.module("Region_Color_Factory_Test_group");
 
   QUnit.test("Gene Selection Tests", function(assert) {
 
+    function tryThrow(testData, geneLocation, colorArray, gene, expectedThrow) {
+      try {
+        var testObj = new RegionColorFactory(
+          validTestData, geneLocations, colorArray[0], colorArray[1], colorArray[2]
+        );
+        testObj.generateRegionColorArray(gene);
+        assert.ok(false); 
+      }
+      catch(error) {
+        assert.ok(error === expectedThrow);
+      }
+    }
+
     validTestData = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3];
     invalidTestData = [1];
+
+    var validColorArray = ["#ff0000", "00ff00", "0000ff"];
 
     invalidTestData2 = [
       "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
@@ -17,7 +32,9 @@ QUnit.module("Region_Color_Factory_Test_group");
         BOB: 1,
         FOX: 2
       };
-    
+
+    tryThrow(validTestData, geneLocations, validColorArray, "SAY", "ERROR: SAY is not a valid gene!");
+
     // Make sure the user enters in valid gene data.
     try {
       var gene = "SAY";
@@ -103,7 +120,7 @@ QUnit.module("Region_Color_Factory_Test_group");
       assert.ok(false, "GeneExpressionDataPassedInTest2");
     }
 
-    // Ensure that colors are generated appropriatly, for the min-mid-max normalization.
+    // Ensure that colors are generated appropriatly, for no normalization option.
     validTestData2 = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10,
        10, 10, 10, 10, 10, 10, 10]
@@ -124,6 +141,27 @@ QUnit.module("Region_Color_Factory_Test_group");
       assert.ok(actual[i][2] == expected1);
     }
 
+    // Ensure that colors are generated appropriatly, for the zscore normalization.
+    validTestData2 = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10,
+       10, 10, 10, 10, 10, 10, 10]
+    ];
+    var testObj = new RegionColorFactory(validTestData2, geneLocations, minColor, midColor, maxColor);
+    gene = "FOO";
+    testObj.setNormalizationState("zScoreRow");
+    testObj.setColors("#ff0000", "#00ff00", "#0000ff");
+    var actual = testObj.generateRegionColorArray(gene);
+    var expected1 = 0.99609375; // Decimal corresponding to ff. Whenever test data is equal to min mid or max,
+    var expected2 = 0.96484375;
+    for(i = 0; i < 10; i++) {  // there should be a coressisponding ff or 0.99609375 value.
+      assert.ok(actual[i][0] == expected1);
+    }
+    for(i = 10; i < 20; i++) {
+      assert.ok(actual[i][1] == expected2);
+    }
+    for(i = 20; i < 31; i++) {
+      assert.ok(actual[i][2] == expected1);
+    }
   });
 
 
