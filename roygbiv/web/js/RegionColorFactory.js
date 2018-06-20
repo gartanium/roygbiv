@@ -13,74 +13,28 @@
  * @since 06.08.18
  */
 
-function RegionColorFactory() {
+function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
 
-    var brainRegionCount = 31;
+    var _colorMin = minColor;
+    var _colorMid = midColor;
+    var _colorMax = maxColor;
 
-    var _min;
-    var _mid;
-    var _max;
+    var _colorScale;
 
-    var _colorMin;
-    var _colorMid;
-    var _colorMax;
+    var _geneData = data;
+    var _locationArray = locationArray;      
 
-    // Possible normalizations for our region color data.
-    var normalizationsEnum = {
-        noState:   0,
-        minMidMax: 1,
-        zScore:    2
+    var _normalizedData = [];       
+    var _normalizationState = 0;
+    var _normalizationEnum = {
+        default: 0,
+        zScoreRow: 1,
+        zScoreColumn: 2
     }
-
-    var normalizationState = normalizationsEnum.noState;
-    var colorScale;
-    var colorArray;
-    var unprocessedData;
-
-    var _specificGeneData = [];              // Data for a specific gene for all the regions.
-    var _normalizedData = [];
-
-    var _geneRegionExpressionData = [];      // Data representing how each gene is expressed in each region.
-    var _normalizedRegionData = [];          // Normalized version of the region expression data.
-    var _geneLocations = [];                 // Locations for each gene in the data.
-    var _geneLocation;                       // Location of the gene we are analyzing.
 
     /**
-     * Sets the gene expression data that needs to be processed.
-     * @param {Array} data Data to be processed into a dictionary of colors.
+     * Set the colors that the factory uses to produce the associative color array.
      */
-    this.setDataToProcess = function(data) {
-        
-        try {
-            validateGeneExpressionData(data);
-            _specificGeneData = data;
-        }
-        catch (error) {
-            throw error;
-        }
-    }
-    
-    /**
-     * Set the factory to build gene expression data using zScore
-     */
-    this.setNormalizationStateToZScore = function() {
-        normalizationState = normalizationsEnum.zScore;
-    }
-
-
-    this.setNormalizationStateToMinMidMax = function(min, mid, max) {
-        try {
-            validateMinMidMax(min, mid, max);
-            normalizationState = normalizationsEnum.minMidMax;
-            _min = min; 
-            _mid = mid;
-            _max = max;
-        } catch (error) {
-            throw error;
-        }
-        
-    }
-
     this.setColors = function(minColor, midColor, maxColor) {
         _colorMin = minColor;
         _colorMid = midColor;
@@ -90,84 +44,80 @@ function RegionColorFactory() {
     /**
      * Returns a dictionary of colors for representing how a gene is expressed 
      */
-    this.generateRegionColorArray = function() {
-        if(normalizationState === normalizationsEnum.noState) {
-            throw "ERROR: The factory does not have a normalization state!";
-        }
-        else if(_specificGeneData.length === 0) {
-            throw "ERROR: Gene expression data for a region must be loaded into the factory class!";
-        }
-        else if(typeof _colorMin == "undefined" || _colorMid == "undefined" || _colorMax == "undefined") {
-            throw "ERROR: The factory does not have a set color scale!";
-        }
-        else {
-             _normalizedData = getNormalizeData(_specificGeneData);
-            if(normalizationState === normalizationsEnum.zScore){
-                _min = Math.min.apply(Math, _specificGeneData);
-                _mid = 0;
-                _max = Math.max.apply(Math, _specificGeneData);
-            }
+    this.generateRegionColorArray = function(gene) {
+        
+        // Get the gene data
+        data = getGeneData(gene);
 
-            colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
-            return buildColorArray(colorScale, _normalizedData);
-        }
+        // Data validation
+        validateGeneExpressionData(data);
+        validateColor(minColor);
+        validateColor(midColor);
+        validateColor(maxColor);
+
+        // Perform data normalizations
+        _normalizedData = generateNormalizedData(data);
+
+        // Get the min mid and max
+        _min = Math.min.apply(Math, data);
+        _mid = arr.mean(data);
+        _max = Math.max.apply(Math, data);
+        
+        // Generate the color scale
+
+        // Build the Color Array.
+        
+      
+        colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
+        return buildColorArray(colorScale, _normalizedData);
     }
 
     /**
-     * Sets the Gene to be analyzed.
-     * @param {String} gene Name of the gene to be analyzed.
+     * Returns the color scale associated with the factory.
      */
-    this.setGene = function (gene) {
-
-        var location = _geneLocations[gene];
-        try {
-            if(gene == "") {
-                throw "ERROR: No gene was specified (Empty string)";
-            }
-            else if(location == null) {
-                throw "ERROR: " + gene +" is not a valid gene!";
-            }
-            else {
-                _geneLocation = location;
-            }
-        }
-        catch (errorMsg) {
-            throw errorMsg;
-        }
-    }
-
-    /**
-     * Sets the data that expresses how each gene is represented in each brain region.
-     * @param {array} regionExpressionArray a 2-dimensional array expressing how each gene is 
-     * represented in each brain region.
-     */
-    this.setRegionExpressionData = function(regionExpressionArray) {
-        _geneRegionExpressionData = regionExpressionArray;
-    }
-
-    /**
-     * Sets the key that lets the factory know where each gene is located in the Region Expression Array.
-     * @param {Array} geneExpressionKey An associative array representing where each gene is located at.
-     */
-    this.setGeneKey = function(geneExpressionKey) {
-        _geneLocations = geneExpressionKey;
-    }
-
     this.getColorScale = function() {
-
+        return _colorScale;
     }
 
-    function validateColor(colorString) {
 
-        try {
-            color = d3.color(colorString);
-            if(color.displayable)
-                return true;
-            else throw 'invalid color';
+    /**
+     * Sets the state for normalizing the data.
+     * @param {String} state 
+     * "default": No normalization occurs
+     * "zScoreRow": Each row is normalized relative to each row.
+     * "zScoreColumn": Each column is normalized relative to each column.
+     */
+    this.setNormalizationState = function(state) {
+        
+        _normalizationState = _normalizationEnum[state];
+
+        if(typeof _normalizationState == "undefined") {
+            throw "ERROR: " + state + " is not a valid option!";
         }
-        catch (e) {
-            return false;
+    }
+
+    function generateNormalizedData(data) {
+        normalizedData = shallowCopyArray(data);
+
+        if(_normalizationState == _normalizationEnum.default) {
+            return normalizedData;
         }
+        else if(_normalizationState == _normalizationEnum.zScoreRow) {
+
+        }
+        else if(_normalizationState == _normalizationEnum.zScoreColumn) {
+
+        }
+    }
+
+    /**
+     * Validates that a color is a d3.color.
+     * @param {String} colorString string representation of a color.
+     */
+    function validateColor(colorString) {
+        color = d3.color(colorString);
+        if(color === null || !color.displayable)
+            throw "ERROR: Invalid color [" + colorString + "]!";
     }
 
     /** 
@@ -202,37 +152,17 @@ function RegionColorFactory() {
     }
 
     /**
-     * Validates the given min, mid, and max values.
-     * Throws an error if one occurs.
-     * @param {float} min 
-     * @param {float} mid 
-     * @param {float} max 
-     */
-    function validateMinMidMax(min, mid, max) {
-        if (min < mid && mid < max) {
-            return;
-        }
-        else {
-            throw "ERROR: min must be less than mid, and mid must be less than max!"
-        }
-    }
-
-    /**
      * Validates that the gene expression data array has data for each region of
      * the brain, and only numerical data.
      */
     function validateGeneExpressionData(data) {
-        // There are only 31 regions expressed.
-        if(data.length != brainRegionCount) {
-            throw "ERROR: You must provide data for " + brainRegionCount + " brain regions!";
-        }
-        
+
         // Each value in the array is a number.
         for(i = 0; i < data.length; i++) {
             if(typeof data[i] === "number")
                 continue;
             else
-                throw "ERROR: The data represinting gene expression for each region must be numerical!";
+                throw "ERROR: The data representing gene expression for each region must be numerical!";
         }
     }
 
@@ -249,21 +179,28 @@ function RegionColorFactory() {
         return total / data.length;
     }
 
-    /**
-     * Normalizes the data based on the normalization state.
-     */
-    function getNormalizeData(data) {
-
-        normalizedData = shallowCopyArray(data);
-
-        if(normalizationState == normalizationsEnum.zScore) {
-            applyZScore(normalizedData);
-        }
-
-        return normalizedData;
-    }
-
     function shallowCopyArray(oldArray) {
         return oldArray.slice()
     }
+
+    /**
+    * @function Description: Returns data describing how a gene is expressed in a region. 
+    * @param {String} gene Gene to get region expression data for.
+    * @param {Array} data Array describing how each gene is expressed in each brain region.
+    * @param {Array} locationArray Array describing where each gene is located in the data.
+    */
+    function getGeneData(gene) {
+        var location = _locationArray[gene];
+        if(gene == "") {
+            throw "ERROR: No gene was specified (Empty string)";
+        }
+        else if(location == null) {
+            throw "ERROR: " + gene +" is not a valid gene!";
+        }
+        else {
+            return _geneData[location];
+        }
+    }
 }
+
+
