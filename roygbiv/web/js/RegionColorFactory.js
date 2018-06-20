@@ -64,12 +64,12 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
         _max = Math.max.apply(Math, _normalizedData);
         
         // Generate the color scale
-
-        // Build the Color Array.
-        
-      
         colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
-        return buildColorArray(colorScale, _normalizedData);
+       
+        // Build the Color Array.
+        colorArray = buildColorArray(colorScale, _normalizedData);
+
+        return colorArray;
     }
 
     /**
@@ -96,6 +96,10 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
         }
     }
 
+    /**
+     * Returns a copy of all the data describing how each gene is expressed over each region,
+     * and normalizes the copy.
+     */
     function generateNormalizedData(data) {
         normalizedData = shallowCopyArray(data);
 

@@ -97,6 +97,10 @@ function getGeneLocation(locationDict, gene) {
     return regionDictionary;
  }
 
+ function processData(csvRawData, locDict) {
+     return processedData;
+ }
+
  /**
   * @function applyZScore Normalizes the array using a z-score.
   * @param {Float Array} geneRegionData An array of floats containing gene expression data, for the regions of the brain.
