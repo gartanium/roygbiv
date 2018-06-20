@@ -2,129 +2,75 @@ QUnit.module("Region_Color_Factory_Test_group");
 
   QUnit.test("Gene Selection Tests", function(assert) {
 
-    function tryThrow(testData, geneLocation, colorArray, gene, expectedThrow) {
+    function tryThrow(testData, geneLocation, colorArray, gene, expectsThrow, expectedThrow) {
       try {
         var testObj = new RegionColorFactory(
-          validTestData, geneLocations, colorArray[0], colorArray[1], colorArray[2]
+          testData, geneLocation, colorArray[0], colorArray[1], colorArray[2]
         );
         testObj.generateRegionColorArray(gene);
-        assert.ok(false); 
+        if(expectsThrow)
+          assert.ok(false);
+        else
+          assert.ok(true);
       }
       catch(error) {
-        assert.ok(error === expectedThrow);
+        if(expectsThrow)
+          assert.ok(error === expectedThrow);
+        else
+          assert.ok(false, error);
       }
     }
 
-    validTestData = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3];
-    invalidTestData = [1];
-
-    var validColorArray = ["#ff0000", "00ff00", "0000ff"];
-
-    invalidTestData2 = [
-      "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
-      "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
-      "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
-      "31"
-    ]
-      
-      var geneLocations = {
-        FOO: 0,
-        BOB: 1,
-        FOX: 2
-      };
-
-    tryThrow(validTestData, geneLocations, validColorArray, "SAY", "ERROR: SAY is not a valid gene!");
-
-    // Make sure the user enters in valid gene data.
-    try {
-      var gene = "SAY";
-      var testObj = new RegionColorFactory(validTestData, geneLocations);
-      testObj.generateRegionColorArray(gene)
-      assert.ok(false);
-    } catch(error) {
-      assert.ok(error == "ERROR: " + gene + " is not a valid gene!");
-    }
-    try {
-      var gene = "";
-      var testObj = new RegionColorFactory(validTestData, geneLocations);
-      testObj.generateRegionColorArray(gene);
-      assert.ok(false);
-    } catch(error) {
-      assert.ok(error == "ERROR: No gene was specified (Empty string)");
-    }
-  });
-  
-  QUnit.test("Data Processing Tests", function(assert) {
-    
-    var minColor = "#ff0000";
-    var midColor = "#00ff00";
-    var maxColor = "#0000ff";
-
-    validTestData = [ 
+    var validTestData = [
       [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3]
     ];
 
-    invalidTestData = [
+    var validTestData2 = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10,
+       10, 10, 10, 10, 10, 10, 10]
+    ];
+    
+    var invalidTestData = [
       [1]
     ];
 
+    var validColorArray = ["#ff0000", "#00ff00", "#0000ff"];
+    var invalidColorArray = ["#ff0000", "bob", "#0000ff"];
+    
+    var invalidTestData2 = [
+      [
+        "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
+        "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
+        "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
+        "31"
+      ]
+    ]
+      
     var geneLocations = {
       FOO: 0,
       BOB: 1,
       FOX: 2
     };
 
-    invalidTestData2 = [
-      ["foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
-      "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
-      "foo", "dog", "apple", "cat", "dad","foo", "dog", "apple", "cat", "dad",
-      "31"]
-    ]
+    // Ensure only valid genes are options.
+    tryThrow(validTestData, geneLocations, validColorArray, "SAY", 1, "ERROR: SAY is not a valid gene!");
+    tryThrow(validTestData, geneLocations, validColorArray, "", 1, "ERROR: No gene was specified (Empty string)");
+    
+    // Ensure only numerical data represents the region data.
+    tryThrow(invalidTestData2, geneLocations, validColorArray, "FOO", 1, "ERROR: The data representing gene expression for each region must be numerical!");
+    
+    // Ensure that only valid colors are run in the code.
+    tryThrow(validTestData, geneLocations, invalidColorArray, "FOO", 1, "ERROR: Invalid color [bob]!");
+   
+    // Ensure that all systems work together with valid data.
+    tryThrow(validTestData, geneLocations, validColorArray, "FOO", 0, "");
 
-    // Ensure that non-numerical data throws an error.
-    try {
-      var testObj = new RegionColorFactory(validTestData, geneLocations, minColor, midColor, maxColor);
-      assert.ok(true, "Numerical data doesn't throw test PASSED!");
-    } catch (error) {
-      assert.ok(false);
-    }
-    try {
-      gene = "FOO";
-      var testObj = new RegionColorFactory(invalidTestData2, geneLocations, minColor, midColor, maxColor);
-      testObj.generateRegionColorArray(gene);
-      assert.ok(false);
-    } catch(error) {
-      assert.ok(error === "ERROR: The data representing gene expression for each region must be"+
-      " numerical!");
-    }
+    var minColor = "#ff0000";
+    var midColor = "#00ff00";
+    var maxColor = "#0000ff";
 
-    // Ensure that there is validation for the user defined min-mid-max colors.
-    try {
-      gene = "FOO";
-      invalidColor1 = "bob";
-      var testObj = new RegionColorFactory(validTestData, geneLocations, invalidColor1, midColor, maxColor);
-      testObj.generateRegionColorArray(gene);
-      assert.ok(false);
-    } catch (error) {
-      assert.ok(error === "ERROR: Invalid color [" + invalidColor1 + "]!");
-    }
-
-    // Ensure no errors are thrown when all conditions are met.
-    try {
-      gene = "FOO";
-      var testObj = new RegionColorFactory(validTestData, geneLocations, minColor, midColor, maxColor);
-      testObj.setColors("#ffffff", "#ff00ff", "#000000");
-      testObj.generateRegionColorArray(gene);
-      assert.ok(true, "GeneExpressionDataPassedInTest2");
-    } catch (error) {
-      assert.ok(false, "GeneExpressionDataPassedInTest2");
-    }
 
     // Ensure that colors are generated appropriatly, for no normalization option.
-    validTestData2 = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10,
-       10, 10, 10, 10, 10, 10, 10]
-    ];
     var testObj = new RegionColorFactory(validTestData2, geneLocations, minColor, midColor, maxColor);
     gene = "FOO";
     testObj.setColors("#ff0000", "#00ff00", "#0000ff");
