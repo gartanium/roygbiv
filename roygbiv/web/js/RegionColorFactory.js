@@ -60,10 +60,11 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
         _normalizedData = generateNormalizedData(data);
 
         // Get the min mid and max
-        _min = Math.min.apply(Math, _normalizedData);
-        _mid = mean(_normalizedData);
-        _max = Math.max.apply(Math, _normalizedData);
-        
+        var minMidMax = findMinMidMax(_normalizedData);
+        _min = minMidMax[0];
+        _mid = minMidMax[1];
+        _max = minMidMax[2];
+
         // Generate the color scale
         colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
        
@@ -80,6 +81,17 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
         return _colorScale;
     }
 
+    function findMinMidMax(array) {
+        var newArray = [];
+        var counter = 0;
+        for(var key in array) {
+            newArray[counter] = array[key];
+            counter += 1;
+        }
+
+        var locMean = mean(newArray);
+       return [Math.min.apply(Math, newArray), locMean, Math.max.apply(Math, newArray)];
+    }
 
     /**
      * Sets the state for normalizing the data.
@@ -142,10 +154,12 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
      * the differing regions of the brain, and the gene expression data.
     */
     function buildColorArray(colorScale, data, header) {
-        var colorArray = [];
-        for (var i = 0; i < data.length; i++) {
 
-            var tempFloat = parseFloat(data[i]);
+
+        var colorArray = [];
+        for(var key in data) {
+
+            var tempFloat = parseFloat(data[key]);
             var colorScaled = colorScale(tempFloat);
 
             tempColor = d3.color(colorScaled);
@@ -154,10 +168,9 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
             green =  tempColor.g / 256;
             blue = tempColor.b / 256;
 
-            key = header[i];
-
             colorArray[key] = [red, green, blue];
         }
+
         return colorArray;
 
     }
@@ -191,7 +204,14 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
     }
 
     function shallowCopyArray(oldArray) {
-        return oldArray.slice()
+
+        var newArray = [];
+
+        for(var key in oldArray) {
+            newArray[key] = oldArray[key];
+        }
+
+        return newArray;
     }
 
     /**

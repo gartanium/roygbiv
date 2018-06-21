@@ -215,7 +215,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
 
                     // Settup our gene data expression factory.
                     $scope.regionColorFactory = new RegionColorFactory(
-                        csvObject, geneLocDictionary, $scope.colorPickerR,
+                        rawData, getHeader(), $scope.colorPickerR,
                         $scope.colorPickerG, $scope.colorPickerB
                     );
 
