@@ -210,12 +210,12 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     // var geneRegionDataObject = getRegionDict(geneLoc, csvObject);
                     // var geneRegionDataArray = Object.values(geneRegionDataObject);
                     // geneRegionDataArray = geneRegionDataArray.map(Number);
-                    geneLocDictionary = Object.values(geneLocDictionary);
-                    var processedData = processData(csvObject, geneLocDictionary);
+
+                    var rawData = cleanData(csvObject, geneLocDictionary);
 
                     // Settup our gene data expression factory.
                     $scope.regionColorFactory = new RegionColorFactory(
-                        geneRegionDataArray, geneLocDictionary, $scope.colorPickerR,
+                        csvObject, geneLocDictionary, $scope.colorPickerR,
                         $scope.colorPickerG, $scope.colorPickerB
                     );
 

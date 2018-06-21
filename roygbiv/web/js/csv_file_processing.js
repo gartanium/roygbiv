@@ -31,7 +31,7 @@ function getGeneLocation(locationDict, gene) {
  * @param {*} csv_object CSV object to be processed. 
  */
  function getGeneLocDict(csv_object) {
-    var dictionary = {};
+    var dictionary = [];
     length = csv_object.length;
     
     // Start at index 2
@@ -81,15 +81,12 @@ function getGeneLocation(locationDict, gene) {
 
                 // Keys for each brain region (I:E 1002 is ctx-lh-caudalanteriorcingulate)
                 key1 = headerObj[i + 1002]; 
-                key2 = headerObj[i + 2002];
 
                 // Extract the data.
                 data1 = parseFloat(geneData[key1]);
-                data2 = parseFloat(geneData[key2]);
 
                 // Set it to our return object.
                 regionDictionary[i + 1002] = data1;
-                regionDictionary[i + 2002] = data2;
                 break;
         }
 
@@ -97,8 +94,20 @@ function getGeneLocation(locationDict, gene) {
     return regionDictionary;
  }
 
- function processData(csvRawData, locDict) {
-     return processedData;
+ function cleanData(csvRawData, locDict) {
+    // For each key in location dictionary.
+    // Create a new
+ 
+    var cleanedData = [];
+
+    for(var key in locDict) {
+
+        var location = locDict[key];
+        var regionData = getRegionDict(location, csvRawData);
+        cleanedData[key] = regionData;
+    } 
+
+    return cleanedData; 
  }
 
  /**
