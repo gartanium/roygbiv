@@ -157,6 +157,12 @@ function generateNewBrain(scope, colorsDict) {
     updateRegionDisplay("region-select", $scope.brain);
 }
 
+
+function colorChange(event) {
+    $('#nav-brain').css("background-color",  event.target.value);
+}
+
+
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
@@ -205,6 +211,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         $scope.$apply();
                         return;
                     }
+
 
                     // Get the brain data related to the specific Gene Location.
                     // var geneRegionDataObject = getRegionDict(geneLoc, csvObject);
