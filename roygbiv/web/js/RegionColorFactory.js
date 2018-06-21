@@ -13,7 +13,7 @@
  * @since 06.08.18
  */
 
-function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
+function RegionColorFactory(data, header, minColor, midColor, maxColor) {
 
     var _colorMin = minColor;
     var _colorMid = midColor;
@@ -22,7 +22,6 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
     var _colorScale;
 
     var _geneData = data;
-    var _locationArray = locationArray;      
 
     var _normalizedData = [];       
     var _normalizationState = 0;
@@ -31,6 +30,8 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
         zScoreRow: 1,
         zScoreColumn: 2
     }
+
+    var _header = header;
 
     /**
      * Set the colors that the factory uses to produce the associative color array.
@@ -67,7 +68,7 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
         colorScale = buildColorScale(_min, _mid, _max, _colorMin, _colorMid, _colorMax);
        
         // Build the Color Array.
-        colorArray = buildColorArray(colorScale, _normalizedData);
+        colorArray = buildColorArray(colorScale, _normalizedData, _header);
 
         return colorArray;
     }
@@ -140,11 +141,11 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
      * Builds an associative array containing color data for describing
      * the differing regions of the brain, and the gene expression data.
     */
-    function buildColorArray(colorScale, data) {
+    function buildColorArray(colorScale, data, header) {
         var colorArray = [];
-        for (var j = 0; j < data.length; j++) {
+        for (var i = 0; i < data.length; i++) {
 
-            var tempFloat = parseFloat(data[j]);
+            var tempFloat = parseFloat(data[i]);
             var colorScaled = colorScale(tempFloat);
 
             tempColor = d3.color(colorScaled);
@@ -152,7 +153,10 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
             red = tempColor.r / 256;
             green =  tempColor.g / 256;
             blue = tempColor.b / 256;
-            colorArray[j] = [red, green, blue];
+
+            key = header[i];
+
+            colorArray[key] = [red, green, blue];
         }
         return colorArray;
 
@@ -193,19 +197,16 @@ function RegionColorFactory(data, locationArray, minColor, midColor, maxColor) {
     /**
     * @function Description: Returns data describing how a gene is expressed in a region. 
     * @param {String} gene Gene to get region expression data for.
-    * @param {Array} data Array describing how each gene is expressed in each brain region.
-    * @param {Array} locationArray Array describing where each gene is located in the data.
     */
     function getGeneData(gene) {
-        var location = _locationArray[gene];
         if(gene == "") {
             throw "ERROR: No gene was specified (Empty string)";
         }
-        else if(location == null) {
+        else if(!(gene in _geneData)) {
             throw "ERROR: " + gene +" is not a valid gene!";
         }
         else {
-            return _geneData[location];
+            return _geneData[gene];
         }
     }
 }
