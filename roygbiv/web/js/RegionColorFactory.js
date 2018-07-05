@@ -15,7 +15,7 @@
 
  /**
   * 
-  * @param {Float Array} data Associative array containing genes as the key, and an array for region data. 
+  * @param {Array} data Associative array containing genes as the key, and an array for region data. 
   * @param {Array} header Associative array describing what region of the brain each column represents in the data object. 
   * The key should be a numerical ID and the value should be the name of the region. 
   * @param {String} minColor Minimum color value on the scale.
@@ -98,6 +98,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
     }
 
     function findMinMidMax(array) {
+
         var newArray = [];
         var counter = 0;
         for(var key in array) {
@@ -105,8 +106,26 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
             counter += 1;
         }
 
-        var locMean = mean(newArray);
-       return [Math.min.apply(Math, newArray), locMean, Math.max.apply(Math, newArray)];
+        var min = Math.min.apply(Math, newArray);
+        var mid = mean(newArray);
+        var max = Math.max.apply(Math, newArray);
+
+        if(_normalizationState === _normalizationEnum.default) {
+            return [min, mid, max];
+        }
+        else if(_normalizationState === _normalizationEnum.zScoreColumn ||
+                _normalizationState === _normalizationEnum.zScoreRow) {
+
+            var standardDeviations = 3;
+            if( min < -3) {
+                standardDeviations = Math.abs(Math.ceil(min)); 
+            }
+            else if ( max > 3 && max > Math.abs(min)) {
+                standardDeviations = Math.abs(Math.ceil(max));
+            }
+
+            return [standardDeviations * -1, 0, standardDeviations];
+        }
     }
 
     /**
@@ -130,15 +149,40 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
      * and normalizes the copy.
      */
     function generateNormalizedData(data) {
-        normalizedData = shallowCopyArray(data);
+        var normalizedData;
 
         if(_normalizationState == _normalizationEnum.default) {
+            normalizedData = shallowCopyArray(data);
             return normalizedData;
         }
         else if(_normalizationState == _normalizationEnum.zScoreRow) {
-            return arr.zScores(normalizedData);
+
+            normalizedData = shallowCopyArray(data);
+            
+            values = Object.values(normalizedData);
+            values = arr.zScores(values);
+
+            var j = 0;
+            for(i = 1002; i < 1036; i++) {
+                if(normalizedData[i]) {
+                    normalizedData[i] = values[j];
+                    j++;
+                }
+            }
+
+            return normalizedData;
+
         }
         else if(_normalizationState == _normalizationEnum.zScoreColumn) {
+            //TODO: ADD LOGIC HERE FORE NORMALIZING BY COLUMN.
+            //for(i = 0; i < )
+            // Gene 1 2 3 4 5 6 7
+            // Gene 1 2 3 4 5 6 7
+            // Cycle through every gene.
+            // Select the column were on.
+            // Build an array out of that.
+            // Zscore it.
+            // Restore the normalized value.
 
         }
     }
@@ -194,7 +238,6 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
      * the brain, and only numerical data.
      */
     function validateGeneExpressionData(data) {
-
         // Each value in the array is a number.
         for(i = 0; i < data.length; i++) {
             if(typeof data[i] === "number")
@@ -219,13 +262,10 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
     }
 
     function shallowCopyArray(oldArray) {
-
         var newArray = [];
-
         for(var key in oldArray) {
             newArray[key] = oldArray[key];
         }
-
         return newArray;
     }
 
@@ -240,9 +280,9 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
         else if(!(gene in _geneData)) {
             throw "ERROR: " + gene +" is not a valid gene!";
         }
-        else {
+        else 
             return _geneData[gene];
-        }
+        
     }
 }
 

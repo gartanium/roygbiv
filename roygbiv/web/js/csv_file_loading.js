@@ -121,6 +121,27 @@ function setupDefaultValues(container) {
 }
 
 /**
+ * Returns a json file. The json file contains information about where surface files are locatd at.
+ * This function returns the json file associated with the user selected surface.
+ */
+function getSurfaceOption() {
+    
+    // Get the surface option the user selects.
+    var option =  document.getElementById("surfaceSelection").value;
+    var rObj;
+
+    if(option == "Surface 1") {
+        rObj = "data/lh_files_to_load_surface1.json";
+    }
+    else if(option == "Surface 2") {
+        rObj = "data/lh_files_to_load_surface2.json";
+    }
+
+    return rObj;
+
+}
+
+/**
  * 
  * @param {*} scope 
  * @param {*Dictionary} colorsDict Dictionary containing values for the gene expression colors, associated with the region.
@@ -149,7 +170,7 @@ function generateNewBrain(scope, colorsDict) {
             }
             scope.$apply();
         },
-        manifest_url: 'data/lh_files_to_load.json',
+        manifest_url: getSurfaceOption(),
         label_mapper: "data/labels.json",
         colors: colorsDict,
     });
