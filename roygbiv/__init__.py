@@ -15,6 +15,7 @@ import nibabel as nib
 HTML_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'web'))
 DATA_DIR = os.environ.get('ROYGBIV_PATH', os.path.join(HTML_DIR, 'data'))
 
+
 def downsample_vtk(vtk_file, sample_rate):
     """Sample rate: number between 0 and 1."""
     from mindboggle.mio.vtks import read_vtk, write_vtk
@@ -74,9 +75,10 @@ def freesurfer_annot_to_vtks(surface_file, label_file, output_stem='',
         if force or not os.path.exists(surface_vtk):
             print_verbose('Converting surface to vtk: %s' % surface_file)
             from mindboggle.mio.vtks import freesurfer_surface_to_vtk
-            freesurfer_surface_to_vtk(surface_file, surface_vtk)
+            freesurfer_surface_to_vtk(surface_file, "", surface_vtk)
 
     # Convert the data file to vtk
+    print_verbose('Converting data file to vtk')
     if os.path.splitext(label_file)[1] == '.vtk':
         label_vtk = label_file
         labels, names = None, None
