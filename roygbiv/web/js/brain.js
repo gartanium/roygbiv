@@ -270,7 +270,7 @@ var Brain = function(kwargs) {
 		controls.panSpeed = 2;
 
 		controls.noZoom = false;
-		controls.noPan = false;
+		controls.noPan = true;
 
 		controls.staticMoving = true;
 		controls.dynamicDampingFactor = 0.3;
