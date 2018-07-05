@@ -31,7 +31,7 @@ function getGeneLocation(locationDict, gene) {
  * @param {*} csv_object CSV object to be processed. 
  */
  function getGeneLocDict(csv_object) {
-    var dictionary = {};
+    var dictionary = [];
     length = csv_object.length;
     
     // Start at index 2
@@ -81,20 +81,33 @@ function getGeneLocation(locationDict, gene) {
 
                 // Keys for each brain region (I:E 1002 is ctx-lh-caudalanteriorcingulate)
                 key1 = headerObj[i + 1002]; 
-                key2 = headerObj[i + 2002];
 
                 // Extract the data.
                 data1 = parseFloat(geneData[key1]);
-                data2 = parseFloat(geneData[key2]);
 
                 // Set it to our return object.
                 regionDictionary[i + 1002] = data1;
-                regionDictionary[i + 2002] = data2;
                 break;
         }
 
     }
     return regionDictionary;
+ }
+
+ function cleanData(csvRawData, locDict) {
+    // For each key in location dictionary.
+    // Create a new
+ 
+    var cleanedData = [];
+
+    for(var key in locDict) {
+
+        var location = locDict[key];
+        var regionData = getRegionDict(location, csvRawData);
+        cleanedData[key] = regionData;
+    } 
+
+    return cleanedData; 
  }
 
  /**
@@ -105,6 +118,17 @@ function getGeneLocation(locationDict, gene) {
     geneRegionData = arr.zScores(geneRegionData);
     return geneRegionData;
  }
+
+function getHeader() {
+
+    var header = [
+        "1002","1003","1005","1006","1007","1008","1009","1010",
+        "1011","1012","1013","1014","1015","1016","1017","1018","1019",
+        "1020","1021","1022","1023","1024","1025","1026","1027","1028",
+        "1029","1030","1031","1034","1035"
+    ] ;
+    return header;
+}
 
  /** 
   * Generates an associative array with a Key for each region,

@@ -117,8 +117,6 @@ function setupDefaultValues(container) {
     container.colorPickerB = '#ff0000';
     container.cameraManager = new CameraManager();
 
-    container.regionColorFactory = new RegionColorFactory();
-
     container.colorStatus = "Enter in 6 digit hexidecimal color codes";
 }
 
@@ -159,6 +157,12 @@ function generateNewBrain(scope, colorsDict) {
     updateRegionDisplay("region-select", $scope.brain);
 }
 
+
+function colorChange(event) {
+    $('#nav-brain').css("background-color",  event.target.value);
+}
+
+
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
@@ -184,7 +188,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                 $scope.$apply();
                 
             } else {
-                
+
                 // Inform the user that the file successfully loaded, and display the path.
                 $scope.fileStatus = "File uploaded successfully!";
                 $scope.$apply();
@@ -194,14 +198,13 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                 $('#search-form').on('click', '#search-button', function(e) {
                     e.preventDefault();
 
-                    //Currently, values in 'keyObj' and indexes in 'datas' are identical
+                    // Currently, values in 'keyObj' and indexes in 'datas' are identical
                     var geneName = $scope.geneSearch.trim().toUpperCase()
-                    var geneLoc;
+                    var geneLocDictionary;
 
                     // Attempt to get the Gene from the User. Throw a message if it fails.
                     try {
                         geneLocDictionary = getGeneLocDict(csvObject);
-                        geneLoc = getGeneLocation(geneLocDictionary, geneName);
                     }
                     catch (error_message) {
                         $scope.geneStatus = error_message;
@@ -209,39 +212,40 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         return;
                     }
 
+
                     // Get the brain data related to the specific Gene Location.
-                    var geneRegionDataObject = getRegionDict(geneLoc, csvObject);
-                    var geneRegionDataArray = Object.values(geneRegionDataObject);
-                    geneRegionDataArray = geneRegionDataArray.map(Number);
+                    // var geneRegionDataObject = getRegionDict(geneLoc, csvObject);
+                    // var geneRegionDataArray = Object.values(geneRegionDataObject);
+                    // geneRegionDataArray = geneRegionDataArray.map(Number);
 
-                   
+                    var rawData = cleanData(csvObject, geneLocDictionary);
 
-                     // Get the color scale and colored data for the Brain.
-                     // If the zscore box is checked, use zscore for rendering the brain. Otherwise use min/max.
+                    // Settup our gene data expression factory.
+                    $scope.regionColorFactory = new RegionColorFactory(
+                        rawData, getHeader(), $scope.colorPickerR,
+                        $scope.colorPickerG, $scope.colorPickerB
+                    );
+
+                    // Get the color scale and colored data for the Brain.
+                    // If the zscore box is checked, use zscore for rendering the brain. Otherwise use min/max.
                     // TODO: Modify code so upon error, it goes not to minMidMaxStatus but something
                     // more general.
                     if($scope.zScoreCheckbox) {
-
-                        $scope.regionColorFactory.setNormalizationStateToZScore();
+                        $scope.regionColorFactory.setNormalizationState("zScoreRow");
                     }
-                    else {
-                        try {
-                            $scope.regionColorFactory.setNormalizationStateToMinMidMax($scope.userMin, 
-                                $scope.userMid, $scope.userMax);
-                            $scope.regionColorFactory.setColors($scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
-                        } catch (error) {
-                            $scope.minMidMaxStatus = error;
-                            $scope.$apply();
-                        }
+
+                    try {
+                        $scope.regionColorFactory.setColors($scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
+                    } catch (error) {
+                        $scope.minMidMaxStatus = error;
+                        $scope.$apply();
                     }
                     
-                    $scope.regionColorFactory.setDataToProcess(geneRegionDataArray);
-                    dict = $scope.regionColorFactory.generateRegionColorArray();
+                    dict = $scope.regionColorFactory.generateRegionColorArray(geneName);
                     
                     //render new brain
                     $scope.brain = generateNewBrain($scope, dict);
-                    
-
+                 
                     $('#nav_legend').empty()
                     colorlegend("#nav_legend", colorScale, "linear", {title: "Gene Expression"});
                     initializeDefaultValues();  
