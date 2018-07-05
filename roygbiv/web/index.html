@@ -95,15 +95,6 @@
                                 <td>Color status: </td>
                                 <td>{{colorStatus}}</td>
                             </tr>
-                            <tr>
-                                <td>Min-Mid-Max status: </td>
-                                <td>{{minMidMaxStatus}}</td>
-                            </tr>
-                            <tr>
-                                <td>Camera status: </td>
-                                <td>{{cameraStatus}}</td>
-                            </tr>
-    
                         </table>
     
                         <br />
@@ -130,23 +121,6 @@
                                 <td><input type="checkbox" ng-model="zScoreCheckbox"</td>
                             </tr>
                             <tr>
-                                <td>Minimum</td>
-                                <td><input type="text" class="search-field" ng-model="userMin"></td>
-                            </tr>
-                            <tr>
-                                <td>Mid</td>
-                                <td><input type="text" class="search-field" ng-model="userMid"></td>
-                            </tr>
-                            <tr>
-                                <td>Maximum</td>
-                                <td><input type="text" class="search-field" ng-model="userMax"></td>
-                            </tr>
-                            <tr>
-                                <td>Camera</td>
-                                <td><input value="" class="search-field" ng-model="cameraSettingName"></td>
-                                <td><button id="camera-button" class="search-button">Snapshot</button></td>
-                            </tr>
-                            <tr>
                                 <td>Color</td>
                                 <td><input value="" class="search-field" ng-model="colorPickerR"></td>
                                 <td><input value="" class="search-field" ng-model="colorPickerG"></td>
@@ -154,15 +128,14 @@
                                 <td><button id="color-button" class="search-button">Go</button></td>
                             </tr>
                             <tr>
-                                <td>Region Display</td>
-                                <td><button id="clear-regions" class="search-button">Clear</button></td>
-                                <td><button id="reset-regions" class="search-button">Reset</button></td>
-                            </tr>
-                            <tr>
                                 <td>Background Color</td>
                                 <td><input type="color" class="search-field" id="pickme" onchange="colorChange(event);" ng-model="colorPickerBackground"></td>
                             </tr>
-
+                            <tr>
+                                <td>Camera</td>
+                                <td><input value="" class="search-field" ng-model="cameraSettingName"></td>
+                                <td><button id="camera-button" class="search-button">Snapshot</button></td>
+                            </tr>
                         </table>
 
                             <table id="cameraSettings">
@@ -171,7 +144,14 @@
 
                             <table id="regionSelectID">
                             <tr>
-                            <div id="region-selection">  
+                            <div id="region-selection"> 
+
+                            <tr>
+                                <td>Region Display</td>
+                                <td><button id="clear-regions" class="search-button">Clear</button></td>
+                                <td><button id="reset-regions" class="search-button">Reset</button></td>
+                            </tr>
+
                                 <tr>
                                     <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalanteriorcingulate"> ctx-lh-caudalanteriorcingulate</td>
                                     <td><input type="checkbox" class="region-select" id="region-select" name="ctx-lh-caudalmiddlefrontal"> ctx-lh-caudalmiddlefrontal</td>
