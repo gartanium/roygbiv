@@ -1,11 +1,11 @@
 /*
  * Summary.
- * Functionality for building an associative array of colors that describe how genes are
+ * Functionality for building an associative array of colors that describes how genes are
  * expressed on different regions of the brain.
  * 
  * Description.
  * Contains functionalities for customizing how the associative array of colors 
- * is built. Such options include z-score normilization, scaling with min-mid-max
+ * is built. Such normalization options include z-score normilization, scaling with min-mid-max
  * options, and relative for the given gene expression data.
  * 
  * @file this file defines a RegionColorFactory object.
@@ -13,6 +13,15 @@
  * @since 06.08.18
  */
 
+ /**
+  * 
+  * @param {Float Array} data Associative array containing genes as the key, and an array for region data. 
+  * @param {Array} header Associative array describing what region of the brain each column represents in the data object. 
+  * The key should be a numerical ID and the value should be the name of the region. 
+  * @param {String} minColor Minimum color value on the scale.
+  * @param {String} midColor Middle color value on the scale.
+  * @param {String} maxColor Maximum color value on the scale.
+  */
 function RegionColorFactory(data, header, minColor, midColor, maxColor) {
 
     var _colorMin = minColor;
@@ -34,8 +43,11 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
     var _header = header;
 
     /**
-     * Set the colors that the factory uses to produce the associative color array.
-     */
+    * Sets the color values to be displayed.
+    * @param {String} minColor Minimum color value on the scale.
+    * @param {String} midColor Middle color value on the scale.
+    * @param {String} maxColor Maximum color value on the scale.
+    */
     this.setColors = function(minColor, midColor, maxColor) {
         _colorMin = minColor;
         _colorMid = midColor;
@@ -43,7 +55,8 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
     }
 
     /**
-     * Returns a dictionary of colors for representing how a gene is expressed 
+     * Returns a dictionary of colors for representing how a gene is expressed
+     * @param {String} gene Gene to be represented. 
      */
     this.generateRegionColorArray = function(gene) {
         

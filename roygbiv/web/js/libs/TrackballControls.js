@@ -307,6 +307,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		}
 
+			
 		if ( !_this.noPan ) {
 
 			_this.panCamera();
