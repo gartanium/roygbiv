@@ -254,6 +254,7 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     if($scope.zScoreCheckbox) {
                         $scope.regionColorFactory.setNormalizationState("zScoreRow");
                     }
+                    
 
                     try {
                         $scope.regionColorFactory.setColors($scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
