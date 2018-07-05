@@ -66,6 +66,9 @@ function registerEvents(scope, cameraManager) {
         checkBoxesByClass("region-select", true);
     });
 
+    // Register the menu options for selecting a normalization.
+    $('#search-form').on('click', '#')
+
     // Register the button for saving the camera data.
     $('#search-form').on('click', '#camera-button', function(e) {
         try {
