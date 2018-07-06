@@ -61,7 +61,7 @@ The user has the option to normalize the gene expression data that is displayed.
 
 -Default: By default, the data is scaled by selecting the minimum, mean, and maximum values.
 
--Z-Score-Gene: This option normalizes the data relative to each gene. The data in a different gene does not effect how the selected gene is normalized. By default, the standard scale has a minimum of 3 standard deviations, a mid of 0, and a maximum of 3 standard deviations. If any of the cells has a zscore value greater than 3 or less than -3, the scale is expanded.
+-Z-Score-Gene: This option normalizes the data relative to each gene. The data in a different gene does not effect how the selected gene is normalized. By default, the standard scale has a minimum of 3 standard deviations, a mid of 0, and a maximum of 3 standard deviations. If any of the cells has a zscore value greater than 3 or less than -3, the scale is expanded to the smallest whole number above that min or max.
 
 -Z-Score-Region: This option normalizes the data relative to each brain region. This means that the cell for a given brain region in each gene is normalized relative to eachother. For example, all the cells in the ctx-lh-insula brain region are normalized relative to each other while all the cells in the ctx-lh-precentral region are normalized relative to each other. By default, the standard scale has a minimum of 3 standard deviations, a mid of 0, and a maximum of 3 standard deviations. If any of the cells has a zscore value greater than 3 or less than -3, the scale is expanded.
 

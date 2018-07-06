@@ -30,3 +30,5 @@ QUnit.test("get_gene_location_test", function( assert ) {
     }
     
   });
+
+  // Unit tests for asserting that the file is processed correctly.
