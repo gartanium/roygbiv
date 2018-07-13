@@ -8,6 +8,11 @@ function isarr(v) {
 
 function set_mesh_color(mesh, color) {
     var geometry = mesh.geometry;
+
+    if(geometry instanceof THREE.BufferGeometry) {
+        geometry = new THREE.Geometry().fromBufferGeometry(geometry);
+    }
+
     for (var i=geometry.faces.length - 1; i>=0; --i) {
         var face = geometry.faces[i];
         if (color) {
@@ -21,6 +26,7 @@ function set_mesh_color(mesh, color) {
       //face.materials = [ new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } ) ];
     }
     geometry.colorsNeedUpdate = true;
+    mesh.geometry = geometry;
     return mesh;
 }
 
