@@ -315,6 +315,7 @@ var Brain = function(kwargs) {
 				geometry = new THREE.Geometry().fromBufferGeometry(buffergeometry);
 				geometry.computeFaceNormals();
 				geometry.computeVertexNormals();
+                
 				geometry.__dirtyColors = true;
 				material = new THREE.MeshLambertMaterial({vertexColors: THREE.FaceColors});
 				mesh = new THREE.Mesh(geometry, material);

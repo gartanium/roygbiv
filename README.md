@@ -44,6 +44,9 @@ visiualize gene expression data on the brain.
 **********************************
 GETTING STARTED
 **********************************
+To run the webpage locally, in the command prompt, navigate to roygbiv/roygbiv/web and run: python -m http.server
+then navigate to localhost:8000 on your browser.
+
 Inorder to display a brain, a user must have a csv file containing a column of genes, followed by several columns of brain region data. An example of a valid csv file is found in roygbiv/web/data. The name of the file is ExampleData.csv. Notice that the csv file contains a header, followed by rows that are headed by a gene.
 
 After a csv file is selected that contains gene expression data, the user must select
@@ -92,7 +95,47 @@ Background features
 ----------------------------------
 There is a little bit of data preperation that occurs when the user enters in a csv file for region expression data. The way it loads in data is based off the file formats I was given from the team of medical researchers we are working with. An example of an acceptable csv file format is found in the roygbiv/data/web/data/ExampleData.csv file.
 
+**********************************
+Development notes
+**********************************
+1. Adding more surfaces
+----------------------------------
+-Supported file types: Currently, this version of ROYGBIV supports loading of OBJ files. VTK files should be resupported again soon. The current problem is that I updated three.min.js. I updated so that .obj files could be loaded in with out any errors. The problem is that when I updated three.min.js and VTKLoader.js, VTKLoader.js stopped loading the surfaces correctly. I will work on this. It should be fairly simple to add more file types as well. To add support for more file types, checkout this link https://github.com/mrdoob/three.js/tree/dev/examples/js/loaders, include the appropriate loader into the project, and learn specificly what your loader returns. For example, the VTK loader returns a GeometryBuffer where as the OBJLoader returns a "group" object (really a group object is a 3DObject). To add code for other filetypes, checkout the loadmesh function and follow the example there.
 
+-Adding more surfaces: ROYGBIV loades multiple mesh files and displays them. To add more "Surface templates", you will need meshes for multiple regions of the brain. These are the regions that you need: 
 
+ctx-lh-caudalanteriorcingulate
+ctx-lh-caudalmiddlefrontal
+ctx-lh-cuneus
+ctx-lh-entorhinal
+ctx-lh-fusiform
+ctx-lh-inferiorparietal
+ctx-lh-inferiortemporal
+ctx-lh-isthmuscingulate
+ctx-lh-lateraloccipital
+ctx-lh-lateralorbitofrontal
+ctx-lh-lingual
+ctx-lh-medialorbitofrontal
+ctx-lh-middletemporal
+ctx-lh-parahippocampal
+ctx-lh-paracentral
+ctx-lh-parsopercularis
+ctx-lh-parsorbitalis
+ctx-lh-parstriangularis
+ctx-lh-pericalcarine
+ctx-lh-postcentral
+ctx-lh-posteriorcingulate
+ctx-lh-precentral
+ctx-lh-precuneus
+ctx-lh-rostralanteriorcingulate
+ctx-lh-rostralmiddlefrontal                                     
+ctx-lh-superiorfrontal
+ctx-lh-superiorparietal
+ctx-lh-superiortemporal
+ctx-lh-supramarginal
+ctx-lh-transversetemporal
+ctx-lh-insula
 
+Store these files in data\mindboggled\Twins-2-1\labels\left_exploded_labels_vtks. Store it in a folder (I recommend calling it after the next iteration of surface files such as Surface_X).
+You will also need a JSON file to describe where the location is of each brain region mesh. checkout the lh_files_to_load_surfaceX.JSON files.
 
