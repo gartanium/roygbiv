@@ -98,6 +98,10 @@ There is a little bit of data preperation that occurs when the user enters in a 
 **********************************
 Development notes
 **********************************
+Getting Started
+----------------------------------
+To start off, I would recommend familiarizing your self with Angular JS and JQuery. This will give you a good foundation for understanding how to connect your view, with your models and controllers. You don't need to dig to deep into Angular JS, just enough to understand that the main entry point for you application is found in the csv_file_loading.js file. Understand that this is the flow of the application. 1. A user enters in a CSV file for region expression data. 2. A user selects a gene. Once the user does 1 and 2, then all the magic happens. You will notice in the csv_file_loading.js file that once a user has a file entered in, a gene selected, and then render pressed, all the events to each button is registered, and a brain is rendered onto the screen.
+
 1. Adding more surfaces
 ----------------------------------
 -Supported file types: Currently, this version of ROYGBIV supports loading of OBJ files. VTK files should be resupported again soon. The current problem is that I updated three.min.js. I updated so that .obj files could be loaded in with out any errors. The problem is that when I updated three.min.js and VTKLoader.js, VTKLoader.js stopped loading the surfaces correctly. I will work on this. It should be fairly simple to add more file types as well. To add support for more file types, checkout this link https://github.com/mrdoob/three.js/tree/dev/examples/js/loaders, include the appropriate loader into the project, and learn specificly what your loader returns. For example, the VTK loader returns a GeometryBuffer where as the OBJLoader returns a "group" object (really a group object is a 3DObject). To add code for other filetypes, checkout the loadmesh function and follow the example there.
@@ -139,3 +143,9 @@ ctx-lh-insula
 Store these files in data\mindboggled\Twins-2-1\labels\left_exploded_labels_vtks. Store it in a folder (I recommend calling it after the next iteration of surface files such as Surface_X).
 You will also need a JSON file to describe where the location is of each brain region mesh. checkout the lh_files_to_load_surfaceX.JSON files.
 
+2. Manipulationg region data
+----------------------------------
+-About: The purpose of the extended version of ROYGBIV is to show gene expression data on a brain surface. The brain surface is composed of several meshes. Each mesh is assigned a specific color and region ID. The color is calculated based upon the data located at the Region ID in the gene expression data csv file. 
+
+-Normalization:
+Options are chosen to manipulate this data as well, such as z-score normalization. To add aditional ways to modify this data, open up the RegionColorFactory.js file. 
