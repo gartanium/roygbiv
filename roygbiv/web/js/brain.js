@@ -14,9 +14,7 @@ var Brain = function(kwargs) {
 	    colors: ['color1', 'color2'...],
 	    values: [value1, value2, ...]
 	}
-
 	The following kwargs can be passed, to control the Brain behavior:
-
 	manifest_url: URL to the manifest file.
 	divID: name of the div where we can draw the brain.
 	callback: callback function on selection of a brain ROI.
@@ -212,7 +210,7 @@ var Brain = function(kwargs) {
 		$.ajax({dataType: "json",
 			url: _this.manifest_url,
 			data: function(data) {},
-			error: function(err) { console.error('Load error'); },
+			error: function(err) { console.error('Load error\n' + err); },
 			success: function(data, textStatus, jqXHR) {
 				var download_data = _this.data_url && _this.data_url != _this.manifest_url;
 				reset_mesh_props(data, textStatus, jqXHR, !download_data);
@@ -294,7 +292,16 @@ var Brain = function(kwargs) {
 			var oReq = new XMLHttpRequest();
 			oReq.open("GET", url, true);
 			oReq.onload = function(oEvent) {
-				var buffergeometry = new THREE.VTKLoader().parse(this.response);
+				
+				var buffergeometry;
+
+				if(url.endsWith(".vtk")) {
+					buffergeometry = new THREE.VTKLoader().parse(this.response);
+				}
+				else if(url.endsWith(".obj")) {
+					buffergeometry = new THREE.OBJLoader().parse(this.response);
+				}
+
 				geometry = new THREE.Geometry().fromBufferGeometry(buffergeometry);
 				geometry.computeFaceNormals();
 				geometry.computeVertexNormals();
@@ -415,5 +422,3 @@ var Brain = function(kwargs) {
 	_this.__init__();
 	return _this;
 }
-
-

@@ -139,6 +139,9 @@ function getSurfaceOption() {
     else if(option == "Surface 2") {
         rObj = "data/lh_files_to_load_surface2.json";
     }
+    else if(option == "Surface 3") {
+        rObj = "data/lh_files_to_load_surface3.json";
+    }
 
     return rObj;
 
@@ -280,4 +283,3 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
         });
     });
 }]);
-
