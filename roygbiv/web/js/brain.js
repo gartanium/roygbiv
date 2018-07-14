@@ -275,6 +275,36 @@ var Brain = function(kwargs) {
 		return controls
 	}
 
+	function addMeshToScene(buffergeometry, mesh_props, url) {
+
+		geometry = new THREE.Geometry().fromBufferGeometry(buffergeometry);
+		geometry.computeFaceNormals();
+		geometry.computeVertexNormals();
+		
+		geometry.__dirtyColors = true;
+		material = new THREE.MeshLambertMaterial({vertexColors: THREE.FaceColors});
+		mesh = new THREE.Mesh(geometry, material);
+		copy_mesh_props(mesh_props, mesh);
+		mesh.filename = url;
+		mesh.dynamic = true;
+		mesh.material.transparent = true;
+		mesh.material.opacity = 1;
+		mesh.rotation.y = Math.PI * 1.01;
+		mesh.rotation.x = Math.PI * 0.5;
+		mesh.rotation.z = Math.PI * 1.5 * (url.indexOf('rh_') == -1 ? 1 : -1);
+		//console.log("mesh props is", mesh_props)
+		var mesh_name = mesh_props.name;
+		if (mesh_name) {
+			mesh.name = mesh_name;
+		} else {
+			var tmp = url.split("_")
+			mesh.name = tmp[tmp.length-1].split(".vtk")[0]
+		}
+		_this.scene.add(mesh);
+		_this.meshes[mesh.roi_key] = mesh;
+
+	}
+
 	this.loadMesh = function(url, mesh_props) {
 		var name_found = Object.keys(_this.meshes).reduce(function(c, k) {
 			return c || _this.meshes[k].name == mesh_props.name;
@@ -289,58 +319,32 @@ var Brain = function(kwargs) {
 			if (name_found)  { // Unreusable mesh; remove it
 				_this.removeMesh(_this.meshes[mesh_props.roi_key]);
 			}
-			var oReq = new XMLHttpRequest();
-			oReq.open("GET", url, true);
-			oReq.onload = function(oEvent) {
+			
+			if(url.endsWith(".obj")) {
 				
-				var buffergeometry;
+				var oReq = new XMLHttpRequest();
+				oReq.open("GET", url, true);
+				oReq.onload  = function(oEvent) {
 
-				if(url.endsWith(".vtk")) {
-					buffergeometry = new THREE.VTKLoader().parse(this.response);
-				}
-				else if(url.endsWith(".obj")) {
+					var buffergeometry;
 					group = new THREE.OBJLoader().parse(this.response);
-
 					group.traverse( function ( child ) {
 
 						if ( child instanceof THREE.Mesh ) {
-
 							var mesh = child;
-        					buffergeometry = mesh.geometry;
+							buffergeometry = mesh.geometry;
 						}
-
 					} );
+					addMeshToScene(buffergeometry, mesh_props, url);
 				}
-
-				geometry = new THREE.Geometry().fromBufferGeometry(buffergeometry);
-				geometry.computeFaceNormals();
-				geometry.computeVertexNormals();
-                
-				geometry.__dirtyColors = true;
-				material = new THREE.MeshLambertMaterial({vertexColors: THREE.FaceColors});
-				mesh = new THREE.Mesh(geometry, material);
-				copy_mesh_props(mesh_props, mesh);
-				mesh.filename = url;
-				mesh.dynamic = true;
-				mesh.material.transparent = true;
-				mesh.material.opacity = 1;
-				mesh.rotation.y = Math.PI * 1.01;
-				mesh.rotation.x = Math.PI * 0.5;
-				mesh.rotation.z = Math.PI * 1.5 * (url.indexOf('rh_') == -1 ? 1 : -1);
-                //console.log("mesh props is", mesh_props)
-				var mesh_name = mesh_props.name;
-				if (mesh_name) {
-					mesh.name = mesh_name;
-				} else {
-					var tmp = url.split("_")
-					mesh.name = tmp[tmp.length-1].split(".vtk")[0]
-				}
-				_this.scene.add(mesh);
-				_this.meshes[mesh.roi_key] = mesh;
-
-				
+				oReq.send();
 			}
-			oReq.send();
+			else if(url.endsWith(".vtk")) {
+				var loader = new THREE.VTKLoader();
+				loader.load(url, function(buffergeometry) {
+					addMeshToScene(buffergeometry, mesh_props, url);
+				});
+			}
 		}
 	}
 

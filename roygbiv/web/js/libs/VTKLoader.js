@@ -1160,25 +1160,7 @@ Object.assign( THREE.VTKLoader.prototype, THREE.EventDispatcher.prototype, {
 		}
 
 		// get the 5 first lines of the files to check if there is the key word binary
-		// var meta = THREE.LoaderUtils.decodeText( new Uint8Array( data, 0, 250 ) ).split( '\n' );
-		var meta = [];
-		var currentWord = "";
-		var jMem = 0;
-
-		for(i = 0; i < 5; i++) {
-			for(j = jMem; j < data.length; j++) {
-				if(data[j] != '\n') {
-					currentWord += data[j];
-				}
-				else {
-					meta[i] = currentWord;
-					currentWord = "";			
-					jMem = j;
-					jMem++;
-					break;
-				}
-			}
-		}
+		var meta = THREE.LoaderUtils.decodeText( new Uint8Array( data, 0, 250 ) ).split( '\n' );
 
 		if ( meta[ 0 ].indexOf( 'xml' ) !== - 1 ) {
 

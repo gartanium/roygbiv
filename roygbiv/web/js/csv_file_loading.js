@@ -142,9 +142,14 @@ function getSurfaceOption() {
     else if(option == "Surface 3") {
         rObj = "data/lh_files_to_load_surface3.json";
     }
+    else if(option == "Surface 4") {
+        rObj = "data/lh_files_to_load_surface4.json";
+    }
+    else if(option == "Surface 5") {
+        rObj = "data/lh_files_to_load_surface5.json";
+    }
 
     return rObj;
-
 }
 
 /**
@@ -239,7 +244,6 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         return;
                     }
 
-
                     // Get the brain data related to the specific Gene Location.
                     // var geneRegionDataObject = getRegionDict(geneLoc, csvObject);
                     // var geneRegionDataArray = Object.values(geneRegionDataObject);
@@ -261,7 +265,6 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                         $scope.regionColorFactory.setNormalizationState("zScoreRow");
                     }
                     
-
                     try {
                         $scope.regionColorFactory.setColors($scope.colorPickerR, $scope.colorPickerG, $scope.colorPickerB);
                     } catch (error) {
@@ -270,7 +273,6 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
                     }
                     
                     dict = $scope.regionColorFactory.generateRegionColorArray(geneName);
-                    
                     //render new brain
                     $scope.brain = generateNewBrain($scope, dict);
                  
