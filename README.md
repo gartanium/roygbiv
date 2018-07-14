@@ -32,7 +32,8 @@ Note:
 
 
 **********************************
-# Extended version - Author Matthew Brown (Built off of previous work of Mckay Davis)
+# Extended version - Author Matthew Brown 
+### Built off of previous work of Mckay Davis
 **********************************
 
 
@@ -133,7 +134,7 @@ ctx-lh-insula
 Store these files in data\mindboggled\Twins-2-1\labels\left_exploded_labels_vtks. Store it in a folder (I recommend calling it after the next iteration of surface files such as Surface_X).
 You will also need a JSON file to describe where the location is of each brain region mesh. checkout the lh_files_to_load_surfaceX.JSON files.
 
-### 2. Manipulationg region data
+### 2. Manipulation region data
 ----------------------------------
 -About: The purpose of the extended version of ROYGBIV is to show gene expression data on a brain surface. The brain surface is composed of several meshes. Each mesh is assigned a specific color and region ID. The color is calculated based upon the data located at the Region ID in the gene expression data csv file. 
 
