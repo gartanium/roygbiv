@@ -76,13 +76,17 @@ body {
 
 #nav-brain {
 	float: left;
-	width: 1600px;
-	height: 100%
-	margin: 15px;
+	width: 100%;
+	height: 100%;
 	background-color: #000000;
-	
+	margin: 0 auto;
 	
 	opacity: 2.25;
+}
+
+.graphics-display {
+	width: 100%;
+	height: 100%;
 }
 
 #plot-canvas {

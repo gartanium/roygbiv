@@ -164,6 +164,8 @@ function generateNewBrain(scope, colorsDict) {
         $('#nav-brain').empty();
     }
 
+    // document.getElementById("cameraSettings").innerHTML = "";
+
     return new Brain({
         divID: "nav-brain",  // div to render brain
         callback: function (mesh) {
@@ -196,6 +198,7 @@ function colorChange(event) {
 
 
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
+// Main entry point for the application
 // gene of interest.
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
 

@@ -122,7 +122,7 @@ function CameraManager() {
      * @param {*} cameraSettingList List of camera settings.
      */
     function removeCameraSettingObject(settingID, cameraSettingList) {
-
+        
     }
 
     /**
