@@ -34,8 +34,8 @@ function getGeneLocation(locationDict, gene) {
     var dictionary = [];
     length = csv_object.length;
     
-    // Start at index 2
-    for(i = 2; i < length; i++) {
+    // Start at index 1
+    for(i = 1; i < length; i++) {
         
         // Weirdly enough, empty string is the gene location?
         key = csv_object[i][""];
