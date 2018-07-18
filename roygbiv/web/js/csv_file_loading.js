@@ -203,6 +203,20 @@ function colorChange(event) {
 angular.module('navigator', []).controller('NavigateController', ['$scope', function($scope) {
 
     setupDefaultValues($scope);
+
+    // Load CSV file
+
+    // Select Gene
+
+    // Clean the data
+
+    // get the color data
+
+    // select options
+
+    // build the brain
+
+    // register events
     
     // Upload is for uploading data on how genes are expressed on different regions of the brain.
     $('#search-form').on('click', '#upload', function(e) { 
