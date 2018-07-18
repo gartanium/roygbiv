@@ -51,7 +51,7 @@ function checkBoxesByClass(className, boolChecked) {
  * @param {scope} scope scope containing the brain object.
  * @param {Camera Array} cameraSettingsArray an array containing camera objects, with their setting name as their key.
  **/
-function registerEvents(scope, cameraManager) {
+function registerBrainCustomizationEvents(scope, cameraManager) {
     
     // Hide brain when user clicks clear
     $('#search-form').on('click', '#clear-regions', function(e) { 
@@ -80,7 +80,6 @@ function registerEvents(scope, cameraManager) {
     
     // Register the checkboxes that hide/show the brain.
     registerRegionCheckboxes(scope.brain);
-
 }
 
 /**
@@ -117,28 +116,8 @@ function setupDefaultValues(container) {
  * This function returns the json file associated with the user selected surface.
  */
 function getSurfaceOption() {
-    
     // Get the surface option the user selects.
-    var option =  document.getElementById("surfaceSelection").value;
-    var rObj;
-
-    if(option == "Surface 1") {
-        rObj = "data/lh_files_to_load_surface1.json";
-    }
-    else if(option == "Surface 2") {
-        rObj = "data/lh_files_to_load_surface2.json";
-    }
-    else if(option == "Surface 3") {
-        rObj = "data/lh_files_to_load_surface3.json";
-    }
-    else if(option == "Surface 4") {
-        rObj = "data/lh_files_to_load_surface4.json";
-    }
-    else if(option == "Surface 5") {
-        rObj = "data/lh_files_to_load_surface5.json";
-    }
-
-    return rObj;
+    return  document.getElementById("surfaceSelection").value;
 }
 
 /**
@@ -226,7 +205,6 @@ function registerLoadCSVFileEvent(scope) {
                 scope.$apply();
                 
             } else {
-
                 // Inform the user that the file successfully loaded, and display the path.
                 scope.fileStatus = "File uploaded successfully!";
                 scope.csvObject = csvObject;
@@ -236,38 +214,38 @@ function registerLoadCSVFileEvent(scope) {
     });
 }
 
+function getRegionColorArray(scope, proccessedData, geneName) {
+
+    var regionColorFactory = new RegionColorFactory(
+        proccessedData, getHeader(), scope.colorPickerR,
+        scope.colorPickerG, scope.colorPickerB);
+
+    if(scope.zScoreCheckbox) {
+        regionColorFactory.setNormalizationState("zScoreRow");
+    }
+    try {
+        scope.regionColorFactory.setColors(scope.colorPickerR, scope.colorPickerG, scope.colorPickerB);
+    } catch (error) {
+        scope.minMidMaxStatus = error;
+        scope.$apply();
+    }
+    return regionColorFactory.generateRegionColorArray(geneName);
+}
+
 function registerRenderBrainEvent(scope) {
     $('#search-form').on('click', '#search-button', function(e) {
         e.preventDefault();
 
         var geneName = scope.geneSearch.trim().toUpperCase()
-
         geneLocationArray = getGeneLocationArray(scope.csvObject, scope); 
+        var processedData = cleanData(scope.csvObject, geneLocationArray);
+        regionColorArray = getRegionColorArray(scope, processedData, geneName); 
 
-        var rawData = cleanData(scope.csvObject, geneLocationArray);
-
-        scope.regionColorFactory = new RegionColorFactory(
-            rawData, getHeader(), scope.colorPickerR,
-            scope.colorPickerG, scope.colorPickerB
-        );
-
-        if(scope.zScoreCheckbox) {
-            scope.regionColorFactory.setNormalizationState("zScoreRow");
-        }
-        
-        try {
-            scope.regionColorFactory.setColors(scope.colorPickerR, scope.colorPickerG, scope.colorPickerB);
-        } catch (error) {
-            scope.minMidMaxStatus = error;
-            scope.$apply();
-        }
-        
-        regionColorArray = scope.regionColorFactory.generateRegionColorArray(geneName);
         scope.brain = generateNewBrain(scope, regionColorArray);
 
         deployLegend("nav_legend", colorScale);
         checkBoxesByClass("region-select", true);
-        registerEvents(scope, scope.cameraManager);
+        registerBrainCustomizationEvents(scope, scope.cameraManager);
     });
 }
 
