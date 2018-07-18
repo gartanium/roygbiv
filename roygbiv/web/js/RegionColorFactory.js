@@ -138,6 +138,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
     this.setNormalizationState = function(state) {
         
         _normalizationState = _normalizationEnum[state];
+        _normalizedData = [];
 
         if(typeof _normalizationState == "undefined") {
             throw "ERROR: " + state + " is not a valid option!";
@@ -175,15 +176,20 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
         }
         else if(_normalizationState == _normalizationEnum.zScoreColumn) {
             //TODO: ADD LOGIC HERE FORE NORMALIZING BY COLUMN.
-            //for(i = 0; i < )
-            // Gene 1 2 3 4 5 6 7
-            // Gene 1 2 3 4 5 6 7
-            // Cycle through every gene.
-            // Select the column were on.
-            // Build an array out of that.
-            // Zscore it.
-            // Restore the normalized value.
+            // for every gene..
+            // get element at position
+            // Build an indexed array to hold the gene.
+            // Extract an array containing positions and genes.
+            normalizedData = shallowCopyArray(data);
+            geneIndexedArray = [];
+            valueIndexedArray = [];
+            for(var gene in normalizedData) {
+                geneIndexedArray.push(gene);
+                valueIndexedArray.push(normalizedData[gene][1002])
+            }
 
+            
+            
         }
     }
 

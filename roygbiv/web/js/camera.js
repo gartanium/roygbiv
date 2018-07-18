@@ -131,15 +131,6 @@ function CameraManager() {
     }
 
     /**
-     * Removes a camera setting from the list based off of it's ID.
-     * @param {String} settingID ID of the camera setting.
-     * @param {*} cameraSettingList List of camera settings.
-     */
-    function removeCameraSettingObject(settingID, cameraSettingList) {
-        
-    }
-
-    /**
      * Adds a camera setting button to a table.
      * @param {String} settingID ID of the camera setting. 
      * @param {String} tableID Table to send the camera button to.
@@ -187,7 +178,5 @@ function CameraManager() {
             //for(var k in cameraSettingsArray[this.id]) scope.brain.camera[k]=cameraSettingsArray[this.id][k];
         })
     }
-
-
 };
     

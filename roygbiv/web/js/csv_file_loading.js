@@ -49,7 +49,7 @@ function checkBoxesByClass(className, boolChecked) {
 /** 
  * @function registerEvents Registers events associated with the brain.
  * @param {scope} scope scope containing the brain object.
- * @param {Camera Array} cameraSettingsArray an array containing camera objects, with their setting name as their key.
+ * @param {Array} cameraSettingsArray an array containing camera objects, with their setting name as their key.
  **/
 function registerBrainCustomizationEvents(scope, cameraManager) {
     
