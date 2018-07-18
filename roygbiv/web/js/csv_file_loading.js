@@ -164,7 +164,7 @@ function generateNewBrain(scope, colorsDict) {
         $('#nav-brain').empty();
     }
 
-    // document.getElementById("cameraSettings").innerHTML = "";
+    scope.cameraManager.clear();
 
     return new Brain({
         divID: "nav-brain",  // div to render brain

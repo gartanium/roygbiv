@@ -112,8 +112,14 @@ You will also need a JSON file to describe where the location is of each brain r
 Options are chosen to manipulate this data as well, such as z-score normalization. To add additional ways to modify this data, open up the RegionColorFactory.js file. 
 
 
-## Deprecated version ( Running the scripts will still do things, but the project will not correctly interact with them).
+**********************************
+# Missing files
+**********************************
+Currently the project does not include any surfaces for visualization. To receive these files, one could email Accendero Software, or wait until they get added into the project.
+If you would like to use the project with out them, then use python get_data.py to retrieve a cortical surface. Then, simply modify the function to create the brain. Specificly, the url: kwargs should be set to lh_files_to_load.json
 
+# Deprecated version ( Running the scripts will still do things, but the project will not correctly interact with them).
+-----------------------------------
 Instructions for running demos are below. To run demos locally, install the `flask` Python package.
 
 

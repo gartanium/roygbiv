@@ -22,6 +22,8 @@ function CameraManager() {
      * Contains a key-value pair of strings for keys and values of three.PerspectiveCameras.
      */
     this.cameraSettingsArray = {};
+    this.cameraTableIdList = []; // Locations where the camera button elements are added to.
+    this.genericCameraClass = "cameraSettingButton";
 
     /**
      * Creates a button for loading camera settings. Saves the associated camera settings in the array,
@@ -70,7 +72,19 @@ function CameraManager() {
     this.addLoadSettingsButton = function(settingID, camera, tableID) {
         insertHTMLButton(settingID, tableID);
         registerLoadCameraSettingsEvent(settingID, this.cameraSettingsArray, camera);
+        cameraTableIdList.push(tableID);
     }
+
+    /**
+     * Removes all camera settings.
+     */
+    this.clear = function() {
+       $("." + this.genericCameraClass).remove(); 
+       
+        this.cameraSettingsArray = {};
+        this.cameraTableIdList = []; 
+    }
+    
 
     /**
      * Deep copies and object and appends it to an associate array. Gives it the key of the length of the Associative Array.
@@ -140,12 +154,10 @@ function CameraManager() {
 
         // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
         var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
 
         // Add some text to the new cells:
-        cell1.innerHTML = settingID;
-        cell2.innerHTML = "<button class=\"cameraSettingsButton\" id =\"" + 
-                            settingID + "\">Go</button>";
+        cell1.innerHTML = "<button class=\"cameraSettingsButton\" class=\"" + this.genericCameraClass + "\" id =\"" + 
+                            settingID + "\">" + settingID + "</button>";
     }
 
     /**
@@ -176,13 +188,6 @@ function CameraManager() {
         })
     }
 
-    /**
-     * Removes a camera setting from the given div.
-     * @param {*} settingID Camera setting ID.
-     * @param {*} divTargetID Div to remove button from.
-     */
-    function removeLoadCameraSettingButton(settingID, divTargetID) {
 
-    }
 };
     
