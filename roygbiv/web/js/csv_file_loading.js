@@ -86,29 +86,24 @@ function registerBrainCustomizationEvents(scope, cameraManager) {
  * Sets the default values for our scope.
  * @param {Scope} container Scope that contains the individual elements.
  */
-function setupDefaultValues(container) {
+function setupDefaultValues(scope) {
     
     // Sets the default camera position to be {0, 0, 200} x, y, z respectively.
-    container.cameraX = 0;
-    container.cameraY = 0;
-    container.cameraZ = 200;
-    
-    container.userMin = 0;
-    container.userMid = 6;
-    container.userMax = 12;
-    container.fileStatus = "Enter the csv file path...";
-    container.geneStatus = "Enter a Gene...";
-    container.cameraPosDisplayX = 0;
-    container.cameraPosDisplayY = 0;
-    container.cameraPosDisplayZ = 200;
-    container.$apply();
-
-    container.colorPickerR = '#ffffff';
-    container.colorPickerG = '#ffd400';
-    container.colorPickerB = '#ff0000';
-    container.cameraManager = new CameraManager();
-
-    container.colorStatus = "Enter in 6 digit hexidecimal color codes";
+    scope.userMin = 0;
+    scope.userMid = 6;
+    scope.userMax = 12;
+    scope.fileStatus = "Enter the csv file path...";
+    scope.geneStatus = "Enter a Gene...";
+    scope.cameraPosDisplayX = 0;
+    scope.cameraPosDisplayY = 0;
+    scope.cameraPosDisplayZ = 200;
+    scope.colorPickerR = '#ffffff';
+    scope.colorPickerG = '#ffd400';
+    scope.colorPickerB = '#ff0000';
+    scope.cameraManager = new CameraManager();
+    scope.colorStatus = "Enter in 6 digit hexidecimal color codes";
+    scope.loadedCSV = false;
+    scope.$apply();
 }
 
 /**
@@ -175,7 +170,6 @@ function getGeneLocationArray(csvObject, scope) {
 }
 
 function getCSVPath(scope) {
-
     var path = $('#upload-path').val();
     if(path == "") {
         $scope.fileStatus = "Empty file path submitted. Please enter a valid file path."
@@ -208,6 +202,7 @@ function registerLoadCSVFileEvent(scope) {
                 // Inform the user that the file successfully loaded, and display the path.
                 scope.fileStatus = "File uploaded successfully!";
                 scope.csvObject = csvObject;
+                scope.loadedCSV = true;
                 scope.$apply();
             }
         });
@@ -236,16 +231,23 @@ function registerRenderBrainEvent(scope) {
     $('#search-form').on('click', '#search-button', function(e) {
         e.preventDefault();
 
-        var geneName = scope.geneSearch.trim().toUpperCase()
-        geneLocationArray = getGeneLocationArray(scope.csvObject, scope); 
-        var processedData = cleanData(scope.csvObject, geneLocationArray);
-        regionColorArray = getRegionColorArray(scope, processedData, geneName); 
+        if(scope.loadedCSV) {
 
-        scope.brain = generateNewBrain(scope, regionColorArray);
+            var geneName = scope.geneSearch.trim().toUpperCase()
+            geneLocationArray = getGeneLocationArray(scope.csvObject, scope); 
+            var processedData = cleanData(scope.csvObject, geneLocationArray);
+            regionColorArray = getRegionColorArray(scope, processedData, geneName); 
 
-        deployLegend("nav_legend", colorScale);
-        checkBoxesByClass("region-select", true);
-        registerBrainCustomizationEvents(scope, scope.cameraManager);
+            scope.brain = generateNewBrain(scope, regionColorArray);
+
+            deployLegend("nav_legend", colorScale);
+            checkBoxesByClass("region-select", true);
+            registerBrainCustomizationEvents(scope, scope.cameraManager);
+        }
+        else {
+            scope.fileStatus = "ERROR: Upload a csv file before trying to upload region data!";
+            scope.$apply();
+        }
     });
 }
 
