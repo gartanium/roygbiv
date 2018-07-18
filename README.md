@@ -1,8 +1,9 @@
-roygbiv (Roy G. Brain Image Viewer) is an interactive browser-based visualization of cortical surfaces.
+# ROYGBIV
+### (Roy G. Brain Image Viewer) is an interactive browser-based visualization of cortical surfaces.
 
 **********************************
 # Extended version - Author Matthew Brown 
-### Built off of previous work of Mckay Davis
+### Built off of the previous work of Mckay Davis
 **********************************
 
 
@@ -13,13 +14,13 @@ The purpose of the improved version of ROYGBIV is to display gene expression dat
 
 ## GETTING STARTED
 
-To run the web page locally in windows, in the command prompt, navigate to roygbiv/roygbiv/web and run: python -m http.server
+To run the web page locally in windows, in the command prompt, navigate to roygbiv/roygbiv/web and run: python -m http.server, 
 then navigate to localhost:8000 on your browser.
 
 In order to display a brain, a user must have a csv file containing a column of genes, followed by several columns of brain region data. An example of a valid csv file is found in roygbiv/web/data. The name of the file is ExampleData.csv. Notice that the csv file contains a header, followed by rows that are headed by a gene.
 
 After a csv file is selected that contains gene expression data, the user must select
-one of those genes to be visualized on the brain surface template. There are several
+one of those genes to be visualized on the brain surface template. To customize the visualization, there are several
 options that a user can include as well.
 
 
