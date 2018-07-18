@@ -187,9 +187,6 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
                 geneIndexedArray.push(gene);
                 valueIndexedArray.push(normalizedData[gene][1002])
             }
-
-            
-            
         }
     }
 

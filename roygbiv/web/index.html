@@ -99,7 +99,13 @@
                                 </td>
                             <tr>
                                 <td>Z-Score</td>
-                                <td><input type="checkbox" ng-model="zScoreCheckbox"</td>
+                                <td>
+                                    <select id="normalizationSelection" ng-model="normalizationSelection">
+                                        <option value="default">default</option>
+                                        <option value="zScoreRow">Z Score By Gene</option>
+                                        <option value="zScoreColumn">Z Score By Region</option>
+                                    </select>
+                                </td>
                             </tr>
                             <tr>
                                 <div id="nav_legend"></div>

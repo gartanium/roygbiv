@@ -215,9 +215,9 @@ function getRegionColorArray(scope, proccessedData, geneName) {
         proccessedData, getHeader(), scope.colorPickerR,
         scope.colorPickerG, scope.colorPickerB);
 
-    if(scope.zScoreCheckbox) {
-        regionColorFactory.setNormalizationState("zScoreRow");
-    }
+    
+    regionColorFactory.setNormalizationState(scope.normalizationSelection);
+    
     try {
         scope.regionColorFactory.setColors(scope.colorPickerR, scope.colorPickerG, scope.colorPickerB);
     } catch (error) {
