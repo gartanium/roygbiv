@@ -22,15 +22,16 @@
   * @param {String} midColor Middle color value on the scale.
   * @param {String} maxColor Maximum color value on the scale.
   */
-function RegionColorFactory(data, header, minColor, midColor, maxColor) {
 
+function RegionColorFactory(data, header, minColor, midColor, maxColor) {
+    // color min and max are the min and max displayed for the color gradient on the brain
     var _colorMin = minColor;
     var _colorMid = midColor;
     var _colorMax = maxColor;
-
+    // 3.js scale data type, takes min, mid, and max and displays the appropriate color on the brain
     var _colorScale;
 
-    var _geneData = data;
+    var _csvFile = data;
 
     var _normalizedData = [];       
     var _normalizationState = 0;
@@ -178,7 +179,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
             // get element at position
             // Build an indexed array to hold the gene.
             // Extract an array containing positions and genes.
-            normalizedData = shallowCopyArray(_geneData);
+            normalizedData = shallowCopyArray(_csvFile);
             
             for(i = 1002; i < 1036; i++) {
                 if(normalizedData[i]) {
@@ -292,11 +293,11 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
         if(gene == "") {
             throw "ERROR: No gene was specified (Empty string)";
         }
-        else if(!(gene in _geneData)) {
+        else if(!(gene in _csvFile)) {
             throw "ERROR: " + gene +" is not a valid gene!";
         }
         else 
-            return _geneData[gene];
+            return _csvFile[gene];
     }
 }
 
