@@ -195,7 +195,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
      */
     function validateColor(colorString) {
         color = d3.color(colorString);
-        if(color === null || !color.displ   ayable)
+        if(color === null || !color.displayable)
             throw "ERROR: Invalid color [" + colorString + "]!";
     }
 
