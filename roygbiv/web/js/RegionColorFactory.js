@@ -73,7 +73,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
         validateColor(maxColor);
 
         // Perform data normalizations
-        _normalizedData = generateNormalizedData(data);
+        _normalizedData = generateNormalizedData(data, gene);
 
         // Get the min mid and max
         var minMidMax = findMinMidMax(_normalizedData);
@@ -149,7 +149,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
      * Returns a copy of all the data describing how each gene is expressed over each region,
      * and normalizes the copy.
      */
-    function generateNormalizedData(data) {
+    function generateNormalizedData(data, selectedGene) {
         var normalizedData;
 
         if(_normalizationState == _normalizationEnum.default) {
@@ -171,7 +171,6 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
                 }
             }
             return normalizedData;
-
         }
         else if(_normalizationState == _normalizationEnum.zScoreColumn) {
             //TODO: ADD LOGIC HERE FORE NORMALIZING BY COLUMN.
@@ -179,13 +178,29 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
             // get element at position
             // Build an indexed array to hold the gene.
             // Extract an array containing positions and genes.
-            normalizedData = shallowCopyArray(data);
-            geneIndexedArray = [];
-            valueIndexedArray = [];
-            for(var gene in normalizedData) {
-                geneIndexedArray.push(gene);
-                valueIndexedArray.push(normalizedData[gene][1002])
+            normalizedData = shallowCopyArray(_geneData);
+            
+            for(i = 1002; i < 1036; i++) {
+                if(normalizedData[i]) {
+
+                    geneIndexedArray = [];
+                    valueIndexedArray = [];
+                    for(var gene in normalizedData) {
+                        geneIndexedArray.push(gene);
+                        valueIndexedArray.push(normalizedData[gene][i])
+                    }
+
+                    valueIndexedArray = arr.zScores(valueIndexedArray);
+
+                    // put it back in!
+                    for(j = 0; j < valueIndexedArray.length; j++) {
+                        key = geneIndexedArray[j];
+                        value = valueIndexedArray[j];
+                        normalizedData[key] = value;
+                    }
+                }
             }
+            return normalizedData[selectedGene];
         }
     }
 
@@ -223,6 +238,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
             var colorScaled = colorScale(tempFloat);
 
             tempColor = d3.color(colorScaled);
+
             // We want a 0 to 1 scale for the colors.
             red = tempColor.r / 256;
             green =  tempColor.g / 256;
@@ -230,9 +246,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
 
             colorArray[key] = [red, green, blue];
         }
-
         return colorArray;
-
     }
 
     /**
