@@ -8,6 +8,8 @@
  * @param {*} locationDict Associative array containing the genes as keys and locations as values.
  * @param {*String} gene containing the gene name.
  */
+
+// var location is the index of the row values return when a gene keyword is given
 function getGeneLocation(locationDict, gene) {
     var location = locationDict[gene];
     try {

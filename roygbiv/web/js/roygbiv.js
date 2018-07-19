@@ -2,7 +2,11 @@
  * @function registerRegionCheckboxes registers events for showing or hiding a mesh when the associated
  * checkbox is checked. 
  * @param {brain} brain Brain associated with the events.
+ * if you make a change to scope remember to use $scope.$apply()
+ * unless you are in a function then you can use scope.$apply()
  */
+
+// call back function for the check boxes to show whichever gene region
 function registerRegionCheckboxes(brain) {
     $('.region-select').on('change', function(e) { 
         name = this.name;
@@ -11,23 +15,6 @@ function registerRegionCheckboxes(brain) {
         }
         else
         {
-            brain.hideMeshByName(name);
-        }
-    });
-}
-
-/**
- * @function updateRegionDisplay Shows or hides each brain mesh based upon it being checked.
- * @param {string} className 
- * @param {brain} brain 
- */
-function updateRegionDisplay(className, brain) {
-    $('.'+className).each(function() {
-        
-        if($(this).is(':checked')) {
-            brain.showMeshByName(name);
-        }  
-        else {
             brain.hideMeshByName(name);
         }
     });
@@ -62,9 +49,6 @@ function registerBrainCustomizationEvents(scope, cameraManager) {
     $('#search-form').on('click', '#reset-regions', function(e) { 
         checkBoxesByClass("region-select", true);
     });
-
-    // Register the menu options for selecting a normalization.
-    $('#search-form').on('click', '#')
 
     // Register the button for saving the camera data.
     $('#search-form').on('click', '#camera-button', function(e) {
@@ -150,14 +134,14 @@ function generateNewBrain(scope, colorsDict) {
         label_mapper: "data/labels.json",
         colors: colorsDict,
     });
-    
-    updateRegionDisplay("region-select", $scope.brain);
 }
 
+//called in the index.html file
 function colorChange(event) {
     $('#nav-brain').css("background-color",  event.target.value);
 }
 
+// catches if the gene selection has an error and displays it to the screen
 function getGeneLocationArray(csvObject, scope) {
     try {
         return getGeneLocDict(csvObject);
@@ -169,6 +153,7 @@ function getGeneLocationArray(csvObject, scope) {
     }
 }
 
+// error handing for CSV file loading and displays to the screen
 function getCSVPath(scope) {
     var path = $('#upload-path').val();
     if(path == "") {
@@ -179,11 +164,13 @@ function getCSVPath(scope) {
     return path;
 }
 
+// displays the legend to the screen
 function deployLegend(divID, colorScale) {
     $('#' + divID).empty()
     colorlegend("#" + divID, colorScale, "linear", {title: "Gene Expression"});
 }
 
+// upload button handling
 function registerLoadCSVFileEvent(scope) {
     // Upload is for uploading data on how genes are expressed on different regions of the brain.
     $('#search-form').on('click', '#upload', function(e) { 
@@ -209,13 +196,14 @@ function registerLoadCSVFileEvent(scope) {
     });
 }
 
+//if you want to change the colors or normalize the data it is done here
 function getRegionColorArray(scope, proccessedData, geneName) {
 
     var regionColorFactory = new RegionColorFactory(
         proccessedData, getHeader(), scope.colorPickerR,
         scope.colorPickerG, scope.colorPickerB);
 
-    
+    //where you do normalization for your data 
     regionColorFactory.setNormalizationState(scope.normalizationSelection);
     
     try {
@@ -227,21 +215,25 @@ function getRegionColorArray(scope, proccessedData, geneName) {
     return regionColorFactory.generateRegionColorArray(geneName);
 }
 
+// render button handing
 function registerRenderBrainEvent(scope) {
     $('#search-form').on('click', '#search-button', function(e) {
         e.preventDefault();
 
         if(scope.loadedCSV) {
 
+            // this is where Gene Selection is referenced
             var geneName = scope.geneSearch.trim().toUpperCase()
             geneLocationArray = getGeneLocationArray(scope.csvObject, scope); 
             var processedData = cleanData(scope.csvObject, geneLocationArray);
+            // creates the array of colors for the brain
             regionColorArray = getRegionColorArray(scope, processedData, geneName); 
 
             scope.brain = generateNewBrain(scope, regionColorArray);
 
             deployLegend("nav_legend", colorScale);
             checkBoxesByClass("region-select", true);
+            //anything that is not Gene Selection and is a button is done here
             registerBrainCustomizationEvents(scope, scope.cameraManager);
         }
         else {
@@ -259,9 +251,12 @@ angular.module('navigator', []).controller('NavigateController', ['$scope', func
     setupDefaultValues($scope);
 
     // Load CSV file containing gene expression data for the brain regions.
+    //this is where the "Upload" button is called
     registerLoadCSVFileEvent($scope);
 
     // Events associated with rendering the brain and selection options.
+    // This is where the render button is called
+
     registerRenderBrainEvent($scope);
 
 }]);
