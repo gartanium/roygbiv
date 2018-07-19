@@ -170,7 +170,6 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
                     j++;
                 }
             }
-
             return normalizedData;
 
         }
@@ -196,7 +195,7 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
      */
     function validateColor(colorString) {
         color = d3.color(colorString);
-        if(color === null || !color.displayable)
+        if(color === null || !color.displ   ayable)
             throw "ERROR: Invalid color [" + colorString + "]!";
     }
 
@@ -248,7 +247,6 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
             else
                 throw "ERROR: The data representing gene expression for each region must be numerical!";
         }
-
     }
 
     /**
@@ -285,7 +283,6 @@ function RegionColorFactory(data, header, minColor, midColor, maxColor) {
         }
         else 
             return _geneData[gene];
-        
     }
 }
 
