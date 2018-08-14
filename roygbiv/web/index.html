@@ -37,7 +37,7 @@
         <!--Some stuff for color scale-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="http://d3js.org/d3.v4.js"></script>
-		
+
 	</head>
 
 	<body>
@@ -76,11 +76,15 @@
                 <div class="search-container">
                     <form id="search-form">
                         <table style="width:100%">
+                            
                             <tr>
-                                <td>CSV File Upload</td>
-                                <td><input value="" id="upload-path" class="search-field" type="search" autocomplete="off" /></td>
-                                <td><button id="upload" class="search-button">Upload</button></td>
-                            </tr>
+                            <tr>
+                                <input type="file" id="csvFileInput" onchange="handleFiles(this.files)"
+                                       accept=".csv">
+                            <tr><button id="get-file">Upload_file</button></tr>
+                            <tr>
+                            <tr>
+
                             <tr>
                                 <td>Gene Selection</td>
                                 <td><input value="" id="search-field" ng-model="geneSearch" class="search-field" type="search" autocomplete="off" /></td>
@@ -103,7 +107,7 @@
                                     <select id="normalizationSelection" ng-model="normalizationSelection">
                                         <option value="default">default</option>
                                         <option value="zScoreRow">Z Score By Gene</option>
-                                        <option value="zScoreColumn">Z Score By Region</option>
+                                    <!--    <option value="zScoreColumn">Z Score By Region</option> -->
                                     </select>
                                 </td>
                             </tr>

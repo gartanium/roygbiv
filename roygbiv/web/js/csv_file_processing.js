@@ -30,14 +30,15 @@ function getGeneLocation(locationDict, gene) {
  
 /**
  * Returns an associative array or "dictionary" containing the location  of every gene in the csv file.
- * @param {*} csv_object CSV object to be processed. 
+ * @param {*} csv_object CSV object to be processed.
+ * this is getGeneLocationArray
  */
  function getGeneLocDict(csv_object) {
     var dictionary = [];
     length = csv_object.length;
     
     // Start at index 1
-    for(i = 1; i < length; i++) {
+    for(i = 0; i < length; i++) {
         
         // Weirdly enough, empty string is the gene location?
         key = csv_object[i][""];

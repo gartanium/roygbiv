@@ -164,22 +164,86 @@ function getCSVPath(scope) {
     return path;
 }
 
+
 // displays the legend to the screen
 function deployLegend(divID, colorScale) {
     $('#' + divID).empty()
     colorlegend("#" + divID, colorScale, "linear", {title: "Gene Expression"});
 }
 
-// upload button handling
+// upload the csv button handling
 function registerLoadCSVFileEvent(scope) {
+    rowDeleteArray = []
+    console.log("this is outside")
     // Upload is for uploading data on how genes are expressed on different regions of the brain.
-    $('#search-form').on('click', '#upload', function(e) { 
+    $('#search-form').on('click', '#get-file', function(e) {
+        console.log("I want to pass here")
+        console.log("csvarray", csvarray)
+
+        //this is to find empty rows
+        for (var i=0; i < csvarray.length; i++){
+            if (csvarray[i][0] == ""){
+                console.log("found an empty spot", i)
+                rowDeleteArray.push(i)
+            }
+            csvarray[i][0] = csvarray[i][0].concat("\n")
+        }
+
+        // this is to delete the empty rows in the csv that were found
+        for (var i=0; i < rowDeleteArray.length; i++){
+            console.log("delete extra space")
+            csvarray.splice(rowDeleteArray[i],1);
+        }
+
+        //this breaks up each row into an array of strings separated by commas,
+        //then we go through and get rid of leading white space if it was created
+        //then we make a make by mapping the column headers to the row value at its spot for
+        //each row.
+        //it might be good for me to use a reduce method instead of the for loop.
+        var d3object = d3.csvParseRows(String(csvarray.slice(1,csvarray.length)), function(d) {
+            var ret = {};
+            if (d[0] === ""){
+                d.shift()
+            }
+            //console.log(d)
+            for (var i = 0; i < d.length; i++){
+                ret[csvarray[0][0].trim().split(",")[i]] = d[i]
+            }
+            return ret;
+        });
+
+        // make the completed csv object available to scope
+        scope.csvObject = d3object;
+        //update the screen display
+        scope.fileStatus = "File uploaded successfully!";
+        //print the finalized object
+        console.log("scope.csvObject", scope.csvObject)
+        //update the loaded status
+        scope.loadedCSV = true;
+        //update all the scope changes that you have made
+        scope.$apply();
+    });
+
+    //called when you hit Choose file, allows the user to browse for a csv
+    $('#search-form').on('click', '#csvFileInput', function(e){
+        console.log("well, well, well")
+        handleFiles(this.files)
+    });
+
+
+
+    $('#search-form').on('click', '#upload', function(e) {
+        console.log("Upload this")
+        //});
+        //print("for the love of all things good, yes")
+        //console.log(e)
         path = getCSVPath(scope);
         d3.csv(path, function(error, csvObject) {
             
             // Get the file path of the users defined file, so we can display it for the user.
             scope.filePath = path;
-            
+
+
             if(error) {
                 // Inform the user that the file failed to load.
                 scope.fileStatus = "ERROR failed to upload file!";
@@ -189,6 +253,7 @@ function registerLoadCSVFileEvent(scope) {
                 // Inform the user that the file successfully loaded, and display the path.
                 scope.fileStatus = "File uploaded successfully!";
                 scope.csvObject = csvObject;
+                console.log("scope.csvObject", scope.csvObject)
                 scope.loadedCSV = true;
                 scope.$apply();
             }
@@ -221,11 +286,14 @@ function registerRenderBrainEvent(scope) {
         e.preventDefault();
 
         if(scope.loadedCSV) {
-
             // this is where Gene Selection is referenced
+            console.log("current csv object", scope.csvObject)
             var geneName = scope.geneSearch.trim().toUpperCase()
-            geneLocationArray = getGeneLocationArray(scope.csvObject, scope); 
+            console.log("geneName", geneName)
+            geneLocationArray = getGeneLocationArray(scope.csvObject, scope);
+            console.log("gene location array", geneLocationArray)
             var processedData = cleanData(scope.csvObject, geneLocationArray);
+            console.log("Processed data", processedData)
             // creates the array of colors for the brain
             regionColorArray = getRegionColorArray(scope, processedData, geneName); 
 
@@ -242,6 +310,69 @@ function registerRenderBrainEvent(scope) {
         }
     });
 }
+
+//global variable to store the csv file for registerLoadCSVFile
+var csvarray = [];
+function makeFunction(array) {
+    console.log("grabbed the csv from the asyc process")
+    csvarray = array;
+    console.log(array)
+}
+
+
+//file loading for the csv allows to get csv from their hard drive or network
+function handleFiles(files) {
+      // Check for the various File API support.
+  if (window.FileReader) {
+          // FileReader are supported.
+      var lines = getAsText(files[0]);
+      return lines;
+  } else {
+      alert('FileReader are not supported in this browser.');
+  }
+}
+
+function getAsText(fileToRead) {
+  var reader = new FileReader();
+      // Read file into memory as UTF-8
+    reader.onerror = errorHandler;
+    reader.onload = loadHandler;
+    reader.readAsText(fileToRead);
+    //reader.readAsText(fileToRead);
+    console.log("start")
+    console.log("done")
+
+      // Handle errors load
+    reader.onload();
+}
+
+function loadHandler(event) {
+  var csv = event.target.result;
+  processData(csv);
+}
+
+function processData(csv) {
+    var allTextLines = csv.split(/\r\n|\n/);
+    var lines = [];
+    for (var i=0; i<allTextLines.length; i++) {
+        var data = allTextLines[i].split(';');
+            var tarr = [];
+            for (var j=0; j<data.length; j++) {
+                tarr.push(data[j]);
+            }
+            lines.push(tarr);
+    }
+  console.log("process data log",lines);
+  makeFunction(lines)
+}
+
+function errorHandler(evt) {
+  if(evt.target.error.name == "NotReadableError") {
+      alert("Cannot read file !");
+  }
+}
+
+
 
 // Set up the module/controller for Uploading the Brain CSV file, and displaying the brain based off of the
 // Main entry point for the application
