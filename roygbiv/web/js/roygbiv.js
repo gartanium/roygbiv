@@ -174,8 +174,14 @@ function deployLegend(divID, colorScale) {
 // upload the csv button handling
 function registerLoadCSVFileEvent(scope) {
     rowDeleteArray = []
+    array_to_be_passed = []
     console.log("this is outside")
     // Upload is for uploading data on how genes are expressed on different regions of the brain.
+
+    function closureattempt(array) {
+        array_to_be_passed = array
+    }
+
     $('#search-form').on('click', '#get-file', function(e) {
         console.log("I want to pass here")
         console.log("csvarray", csvarray)
@@ -226,11 +232,8 @@ function registerLoadCSVFileEvent(scope) {
 
     //called when you hit Choose file, allows the user to browse for a csv
     $('#search-form').on('click', '#csvFileInput', function(e){
-        console.log("well, well, well")
-        handleFiles(this.files)
+        console.log("File is being searched")
     });
-
-
 
     $('#search-form').on('click', '#upload', function(e) {
         console.log("Upload this")
@@ -263,7 +266,6 @@ function registerLoadCSVFileEvent(scope) {
 
 //if you want to change the colors or normalize the data it is done here
 function getRegionColorArray(scope, proccessedData, geneName) {
-
     var regionColorFactory = new RegionColorFactory(
         proccessedData, getHeader(), scope.colorPickerR,
         scope.colorPickerG, scope.colorPickerB);
@@ -323,6 +325,7 @@ function makeFunction(array) {
 //file loading for the csv allows to get csv from their hard drive or network
 function handleFiles(files) {
       // Check for the various File API support.
+    console.log("is this what is here")
   if (window.FileReader) {
           // FileReader are supported.
       var lines = getAsText(files[0]);
