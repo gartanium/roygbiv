@@ -9,7 +9,7 @@
 
 ## ABOUT
 
-The purpose of the improved version of ROYGBIV is to display gene expression data onto a given brain template surface. It is for medical researchers who wish to visualize gene expression data on the brain.
+The purpose of the improved version of ROYGBIV is to display gene expression data onto a 3-D brain surface. It is for medical researchers who wish to visualize gene expression data on the brain.
 
 
 ## GETTING STARTED
@@ -38,13 +38,13 @@ The user has the option to normalize the gene expression data that is displayed.
 -Z-Score-Region: This option normalizes the data relative to each brain region. This means that the cell for a given brain region in each gene is normalized relative to each other. For example, all the cells in the ctx-lh-insula brain region are normalized relative to each other while all the cells in the ctx-lh-precentral region are normalized relative to each other. By default, the standard scale has a minimum of 3 standard deviations, a mid of 0, and a maximum of 3 standard deviations. If any of the cells has a zscore value greater than 3 or less than -3, the scale is expanded.
 
 ### 2. Camera
-The user has the option to save the position of the camera, and restore it. To save a camera position, the user simply enters in a name next to the camera label, and clicks "Snapshot" to save it. This creates a button that upon being clicked will restore the position.
+The user has the option to save the position of the camera, and restore it. To save a camera position, the user simply enters in a name next to the camera label, and clicks "Snapshot" to save it. This creates a button that when clicked will restore the position.
 
 ### 3. Surface Selection
 The user has the option to select the surface to be used as a template for visualizing gene expression data. This is done by selecting one of the surfaces in the surface selection drop box. The brain must be re-rendered for it to take effect.
 
 ### 4. Region Display
-The user has the option to select which regions are "displayed" by selecting differing check boxes next to a region name. This feature is rough at the moment, because the meshes are only surfaces and not filled. In addition, what this feature really does is set the opacitiy of a mesh to 0-meaning that when a "hidden" mesh is looked at, it hides visible meshes behind it.
+The user has the option to select which regions are "displayed" by selecting differing check boxes next to a region name. What this feature really does is set the opacitiy of a mesh to 0-meaning that when a "hidden" mesh is looked at, it hides visible meshes behind it.
 
 ### 5. Color Scale
 The user has the option to select which colors are used for displaying the brain. Three colors are required, a minimum, middle, and maximum. The user can enter in a hexadecimal code such as #ffffff (preceded by a #) to choose as a color.
@@ -52,10 +52,9 @@ The user has the option to select which colors are used for displaying the brain
 ### 6. Background Color
 The user can select a background color for the brain surface. This is simply done by selecting the color box and choosing a color.
 
-
 ## Background features
 1. Uploading a csv file containing gene expression data.
-There is a little bit of data preparation that occurs when the user enters in a csv file for region expression data. The way it loads in data is based off the file formats I was given from the team of medical researchers we are working with. An example of an acceptable csv file format is found in the roygbiv/data/web/data/ExampleData.csv file.
+There is data preparation that occurs when the user enters in a csv file for region expression data. The way it loads in data is based off the file formats I was given from the team of medical researchers we are working with. An example of an acceptable csv file format is found in the roygbiv/data/web/data/ExampleData.csv file.
 
 **********************************
 # Development notes
@@ -104,7 +103,7 @@ ctx-lh-insula
 Store these files in data\mindboggled\Twins-2-1\labels\left_exploded_labels_vtks. Store it in a folder (I recommend calling it after the next iteration of surface files such as Surface_X).
 You will also need a JSON file to describe where the location is of each brain region mesh. checkout the lh_files_to_load_surfaceX.JSON files.
 
-### 2. Manipulation region data
+### 2. Manipulating region data
 ----------------------------------
 -About: The purpose of the extended version of ROYGBIV is to show gene expression data on a brain surface. The brain surface is composed of several meshes. Each mesh is assigned a specific color and region ID. The color is calculated based upon the data located at the Region ID in the gene expression data csv file. 
 
@@ -118,9 +117,9 @@ Options are chosen to manipulate this data as well, such as z-score normalizatio
 Currently the project does not include any surfaces for visualization. To receive these files, one could email Accendero Software, or wait until they get added into the project.
 If you would like to use the project with out them, then use python get_data.py to retrieve a cortical surface. Then, simply modify the function to create the brain. Specificly, the url: kwargs should be set to lh_files_to_load.json
 
-# Deprecated version ( Running the scripts will still do things, but the project will not correctly interact with them).
+# Deprecated version (The scripts will still run, but the project will not correctly interact with them).
 -----------------------------------
-Instructions for running demos are below. To run demos locally, install the `flask` Python package.
+Instructions for running the demo is shown below. To run the demo locally, install the `flask` Python package.
 
 
 ###To set up the main demo locally:
